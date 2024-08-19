@@ -6,30 +6,21 @@ public class FishScript : MonoBehaviour
 {   
     [SerializeField] public float Hp = 5f;
 
-    // [SerializeField] public int id;
-
-
+    
     private BulletScript bulletScript;
 
+    private GameManager GM;
 
-
-    void Awake()
-    {
-        
-    }
-
-
-     void Start()
+    private void Start()
     {
         bulletScript = BulletScript.Instance;
+       GM = GameManager.Instance;
+        
     }
 
     private bool IsDead(){
         return Hp <= 0;
     }
-
-
-
 
 
     public void ResetFishColor(SpriteRenderer Fish, Color backUpColor)
@@ -53,6 +44,7 @@ public class FishScript : MonoBehaviour
     private void FishSystem(SpriteRenderer Fish){
         if(IsDead()){
             Fish.gameObject.SetActive(false);
+            
         }
     }   
 

@@ -13,12 +13,13 @@ public class ShootingScript : MonoBehaviour
 
     public float Next_Shot = 0f;
 
-    public float bulletLifetime = 1f; // Time after which the bullet is destroyed
+    public float bulletLifetime = 2f; // Time after which the bullet is destroyed
 
     public Animator Net;
 
     public Animator netAnimator;
     private WeaponsScripts weaponsScripts;
+    private GameManager GM;
 
     private void Awake()
     {
@@ -27,28 +28,34 @@ public class ShootingScript : MonoBehaviour
 
     void Start()
     {
-        weaponsScripts = WeaponsScripts.Instance;
+        weaponsScripts = GameManager.Instance.weaponsScripts;
+        GM = GameManager.Instance;
     }
 
 
     private void LateUpdate()
     {
 
-        if (Input.GetMouseButtonDown(0) && Time.time > Next_Shot)
-        {
-            ShootOnce();
 
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(GM.Amount >= weaponsScripts.Totalbet){
+                ShootOnce();
+                GM.CalculateTotalCoinWithBet();
+            }
+
             if (Instance != null)
             {
                 Instance.UpdateNetReference(netAnimator);
             }
+
         }
+
 
     }
     public void ShootOnce()
     {
-        Next_Shot = Time.time + Rate; // Set the time for the next allowed shot
+        Next_Shot = Time.time + Rate;
 
         GameObject bullet = Instantiate(prefab_shoot, turret.position, turret.rotation);
 

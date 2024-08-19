@@ -5,31 +5,31 @@ using UnityEngine;
 
 public class WeaponsScripts : MonoBehaviour
 {
-    public static WeaponsScripts Instance;
+
     public Transform BullepositonToClone;
     public GameObject[] Gunlevel;
     public GameObject[] Gun;
     public Animator[] Anima_Gun;
+    [SerializeField] public float[] Bet;
 
     public GameObject poinClick;
 
-    [SerializeField] int activeGunLevel = 1; // Default to level 2
+    [SerializeField] int activeGunLevel = 1; 
     [SerializeField] private float AnimaShootWait = 0.11f;
 
+    public float Totalbet;
 
+    private GameManager GM;
     private ShootingScript shootingScript;
 
 
-    void Awake()
-    {
-        Instance = this;
-    }
-
     void Start()
     {
+        GM = GameManager.Instance;
         shootingScript = ShootingScript.Instance;
 
         ActivateGun(activeGunLevel);
+        
     }
 
     void Update()
@@ -37,9 +37,14 @@ public class WeaponsScripts : MonoBehaviour
         ActivateGun(activeGunLevel);
         if (Input.GetMouseButtonDown(0))
         {
-            PoinMouseClick();
             RotateActiveGun();
-            StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
+            if(GM.Amount >= Totalbet){
+                
+                PoinMouseClick();
+                
+                StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
+                
+            }
         }
     }
 
@@ -50,7 +55,13 @@ public class WeaponsScripts : MonoBehaviour
             Gunlevel[i].SetActive(i == activeGunLevel - 1); 
         }
 
-    
+        AlwayGetBet(gunLevel);
+        
+    }
+
+    private void AlwayGetBet(int gunLevel){
+        Totalbet = Bet[gunLevel - 1];
+        
     }
 
     private void RotateActiveGun()
