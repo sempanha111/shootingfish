@@ -1,30 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponsScripts : MonoBehaviour
 {
-    public GameObject gunlevel1;
-    public GameObject gunlevel2;
+    public static WeaponsScripts Instance;
+    public Transform BullepositonToClone;
+    public GameObject[] Gunlevel;
+    public GameObject[] Gun;
+    public Animator[] Anima_Gun;
 
-    public GameObject Gun1;
-    public GameObject Gun2;
+    public GameObject poinClick;
 
-    public Animator GunLevel1Animator;
-    public Animator GunLevel2Animator;
-
-    [SerializeReference] int activeGunLevel = 2;
-
+    [SerializeField] int activeGunLevel = 1; // Default to level 2
     [SerializeField] private float AnimaShootWait = 0.11f;
 
 
-    
+    private ShootingScript shootingScript;
 
 
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
+        shootingScript = ShootingScript.Instance;
+
         ActivateGun(activeGunLevel);
     }
 
@@ -33,69 +37,68 @@ public class WeaponsScripts : MonoBehaviour
         ActivateGun(activeGunLevel);
         if (Input.GetMouseButtonDown(0))
         {
-            float angle = GetAngle(GetActiveGun().transform);
-            GetActiveGun().transform.rotation = Quaternion.Euler(0, 0, angle);
-
-            string animationName = $"GunSpriteLevel{activeGunLevel}";
-            string idleAnimation = $"IdleGun{activeGunLevel}Animation";
-            StartCoroutine(SwitchAndAnimateGun(GetActiveGunAnimator(), animationName, idleAnimation));
+            PoinMouseClick();
+            RotateActiveGun();
+            StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
         }
     }
 
-    private void ActivateGun(int level)
+    private void ActivateGun(int gunLevel)
     {
-        activeGunLevel = level;
-
-        gunlevel1.SetActive(level == 1);
-        gunlevel2.SetActive(level == 2);
-    }
-
-    private GameObject GetActiveGun()
-    {
-        switch (activeGunLevel)
+        for (int i = 0; i < Gunlevel.Length; i++)
         {
-            case 1: return Gun1;
-            case 2: return Gun2;
-            default: return Gun1;
+            Gunlevel[i].SetActive(i == activeGunLevel - 1); 
         }
+
+    
     }
 
-    private Animator GetActiveGunAnimator()
+    private void RotateActiveGun()
     {
-        switch (activeGunLevel)
-        {
-            case 1: return GunLevel1Animator;
-            case 2: return GunLevel2Animator;
-            default: return GunLevel1Animator;
-        }
+
+        GameObject activeGun = Gun[activeGunLevel - 1];
+
+        float angle = GetAngle(activeGun.transform);
+
+        activeGun.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName, string idleAnimation)
     {
-        // Play the specified animation
         animator.Play(animationName);
 
-        // Wait for the animation to complete
         yield return new WaitForSeconds(AnimaShootWait);
 
-        // Play the idle animation after the action animation
         animator.Play(idleAnimation);
-        Debug.Log("Animation complete.");
     }
 
     public float GetAngle(Transform gunTransform)
     {
+        // Get mouse position in world space
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = Mathf.Abs(Camera.main.transform.position.z);
 
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
         worldPosition.z = gunTransform.position.z;
 
+        // Calculate the direction vector from the gun to the mouse position
         Vector3 direction = worldPosition - gunTransform.position;
 
+        // Calculate the angle in degrees and adjust by 90 degrees to match initial rotation
         float angle = (Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg) - 90f;
-
 
         return angle;
     }
+
+
+    private void PoinMouseClick(){
+        Vector3 mouseposition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseposition.z = 0 ;
+
+        GameObject poinClickMouse =  Instantiate(poinClick, mouseposition, Quaternion.identity);
+
+        Destroy(poinClickMouse, 0.2f);
+    }
+
+
 }

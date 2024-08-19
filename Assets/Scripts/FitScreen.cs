@@ -4,7 +4,7 @@ using UnityEngine;
 public class FitScreen : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         FitImage();
     }

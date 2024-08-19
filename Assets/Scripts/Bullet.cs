@@ -4,31 +4,44 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    // public GameObject netPrefab;
+    [SerializeField] float netTime = 0.3f;
 
-    public GameObject prefab_shoot; // The bullet prefab
-    public Transform turret; // The shooting point (like the muzzle)
-    public float Rate = 0f; // Fire rate
-    public float Speed = 16f; // Bullet speed
+    private ShootingScript shootingScript;
 
-    private float Next_Shot = 1f;
+    private void Start() {
+        shootingScript = ShootingScript.Instance;
+    }
 
-    void Update()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check for left mouse click (index 0) and if enough time has passed for the next shot
-        if (Input.GetMouseButtonDown(0) && Time.time > Next_Shot)
+        if (other.gameObject.CompareTag("Fish"))
         {
-            ShootOnce();
+            // Change the fish's opacity to 0.90
+            // SpriteRenderer fishSpriteRenderer = other.GetComponent<SpriteRenderer>();
+            // if (fishSpriteRenderer != null)
+            // {
+            //     Color fishColor = fishSpriteRenderer.color;
+            //     fishColor.a = 0.30f;
+            //     fishSpriteRenderer.color = fishColor;
+
+            
+              
+            //     StartCoroutine(ResetFishOpacity(fishSpriteRenderer, resetOpacityTime));
+            // }
+
+            float fishCenterY = other.bounds.center.y;
+
+            Vector3 netPosition = new Vector3(transform.position.x, fishCenterY, transform.position.z);
+
+
+            Animator netInstance = Instantiate(shootingScript.Net, netPosition, Quaternion.identity);
+
+            Destroy(netInstance.gameObject, netTime);
+
+            // Destroy the bullet
+            Destroy(gameObject);
         }
     }
 
-    void ShootOnce()
-    {
-        Next_Shot = Time.time + Rate; // Set the time for the next allowed shot
-
-        // Instantiate the bullet prefab
-        GameObject bullet = Instantiate(prefab_shoot, turret.position, turret.rotation);
-
-        // Set bullet velocity
-        bullet.GetComponent<Rigidbody2D>().velocity = turret.up * Speed;
-    }
 }
