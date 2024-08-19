@@ -172,3 +172,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   netTime: 0.5
+  damage: 5
+  fishspritenew: {fileID: 0}
