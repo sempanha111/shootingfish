@@ -48,7 +48,7 @@ public class BulletScript : MonoBehaviour
 
             Vector3 netPosition = new Vector3(transform.position.x, fishCenterY, transform.position.z);
             Animator netInstance = Instantiate(shootingScript.Net, netPosition, Quaternion.identity);
-
+   
             Destroy(netInstance.gameObject, netTime);
 
     

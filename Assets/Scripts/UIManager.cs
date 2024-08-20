@@ -9,14 +9,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text textTotal;
     [SerializeField] private Text textBet;
 
-    private GameManager GM;
 
-    private void Start() {
-        GM = GameManager.Instance;
+    public void SetTextTotal(string st)
+    {
+        textTotal.text = st;
     }
-    private void Update() {
-        textTotal.text = (GM.Amount).ToString();
-        textBet.text = (GM.weaponsScripts.Totalbet).ToString();
-         
+
+    public void SetTextBet(string st)
+    {
+        textBet.text = st;
     }
 }

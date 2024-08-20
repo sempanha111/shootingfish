@@ -18,6 +18,12 @@ public class ShootingScript : MonoBehaviour
     public Animator Net;
 
     public Animator netAnimator;
+
+
+
+
+
+    
     private WeaponsScripts weaponsScripts;
     private GameManager GM;
 
@@ -35,7 +41,6 @@ public class ShootingScript : MonoBehaviour
 
     private void LateUpdate()
     {
-
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -63,11 +68,9 @@ public class ShootingScript : MonoBehaviour
 
         Destroy(bullet, bulletLifetime);
 
-
         Transform BullepositonToClone = weaponsScripts.BullepositonToClone;
 
         bullet.transform.SetParent(BullepositonToClone);
-
     }
 
     public void UpdateNetReference(Animator newNet)

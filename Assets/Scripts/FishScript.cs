@@ -7,15 +7,12 @@ public class FishScript : MonoBehaviour
     [SerializeField] public float Hp = 5f;
 
     
-    private BulletScript bulletScript;
 
     private GameManager GM;
 
     private void Start()
     {
-        bulletScript = BulletScript.Instance;
-       GM = GameManager.Instance;
-        
+        GM = GameManager.Instance;
     }
 
     private bool IsDead(){
@@ -44,7 +41,8 @@ public class FishScript : MonoBehaviour
     private void FishSystem(SpriteRenderer Fish){
         if(IsDead()){
             Fish.gameObject.SetActive(false);
-            
+            GM.DisplayTextManagerScript.Display(200.ToString(),transform);
+            GM.coinManager.coinAnima(transform);
         }
     }   
 

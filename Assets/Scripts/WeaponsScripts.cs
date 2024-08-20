@@ -27,13 +27,12 @@ public class WeaponsScripts : MonoBehaviour
     {
         GM = GameManager.Instance;
         shootingScript = ShootingScript.Instance;
-
         ActivateGun(activeGunLevel);
-        
     }
 
     void Update()
     {
+       // GM.UIManager.SetTextBet(Bet.ToString());
         ActivateGun(activeGunLevel);
         if (Input.GetMouseButtonDown(0))
         {
@@ -54,7 +53,6 @@ public class WeaponsScripts : MonoBehaviour
         {
             Gunlevel[i].SetActive(i == activeGunLevel - 1); 
         }
-
         AlwayGetBet(gunLevel);
         
     }
