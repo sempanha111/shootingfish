@@ -22,7 +22,7 @@ public class CoinManager : MonoBehaviour
 
     public void coinAnima(Transform Fishpos){
 
-        for(int i = 0; i <= CoinAmount; i++){
+        for(int i = 0; i <= CoinAmount / 2; i++){
             GameObject coinobject = Instantiate(coinprefab, coinparent);
             coinobject.SetActive(true);
 

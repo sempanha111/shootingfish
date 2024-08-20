@@ -41,7 +41,7 @@ public class FishScript : MonoBehaviour
     private void FishSystem(SpriteRenderer Fish){
         if(IsDead()){
             Fish.gameObject.SetActive(false);
-            GM.DisplayTextManagerScript.Display(200.ToString(),transform);
+            GM.DisplayTextManagerScript.Display("+200".ToString(),transform);
             GM.coinManager.coinAnima(transform);
         }
     }   
