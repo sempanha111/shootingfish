@@ -64,19 +64,14 @@ public class WeaponsScripts : MonoBehaviour
         animator.Play(idleAnimation);
     }
 
-    public float GetAngle(Transform gunTransform)
+    private float GetAngle(Transform gunTransform)
     {
-        // Get mouse position in world space
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = Mathf.Abs(Camera.main.transform.position.z);
 
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        worldPosition.z = gunTransform.position.z;
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        worldPosition.z = 0;
 
-        // Calculate the direction vector from the gun to the mouse position
         Vector3 direction = worldPosition - gunTransform.position;
 
-        // Calculate the angle in degrees and adjust by 90 degrees to match initial rotation
         float angle = (Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg) - 90f;
 
         return angle;

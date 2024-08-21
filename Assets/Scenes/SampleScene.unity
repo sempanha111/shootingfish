@@ -341,7 +341,10 @@ MonoBehaviour:
   - {fileID: 1682916385}
   - {fileID: 742742882}
   FishSpawnPosition: {fileID: 1306339014}
-  StartPos: {fileID: 0}
+  TopLeftPos: {fileID: 2084749224}
+  BottomLeftPos: {fileID: 199389089}
+  TopRightPos: {fileID: 575463568}
+  BottomRightPos: {fileID: 1114148135}
 --- !u!1 &84459638
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,8 +474,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 74.13
-  m_fontSizeBase: 74.13
+  m_fontSize: 95
+  m_fontSizeBase: 95
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -639,7 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 199389089}
   m_Layer: 0
-  m_Name: StartBottomLeftPos
+  m_Name: BottomLeftPos
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -653,12 +656,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199389088}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.65, y: -5.49, z: 0.73898154}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -29.14, y: -11.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1840172650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &309345729
 GameObject:
@@ -1538,7 +1541,7 @@ GameObject:
   m_Component:
   - component: {fileID: 575463568}
   m_Layer: 0
-  m_Name: StartTopRightPos
+  m_Name: TopRightPos
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1552,12 +1555,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 575463567}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.49, y: 6.51, z: 0.73898154}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1840172650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &575648129
 GameObject:
@@ -1799,7 +1802,7 @@ GameObject:
   - component: {fileID: 742742888}
   - component: {fileID: 742742887}
   - component: {fileID: 742742886}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Fish4
   m_TagString: Fish
   m_Icon: {fileID: 0}
@@ -1815,7 +1818,7 @@ Transform:
   m_GameObject: {fileID: 742742882}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.459999, y: -1.42, z: 0}
+  m_LocalPosition: {x: -18.12, y: -3.58, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1860,7 +1863,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 398302799
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d2ab232af62edc64b8cd2ea103eb69ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1883,7 +1886,7 @@ Animator:
   m_GameObject: {fileID: 742742882}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 896698c8d527fc34b8cac45345684d13, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2090,7 +2093,7 @@ GameObject:
   - component: {fileID: 811188957}
   - component: {fileID: 811188958}
   - component: {fileID: 811188959}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Fish1
   m_TagString: Fish
   m_Icon: {fileID: 0}
@@ -2151,7 +2154,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 398302799
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 46e3d6198ae1c8941930235fb0bfbce7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2174,7 +2177,7 @@ Animator:
   m_GameObject: {fileID: 811188953}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 09e27ba2b5abc5347b46fc27ed5ccf33, type: 2}
+  m_Controller: {fileID: 9100000, guid: fc861080b8f067f4f865cfeee1457a6d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2629,7 +2632,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 61.309998}
+  m_AnchoredPosition: {x: 0, y: 61.31006}
   m_SizeDelta: {x: 0, y: -122.61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1021375442
@@ -2674,7 +2677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2935,7 +2938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1114148135}
   m_Layer: 0
-  m_Name: StartBottomRightPos
+  m_Name: BottomRightPos
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2949,12 +2952,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1114148134}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.49, y: -5.49, z: 0.73898154}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -11.57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1840172650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1306339013
 GameObject:
@@ -2966,7 +2969,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1306339014}
   m_Layer: 0
-  m_Name: FishSpawnManager
+  m_Name: FishSpawnParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3344,7 +3347,7 @@ GameObject:
   - component: {fileID: 1481555907}
   - component: {fileID: 1481555906}
   - component: {fileID: 1481555908}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: net2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3722,7 +3725,7 @@ GameObject:
   - component: {fileID: 1682916391}
   - component: {fileID: 1682916390}
   - component: {fileID: 1682916389}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Fish3
   m_TagString: Fish
   m_Icon: {fileID: 0}
@@ -3738,7 +3741,7 @@ Transform:
   m_GameObject: {fileID: 1682916385}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.2, y: -1.42, z: 0}
+  m_LocalPosition: {x: -18.23, y: -5.54, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3783,7 +3786,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 398302799
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5df7150abe52a754b90d78b5d888db3a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3806,7 +3809,7 @@ Animator:
   m_GameObject: {fileID: 1682916385}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b9b2ea217a4a2ca4cafcab20c18bcaad, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -4381,7 +4384,7 @@ GameObject:
   - component: {fileID: 1742905487}
   - component: {fileID: 1742905486}
   - component: {fileID: 1742905488}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Fish2
   m_TagString: Fish
   m_Icon: {fileID: 0}
@@ -4442,7 +4445,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 398302799
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f8aca8d9a6977e744ab1dc52dbe7ac7d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4465,7 +4468,7 @@ Animator:
   m_GameObject: {fileID: 1742905482}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9b05eae4b68622e479d2dc66a69309f0, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -4892,6 +4895,41 @@ MonoBehaviour:
   waveSpeed: 0.78
   dropInterval: 2.8
   shader: {fileID: 4800000, guid: 162fe242d486f4dab90ed53db15b9c19, type: 3}
+--- !u!1 &1840172649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1840172650}
+  m_Layer: 0
+  m_Name: PositionFish
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1840172650
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840172649}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.49, y: 6.51, z: 0.73898154}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2084749224}
+  - {fileID: 199389089}
+  - {fileID: 575463568}
+  - {fileID: 1114148135}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1843384025
 GameObject:
   m_ObjectHideFlags: 0
@@ -5129,7 +5167,7 @@ GameObject:
   - component: {fileID: 1938648291}
   - component: {fileID: 1938648293}
   - component: {fileID: 1938648292}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: net1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5597,7 +5635,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2084749224}
   m_Layer: 0
-  m_Name: StartTopLeftPos
+  m_Name: TopLeftPos
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -5611,12 +5649,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084749223}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.02399592, w: 0.9997121}
-  m_LocalPosition: {x: -15.65, y: 6.6, z: 0.73898154}
+  m_LocalRotation: {x: -0, y: -0, z: -0.02399592, w: 0.9997121}
+  m_LocalPosition: {x: -29.19, y: -0.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1840172650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -2.75}
 --- !u!1 &2114072579
 GameObject:
@@ -5954,7 +5992,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4106430006497593185, guid: 219eed3430a12244d9ab4d863f8525aa, type: 3}
       propertyPath: m_fontSize
-      value: 74.13
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 4106430006497593185, guid: 219eed3430a12244d9ab4d863f8525aa, type: 3}
       propertyPath: m_fontStyle
@@ -5962,7 +6000,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4106430006497593185, guid: 219eed3430a12244d9ab4d863f8525aa, type: 3}
       propertyPath: m_fontSizeBase
-      value: 74.13
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 4106430006497593185, guid: 219eed3430a12244d9ab4d863f8525aa, type: 3}
       propertyPath: m_isRightToLeft
@@ -5989,7 +6027,4 @@ SceneRoots:
   - {fileID: 500359124}
   - {fileID: 1874945718}
   - {fileID: 1306339014}
-  - {fileID: 199389089}
-  - {fileID: 2084749224}
-  - {fileID: 1114148135}
-  - {fileID: 575463568}
+  - {fileID: 1840172650}
