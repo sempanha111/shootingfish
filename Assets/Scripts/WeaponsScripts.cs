@@ -14,7 +14,7 @@ public class WeaponsScripts : MonoBehaviour
 
     public GameObject poinClick;
 
-    [SerializeField] int activeGunLevel = 1; 
+    [SerializeField] public int activeGunLevel = 1;
     [SerializeField] private float AnimaShootWait = 0.11f;
 
     public float Totalbet;
@@ -22,7 +22,7 @@ public class WeaponsScripts : MonoBehaviour
     private GameManager GM;
     private ShootingScript shootingScript;
 
-
+    public GameObject  activeGun;
     void Start()
     {
         GM = GameManager.Instance;
@@ -30,45 +30,28 @@ public class WeaponsScripts : MonoBehaviour
         ActivateGun(activeGunLevel);
     }
 
-    void Update()
+    public void ActivateGun(int activeGunLevel)
     {
-       // GM.UIManager.SetTextBet(Bet.ToString());
-        ActivateGun(activeGunLevel);
-        if (Input.GetMouseButtonDown(0))
-        {
-            RotateActiveGun();
-            if(GM.Amount >= Totalbet){
-                
-                PoinMouseClick();
-                
-                StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
-                
-            }
-        }
-    }
 
-    private void ActivateGun(int gunLevel)
-    {
         for (int i = 0; i < Gunlevel.Length; i++)
         {
-            Gunlevel[i].SetActive(i == activeGunLevel - 1); 
+            Gunlevel[i].SetActive(i == activeGunLevel - 1);
         }
-        AlwayGetBet(gunLevel);
-        
+        AlwayGetBet(activeGunLevel);
+        activeGun = Gun[activeGunLevel - 1];
+
+        // Debug.Log("Your Activing Gun is:"+ activeGunLevel);
     }
 
-    private void AlwayGetBet(int gunLevel){
+    private void AlwayGetBet(int gunLevel)
+    {
         Totalbet = Bet[gunLevel - 1];
-        
+
     }
 
     private void RotateActiveGun()
     {
-
-        GameObject activeGun = Gun[activeGunLevel - 1];
-
         float angle = GetAngle(activeGun.transform);
-
         activeGun.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
@@ -100,13 +83,33 @@ public class WeaponsScripts : MonoBehaviour
     }
 
 
-    private void PoinMouseClick(){
+    private void PoinMouseClick()
+    {
         Vector3 mouseposition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseposition.z = 0 ;
+        mouseposition.z = 0;
 
-        GameObject poinClickMouse =  Instantiate(poinClick, mouseposition, Quaternion.identity);
+        GameObject poinClickMouse = Instantiate(poinClick, mouseposition, Quaternion.identity);
 
         Destroy(poinClickMouse, 0.2f);
+    }
+
+    public void ShootingClick()
+    {
+
+        RotateActiveGun();
+        if (GM.Amount >= Totalbet)
+        {
+            
+            PoinMouseClick();
+            
+            StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
+
+
+            shootingScript.ShootOnce(activeGun.transform);
+            
+            GM.CalculateTotalCoinWithBet();
+
+        }
     }
 
 

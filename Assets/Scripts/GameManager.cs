@@ -25,8 +25,23 @@ public class GameManager : MonoBehaviour
     public void CalculateTotalCoinWithBet(){
         Amount -= weaponsScripts.Totalbet;
     }
-    
 
+    public void CalulateTotalCoinWithCoinFish(int amount){
+        StartCoroutine(IEnumCalulateCoinFish(amount));
+    }
+
+    public IEnumerator IEnumCalulateCoinFish(float amount){
+        float perIncrease = amount / 5;
+
+        yield return new WaitForSeconds(1.5f);
+        while(amount >=0)
+        {
+             Amount += perIncrease;
+             amount -= perIncrease;
+             yield return new WaitForSeconds(0.2f);
+        }     
+    }
+    
     void Update()
     {
         UIManager.SetTextTotal(Amount.ToString());

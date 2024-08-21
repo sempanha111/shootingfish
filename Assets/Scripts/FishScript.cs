@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FishScript : MonoBehaviour
-{   
+{
     [SerializeField] public float Hp = 5f;
+    [SerializeField] public int CoinFish;
+    [SerializeField] public float MoveSpeed;
 
-    
+    private Rigidbody2D rb2d;
+
+
 
     private GameManager GM;
 
     private void Start()
     {
         GM = GameManager.Instance;
+        MoveHandle();
     }
 
-    private bool IsDead(){
+    private bool IsDead()
+    {
         return Hp <= 0;
     }
 
@@ -33,18 +39,34 @@ public class FishScript : MonoBehaviour
 
 
 
-    public void TakeDamage(SpriteRenderer Fish, float Damage){
-        Hp -= Damage;      
+    public void TakeDamage(SpriteRenderer Fish, float Damage)
+    {
+        Hp -= Damage;
         FishSystem(Fish);
     }
 
-    private void FishSystem(SpriteRenderer Fish){
-        if(IsDead()){
+    private void FishSystem(SpriteRenderer Fish)
+    {
+        if (IsDead())
+        {
             Fish.gameObject.SetActive(false);
-            GM.DisplayTextManagerScript.Display("+200".ToString(),transform);
+            GM.DisplayTextManagerScript.Display(("+" + CoinFish).ToString(), transform);
             GM.coinManager.coinAnima(transform);
+            GM.CalulateTotalCoinWithCoinFish(CoinFish);
+
         }
-    }   
+    }
+
+
+
+    void MoveHandle()
+    {
+        if (rb2d == null)
+        {
+            rb2d = GetComponent<Rigidbody2D>();
+        }
+        rb2d.velocity = transform.right * MoveSpeed;
+    }
 
 
 }

@@ -6,14 +6,14 @@ public class ShootingScript : MonoBehaviour
 
     public static ShootingScript Instance { get; private set; }
 
-    public GameObject prefab_shoot; // The bullet prefab
-    public Transform turret; // The shooting point (like the muzzle)
-    public float Rate = 0f; // Fire rate
-    public float Speed = 16f; // Bullet speed
+    public GameObject prefab_shoot; 
+    public Transform turret; 
+    public float Rate = 0f; 
+    public float Speed = 16f;
 
     public float Next_Shot = 0f;
 
-    public float bulletLifetime = 2f; // Time after which the bullet is destroyed
+    public float bulletLifetime = 2f;
 
     public Animator Net;
 
@@ -38,16 +38,11 @@ public class ShootingScript : MonoBehaviour
         GM = GameManager.Instance;
     }
 
-
     private void LateUpdate()
     {
 
         if (Input.GetMouseButtonDown(0))
         {
-            if(GM.Amount >= weaponsScripts.Totalbet){
-                ShootOnce();
-                GM.CalculateTotalCoinWithBet();
-            }
 
             if (Instance != null)
             {
@@ -56,21 +51,16 @@ public class ShootingScript : MonoBehaviour
 
         }
 
-
     }
-    public void ShootOnce()
+    public void ShootOnce(Transform gunTransform)
     {
-        Next_Shot = Time.time + Rate;
 
-        GameObject bullet = Instantiate(prefab_shoot, turret.position, turret.rotation);
+        GameObject bullet = Instantiate(prefab_shoot, gunTransform.position, gunTransform.rotation);
 
-        bullet.GetComponent<Rigidbody2D>().velocity = turret.up * Speed;
+        bullet.GetComponent<Rigidbody2D>().velocity = gunTransform.up * Speed;
 
         Destroy(bullet, bulletLifetime);
 
-        Transform BullepositonToClone = weaponsScripts.BullepositonToClone;
-
-        bullet.transform.SetParent(BullepositonToClone);
     }
 
     public void UpdateNetReference(Animator newNet)

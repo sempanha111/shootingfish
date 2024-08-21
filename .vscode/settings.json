@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "shootingfish.sln"
+    "dotnet.defaultSolution": "shootingfish.sln",
+    "cSpell.words": [
+        "Bullepositon"
+    ]
 }
