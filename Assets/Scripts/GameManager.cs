@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         Amount -= weaponsScripts.Totalbet;
     }
 
-    public void CalulateTotalCoinWithCoinFish(int amount){
+    public void CalulateTotalCoinWithCoinFish(float amount){
         StartCoroutine(IEnumCalulateCoinFish(amount));
     }
 

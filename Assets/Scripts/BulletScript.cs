@@ -51,16 +51,15 @@ public class BulletScript : MonoBehaviour
    
             Destroy(netInstance.gameObject, netTime);
 
-    
             Destroy(gameObject);
         }
     }
 
 
-    void OnBecameInvisible()//Out of screen phone
-    {
-        
-    }
+    // void OnBecameInvisible(GameObject gameObject)//Out of screen phone
+    // {
+    //     Destroy(gameObject);
+    // }
 
 
 

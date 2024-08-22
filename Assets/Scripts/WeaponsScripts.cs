@@ -20,13 +20,15 @@ public class WeaponsScripts : MonoBehaviour
     public float Totalbet;
 
     private GameManager GM;
-    private ShootingScript shootingScript;
+    private ShootingScript shootScript;
 
+
+    public Animator newNetupdate;
     public GameObject  activeGun;
     void Start()
     {
         GM = GameManager.Instance;
-        shootingScript = ShootingScript.Instance;
+        shootScript = ShootingScript.Instance;
         ActivateGun(activeGunLevel);
     }
 
@@ -40,12 +42,16 @@ public class WeaponsScripts : MonoBehaviour
         AlwayGetBet(activeGunLevel);
         activeGun = Gun[activeGunLevel - 1];
 
-        // Debug.Log("Your Activing Gun is:"+ activeGunLevel);
+        
     }
+
+
+
 
     private void AlwayGetBet(int gunLevel)
     {
         Totalbet = Bet[gunLevel - 1];
+        
 
     }
 
@@ -100,7 +106,7 @@ public class WeaponsScripts : MonoBehaviour
             StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
 
 
-            shootingScript.ShootOnce(activeGun.transform);
+            shootScript.ShootOnce(activeGun.transform);
             
             GM.CalculateTotalCoinWithBet();
 

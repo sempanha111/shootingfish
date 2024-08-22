@@ -7,6 +7,7 @@ TagManager:
   - Standing
   - GunUI
   - Fish
+  - Border
   layers:
   - Default
   - TransparentFX
@@ -49,4 +50,10 @@ TagManager:
     locked: 0
   - name: Fish
     uniqueID: 398302799
+    locked: 0
+  - name: Net
+    uniqueID: 4192309537
+    locked: 0
+  - name: Gun
+    uniqueID: 30273009
     locked: 0

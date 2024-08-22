@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fish2
+  m_Name: Fish6
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -22,30 +22,30 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 21300000, guid: f8aca8d9a6977e744ab1dc52dbe7ac7d, type: 3}
-    - time: 0.11666667
+    - time: 0.07692308
       value: {fileID: 21300000, guid: 935c0df4ec07e8f46be071514def0efe, type: 3}
-    - time: 0.23333333
+    - time: 0.15384616
       value: {fileID: 21300000, guid: fa3d7d98f86fd3b48b012e3ba47e0a32, type: 3}
-    - time: 0.35
+    - time: 0.23076923
       value: {fileID: 21300000, guid: 4d6249eacd442fe4d8c768a302a93b31, type: 3}
-    - time: 0.45
+    - time: 0.30769232
       value: {fileID: 21300000, guid: 937901435c74d7348a27da854245aaef, type: 3}
-    - time: 0.55
+    - time: 0.3846154
       value: {fileID: 21300000, guid: 4cc7ca332e1c5924ebccafbba5a3d677, type: 3}
-    - time: 0.65
+    - time: 0.46153846
       value: {fileID: 21300000, guid: 4ee744989e1f122418954c2e61ada767, type: 3}
-    - time: 0.76666665
+    - time: 0.53846157
       value: {fileID: 21300000, guid: 77a764c24a013f24a9d63c301f59f262, type: 3}
-    - time: 0.8833333
+    - time: 0.61538464
       value: {fileID: 21300000, guid: 3f489c080b159df4d8bee8fde133a3fd, type: 3}
-    - time: 1
+    - time: 0.6923077
       value: {fileID: 21300000, guid: d6c923c1536c9224eab6058252d95853, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
     flags: 2
-  m_SampleRate: 60
+  m_SampleRate: 13
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -77,7 +77,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.0166667
+    m_StopTime: 0.7692308
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

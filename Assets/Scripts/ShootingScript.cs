@@ -20,23 +20,12 @@ public class ShootingScript : MonoBehaviour
     public Animator netAnimator;
 
 
-
-
-
-    
-    private WeaponsScripts weaponsScripts;
-    private GameManager GM;
-
     private void Awake()
     {
         Instance = this;
     }
 
-    void Start()
-    {
-        weaponsScripts = GameManager.Instance.weaponsScripts;
-        GM = GameManager.Instance;
-    }
+
 
     private void LateUpdate()
     {
@@ -60,6 +49,7 @@ public class ShootingScript : MonoBehaviour
         bullet.GetComponent<Rigidbody2D>().velocity = gunTransform.up * Speed;
 
         Destroy(bullet, bulletLifetime);
+        
 
     }
 

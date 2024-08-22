@@ -5,7 +5,7 @@ using UnityEngine;
 public class FishScript : MonoBehaviour
 {
     [SerializeField] public float Hp = 5f;
-    [SerializeField] public int CoinFish;
+    [SerializeField] public float CoinFish;
     [SerializeField] public float MoveSpeed;
 
     private Rigidbody2D rb2d;
