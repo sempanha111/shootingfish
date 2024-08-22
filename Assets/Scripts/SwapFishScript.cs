@@ -23,6 +23,8 @@ public class SwapFishScript : MonoBehaviour
         StartCoroutine(IEnumStartFish_Bottom_LEFT());
         
 
+        IEnumSmallFish();
+
     }
 
     int orderLayer;
@@ -68,7 +70,7 @@ public class SwapFishScript : MonoBehaviour
 
 
 
-            yield return new WaitForSeconds(Random.Range(3f, 4f));
+            yield return new WaitForSeconds(Random.Range(1f, 4f));
 
         }
     }
@@ -94,7 +96,7 @@ public class SwapFishScript : MonoBehaviour
 
             orderLayer++;
 
-            yield return new WaitForSeconds(Random.Range(3f, 5f));
+            yield return new WaitForSeconds(Random.Range(2f, 5f));
 
         }
     }
@@ -116,7 +118,30 @@ public class SwapFishScript : MonoBehaviour
 
             orderLayer++;
 
-            yield return new WaitForSeconds(Random.Range(3f, 5f));
+            yield return new WaitForSeconds(Random.Range(1f, 5f));
+
+        }
+    }
+    private IEnumerator IEnumSmallFish()
+    {
+        
+        while (true)
+        {
+            int fishIndex = GetSmallFish();
+            var (StartPos, EndPos) = GeneratePos();
+            
+            GameObject spawnedFish = Instantiate(Fish[fishIndex], StartPos.position, Quaternion.identity, FishSpawnPosition);
+            RotateForFish(spawnedFish.transform, EndPos);
+
+            spawnedFish.SetActive(true);
+
+            SpriteRenderer fishSprite = spawnedFish.GetComponent<SpriteRenderer>();
+
+            fishSprite.sortingOrder = orderLayer;
+
+            orderLayer++;
+
+            yield return new WaitForSeconds(Random.Range(1f, 2f));
 
         }
     }
@@ -144,14 +169,36 @@ public class SwapFishScript : MonoBehaviour
 
         return FishIndex;
     }
+    private int GetSmallFish()
+    {
 
-    float SpawnNextTime = 0f;
+        int percent = Random.Range(1, 100);
+        int FishLength = Fish.Length;
+        int FishIndex;
+
+        if (percent >= 90) //10%
+        {
+            FishIndex = 1;
+        }
+        else if (percent >= 70) //20%
+        {
+            FishIndex = Random.Range(1,2);
+        }
+        else //70%
+        {
+            FishIndex = Random.Range(1,4);
+        }
+
+        return FishIndex;
+    }
+
+    float SpawnNextTime = 70f;
     void LateUpdate()
     {           
         if(Time.time >= SpawnNextTime){
             var (startPos, endPos) = GeneratePos();
             Boos(startPos,endPos);
-            SpawnNextTime = Time.time + 40f;
+            SpawnNextTime = Time.time +70f;
         }
     }
 
@@ -191,14 +238,14 @@ public class SwapFishScript : MonoBehaviour
         spawnedFish.SetActive(true);
         SpriteRenderer fishSprite = spawnedFish.GetComponent<SpriteRenderer>();
 
-        fishSprite.sortingOrder = 100;
+        fishSprite.sortingOrder = orderLayer + 100;
         
     }
 
 
     private void RotateForFish(Transform spawnedFish, Transform EndPosition)
     {
-        float angle = GetAngle(spawnedFish, EndPosition) + Random.Range(-5f, 10f);
+        float angle = GetAngle(spawnedFish, EndPosition) + Random.Range(-1f, 10f);
         spawnedFish.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
