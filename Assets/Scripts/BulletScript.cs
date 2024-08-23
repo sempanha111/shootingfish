@@ -14,7 +14,7 @@ public class BulletScript : MonoBehaviour
 
     private ShootingScript shootingScript;
 
-
+    [HideInInspector]public int BulletId = -99;
     void Awake()
     {
         Instance = this;

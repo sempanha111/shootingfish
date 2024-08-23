@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text textTotal;
     [SerializeField] private Text textBet;
 
+
+
     private GameManager GM;
     void Start()
     {

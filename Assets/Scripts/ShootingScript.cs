@@ -41,11 +41,11 @@ public class ShootingScript : MonoBehaviour
         }
 
     }
-    public void ShootOnce(Transform gunTransform)
+    public void ShootOnce(Transform gunTransform,int bulletId)
     {
 
         GameObject bullet = Instantiate(prefab_shoot, gunTransform.position, gunTransform.rotation);
-
+        bullet.GetComponent<BulletScript>().BulletId = bulletId;
         bullet.GetComponent<Rigidbody2D>().velocity = gunTransform.up * Speed;
 
         Destroy(bullet, bulletLifetime);

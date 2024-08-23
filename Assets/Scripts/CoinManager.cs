@@ -15,6 +15,10 @@ public class CoinManager : MonoBehaviour
 
     private GameManager GM;
 
+    private FishScript fishScript;
+
+
+
     void Start()
     {
         GM = GameManager.Instance;
@@ -22,7 +26,15 @@ public class CoinManager : MonoBehaviour
 
     public void coinAnima(Transform Fishpos){
 
-        for(int i = 0; i <= CoinAmount / 2; i++){
+
+
+        fishScript = Fishpos.GetComponent<FishScript>();
+
+        float fishcoin =fishScript.CoinFish / 2;
+
+        float timeToLoop = CalculateTimeToLoop(fishcoin);
+
+        for(int i = 0; i <= timeToLoop; i++){
             GameObject coinobject = Instantiate(coinprefab, coinparent);
             coinobject.SetActive(true);
 
@@ -41,6 +53,14 @@ public class CoinManager : MonoBehaviour
 
 
         }   
+    }
+
+
+    private float CalculateTimeToLoop(float fishcoin)
+    {
+        float clampedFishcoin = Mathf.Clamp(fishcoin, 0.1f, 500f);
+
+        return Mathf.Lerp(3, 30, (clampedFishcoin - 0.1f) / (500f - 0.1f));
     }
 
 

@@ -11,7 +11,7 @@ public class WeaponsScripts : MonoBehaviour
     public GameObject[] Gun;
     public Animator[] Anima_Gun;
     [SerializeField] public float[] Bet;
-
+    public int bulletId = -99;
     public GameObject poinClick;
 
     [SerializeField] public int activeGunLevel = 1;
@@ -34,25 +34,17 @@ public class WeaponsScripts : MonoBehaviour
 
     public void ActivateGun(int activeGunLevel)
     {
-
         for (int i = 0; i < Gunlevel.Length; i++)
         {
             Gunlevel[i].SetActive(i == activeGunLevel - 1);
         }
         AlwayGetBet(activeGunLevel);
         activeGun = Gun[activeGunLevel - 1];
-
-        
     }
-
-
-
 
     private void AlwayGetBet(int gunLevel)
     {
         Totalbet = Bet[gunLevel - 1];
-        
-
     }
 
     private void RotateActiveGun()
@@ -93,6 +85,20 @@ public class WeaponsScripts : MonoBehaviour
 
         Destroy(poinClickMouse, 0.2f);
     }
+    private bool holding = false;
+    private float timeToShoot= 0;
+    private float fireRate = 5;
+
+    void Update()
+    {
+        if(holding)
+        {
+            if(timeToShoot <= Time.time){
+            ShootingClick();
+            timeToShoot = Time.time + 1/fireRate;//0+1/10 = 
+            }
+        }
+    }
 
     public void ShootingClick()
     {
@@ -100,18 +106,21 @@ public class WeaponsScripts : MonoBehaviour
         RotateActiveGun();
         if (GM.Amount >= Totalbet)
         {
-            
             PoinMouseClick();
-            
             StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
-
-
-            shootScript.ShootOnce(activeGun.transform);
-            
+            shootScript.ShootOnce(activeGun.transform,bulletId);
             GM.CalculateTotalCoinWithBet();
-
         }
     }
 
+    public void OnClickDown()
+    {
+        holding = true;
+    }
+
+     public void OnClickUp()
+    {
+        holding = false;
+    }
 
 }

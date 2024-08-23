@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public UIManager UIManager {get;private set;}
     public DisplayTextManagerScript DisplayTextManagerScript {get;private set;}
     public CoinManager coinManager {get; private set;}
+
+    public WeaponManagerAll WeaponManagerAll {get; private set;}
     
 
     public float Amount = 2000;
@@ -20,6 +22,7 @@ public class GameManager : MonoBehaviour
         UIManager = GetComponent<UIManager>();
         DisplayTextManagerScript = GetComponent<DisplayTextManagerScript>();
         coinManager = GetComponent<CoinManager>();
+        WeaponManagerAll = GetComponent<WeaponManagerAll>();
     }
 
     public void CalculateTotalCoinWithBet(){
