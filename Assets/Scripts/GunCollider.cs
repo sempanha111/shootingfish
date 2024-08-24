@@ -14,7 +14,7 @@ public class GunCollider : MonoBehaviour
     }
 
     private  IEnumerator IEnumReable(Collider2D Fish){
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(2f);
         Fish.enabled = true;
     }
 

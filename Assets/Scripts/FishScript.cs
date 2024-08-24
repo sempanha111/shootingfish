@@ -37,22 +37,28 @@ public class FishScript : MonoBehaviour
         Fish.color = backUpColor;
     }
 
-
-
-    public void TakeDamage(SpriteRenderer Fish, float Damage)
+    public void TakeDamage(SpriteRenderer Fish, float Damage, int BulletId)
     {
         Hp -= Damage;
-        FishSystem(Fish);
+        FishSystem(Fish, BulletId);
     }
 
-    private void FishSystem(SpriteRenderer Fish)
+    private void FishSystem(SpriteRenderer Fish, int BulletId)
     {
         if (IsDead())
-        {
+        {   
+            Debug.Log("Fish Has Been Die From BulletId:" + BulletId);
             Fish.gameObject.SetActive(false);
             GM.DisplayTextManagerScript.Display(("+" + CoinFish).ToString(), transform);
-            GM.coinManager.coinAnima(transform);
-            GM.CalulateTotalCoinWithCoinFish(CoinFish);
+            GM.coinManager.coinAnima(transform, BulletId);
+
+
+            if(BulletId == 0){
+                GM.CalulateTotalCoinWithCoinFish(CoinFish);
+            }
+            else{
+                GM.CalulateNPCCoinFish(CoinFish, BulletId);
+            }
 
         }
     }
@@ -68,5 +74,13 @@ public class FishScript : MonoBehaviour
         rb2d.velocity = transform.right * MoveSpeed;
     }
 
+    void OnBecameInvisible()
+    {
+        GM.fishInScreenList.Remove(this);
+    }
 
+    void OnBecameVisible()
+    {
+        GM.fishInScreenList.Add(this);
+    }
 }

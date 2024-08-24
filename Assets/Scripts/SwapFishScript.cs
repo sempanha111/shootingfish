@@ -177,12 +177,14 @@ public class SwapFishScript : MonoBehaviour
                 }
             }
 
+
             
 
             yield return new WaitForSeconds(Random.Range(1f, 4f));
 
         }
     }
+
     private IEnumerator IEnumFish_RIGHT_Generate() //Function SWap General Fish  From Right Only
     {
         yield return new WaitForSeconds(0.7f);
@@ -225,6 +227,8 @@ public class SwapFishScript : MonoBehaviour
 
         }
     }
+
+
 
 }
 

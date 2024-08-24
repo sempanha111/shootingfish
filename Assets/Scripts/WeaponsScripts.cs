@@ -11,7 +11,9 @@ public class WeaponsScripts : MonoBehaviour
     public GameObject[] Gun;
     public Animator[] Anima_Gun;
     [SerializeField] public float[] Bet;
-    public int bulletId = -99;
+    public GameObject[] prefab_Bullet; 
+    public Animator[] Net;
+
     public GameObject poinClick;
 
     [SerializeField] public int activeGunLevel = 1;
@@ -23,12 +25,11 @@ public class WeaponsScripts : MonoBehaviour
     private ShootingScript shootScript;
 
 
-    public Animator newNetupdate;
     public GameObject  activeGun;
     void Start()
     {
-        GM = GameManager.Instance;
         shootScript = ShootingScript.Instance;
+        GM = GameManager.Instance;
         ActivateGun(activeGunLevel);
     }
 
@@ -108,7 +109,7 @@ public class WeaponsScripts : MonoBehaviour
         {
             PoinMouseClick();
             StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
-            shootScript.ShootOnce(activeGun.transform,bulletId);
+            shootScript.ShootOnce(prefab_Bullet[activeGunLevel - 1], activeGun.transform, 0);
             GM.CalculateTotalCoinWithBet();
         }
     }

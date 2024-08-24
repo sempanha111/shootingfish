@@ -6,22 +6,23 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
+
+    public int BulletId;
     public static BulletScript Instance;
     // public GameObject netPrefab;
     [SerializeField] float netTime = 0.3f;
 
     [SerializeField] float damage = 1f;
 
-    private ShootingScript shootingScript;
+    private WeaponsScripts ws;
 
-    [HideInInspector]public int BulletId = -99;
     void Awake()
     {
         Instance = this;
     }
 
     private void Start() {
-        shootingScript = ShootingScript.Instance;
+        ws = GameManager.Instance.weaponsScripts;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -35,11 +36,11 @@ public class BulletScript : MonoBehaviour
             {
                 Color fishColor = fishSpriteRenderer.color;
                 Color colorFishBackup = fishColor;
-                fishColor.a = 0.70f;
+                fishColor.a = 0.60f;
                 fishSpriteRenderer.color = fishColor;
 
                 getfishScript.ResetFishColor(fishSpriteRenderer,colorFishBackup);
-                getfishScript.TakeDamage(fishSpriteRenderer, damage);
+                getfishScript.TakeDamage(fishSpriteRenderer, damage, BulletId);
                 
             }
             
@@ -47,20 +48,15 @@ public class BulletScript : MonoBehaviour
 
 
             Vector3 netPosition = new Vector3(transform.position.x, fishCenterY, transform.position.z);
-            Animator netInstance = Instantiate(shootingScript.Net, netPosition, Quaternion.identity);
+            Animator netInstance = Instantiate(ws.Net[ws.activeGunLevel - 1], netPosition, Quaternion.identity);
+
+            // Debug.Log("BUlLet ID :" + BulletId);
    
             Destroy(netInstance.gameObject, netTime);
 
             Destroy(gameObject);
         }
     }
-
-
-    // void OnBecameInvisible(GameObject gameObject)//Out of screen phone
-    // {
-    //     Destroy(gameObject);
-    // }
-
 
 
 }

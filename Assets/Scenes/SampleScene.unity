@@ -224,6 +224,8 @@ GameObject:
   - component: {fileID: 23999489}
   - component: {fileID: 23999490}
   - component: {fileID: 23999491}
+  - component: {fileID: 23999494}
+  - component: {fileID: 23999493}
   - component: {fileID: 23999492}
   m_Layer: 0
   m_Name: GameManager
@@ -259,8 +261,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c210afff3862848835a34a1097aeef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textTotal: {fileID: 0}
-  textBet: {fileID: 0}
+  textTotal: {fileID: 1368879417}
+  textBet: {fileID: 510049547}
+  textTotalNPC:
+  - {fileID: 751401900}
+  textBetNPC:
+  - {fileID: 433230071}
 --- !u!114 &23999487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +279,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c31b4d1f72a00a459adcf6dc688bd46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gun1: {fileID: 0}
+  gun2: {fileID: 0}
+  gun3: {fileID: 0}
   Amount: 2000
 --- !u!114 &23999488
 MonoBehaviour:
@@ -299,12 +308,16 @@ MonoBehaviour:
   Bet:
   - 0.2
   - 0.3
-  bulletId: 1
+  prefab_Bullet:
+  - {fileID: 2742644042312003490, guid: e13e23ecb45708140b5d56be91f6918a, type: 3}
+  - {fileID: 5219170759267054960, guid: 74226f71ce9972147b36056db5c2e7cd, type: 3}
+  Net:
+  - {fileID: 1938648292}
+  - {fileID: 1481555907}
   poinClick: {fileID: 1769563683616118036, guid: d0bc2558bc879b842bc5606d7ab1f97d, type: 3}
-  activeGunLevel: 2
+  activeGunLevel: 1
   AnimaShootWait: 0.11
   Totalbet: 0
-  newNetupdate: {fileID: 0}
   activeGun: {fileID: 0}
 --- !u!114 &23999489
 MonoBehaviour:
@@ -335,7 +348,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinprefab: {fileID: 500359122}
   coinparent: {fileID: 1874945718}
-  coinEnd: {fileID: 690195834}
+  coinEnd:
+  - {fileID: 690195834}
+  - {fileID: 891394891}
   moveDuration: 1
   moveEase: 28
   CoinAmount: 10
@@ -379,12 +394,56 @@ MonoBehaviour:
   m_GameObject: {fileID: 23999484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18f3d9cfde94c3a4c8a73ee8bf83ddbe, type: 3}
+  m_Script: {fileID: 11500000, guid: 8810557f8fb255041a127284ebc3e9cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapon:
-  - {fileID: 1038904189}
-  - {fileID: 1257802039}
+  Gunlevel: []
+  Gun: []
+  Anima_Gun: []
+  Bet: []
+  AmountCoin: 3000
+--- !u!114 &23999493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23999484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed200c264bd8ba4e8b6f23790d4dc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gunlevel: []
+  Gun: []
+  Anima_Gun: []
+  Bet: []
+  AmountCoin: 2000
+--- !u!114 &23999494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23999484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84bfda4c8f20166418d3b733fc401113, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gunlevel:
+  - {fileID: 1411306597}
+  - {fileID: 1504618966}
+  Gun:
+  - {fileID: 79553297}
+  - {fileID: 948555647}
+  Anima_Gun:
+  - {fileID: 79553300}
+  - {fileID: 948555650}
+  Bet:
+  - 5
+  - 10
+  AmountCoin: 1000
 --- !u!1 &79553297
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,7 +521,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 85
   m_Sprite: {fileID: 21300000, guid: e8c3e9800342b564da019688f4055ee9, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.627451}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1372,14 +1431,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9595ce5f8d2605479265feaa21cbd7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab_shoot: {fileID: 2742644042312003490, guid: e13e23ecb45708140b5d56be91f6918a, type: 3}
-  turret: {fileID: 309345730}
   Rate: 0
   Speed: 16
   Next_Shot: 0
   bulletLifetime: 1
-  Net: {fileID: 1938648292}
-  netAnimator: {fileID: 1938648292}
 --- !u!1 &325418646
 GameObject:
   m_ObjectHideFlags: 0
@@ -3878,19 +3933,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686890944}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9595ce5f8d2605479265feaa21cbd7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab_shoot: {fileID: 2742644042312003490, guid: e13e23ecb45708140b5d56be91f6918a, type: 3}
-  turret: {fileID: 686890945}
   Rate: 0
   Speed: 16
   Next_Shot: 0
   bulletLifetime: 1
-  Net: {fileID: 1574008959}
-  netAnimator: {fileID: 1574008959}
 --- !u!1 &690195833
 GameObject:
   m_ObjectHideFlags: 0
@@ -4756,7 +4807,7 @@ GameObject:
   - component: {fileID: 833773656}
   - component: {fileID: 833773657}
   m_Layer: 5
-  m_Name: GunGroupUI1
+  m_Name: GunGroupUI2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4801,7 +4852,7 @@ GameObject:
   - component: {fileID: 891394891}
   - component: {fileID: 891394892}
   m_Layer: 5
-  m_Name: CoinGroupUI1
+  m_Name: CoinGroupUI2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4993,19 +5044,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917916079}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9595ce5f8d2605479265feaa21cbd7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab_shoot: {fileID: 5219170759267054960, guid: 74226f71ce9972147b36056db5c2e7cd, type: 3}
-  turret: {fileID: 917916080}
   Rate: 0
   Speed: 16
   Next_Shot: 0
   bulletLifetime: 1
-  Net: {fileID: 601713744}
-  netAnimator: {fileID: 601713744}
 --- !u!1 &948555647
 GameObject:
   m_ObjectHideFlags: 0
@@ -5284,9 +5331,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: WeaponsPlayerScripts, Assembly-CSharp
-          m_MethodName: ShootingClickPlayer
+        - m_Target: {fileID: 1257802042}
+          m_TargetAssemblyTypeName: WeaponNPC, Assembly-CSharp
+          m_MethodName: ShootingAIClick
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -5308,7 +5355,7 @@ GameObject:
   - component: {fileID: 1021968913}
   - component: {fileID: 1021968912}
   m_Layer: 5
-  m_Name: StandingGun1
+  m_Name: StandingGun2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5394,7 +5441,7 @@ Transform:
   m_GameObject: {fileID: 1038904189}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5426,7 +5473,7 @@ GameObject:
   - component: {fileID: 1053628296}
   - component: {fileID: 1053628295}
   m_Layer: 5
-  m_Name: GunHolderUI1
+  m_Name: GunHolderUI2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5763,6 +5810,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1257802041}
   - component: {fileID: 1257802040}
+  - component: {fileID: 1257802042}
   m_Layer: 0
   m_Name: Gun1
   m_TagString: Untagged
@@ -5799,6 +5847,28 @@ Transform:
   - {fileID: 1504618967}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1257802042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257802039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f3d9cfde94c3a4c8a73ee8bf83ddbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 1
+  prefab_Bullet:
+  - {fileID: 2742644042312003490, guid: e13e23ecb45708140b5d56be91f6918a, type: 3}
+  - {fileID: 5219170759267054960, guid: 74226f71ce9972147b36056db5c2e7cd, type: 3}
+  Net:
+  - {fileID: 1574008959}
+  - {fileID: 601713744}
+  activeGunLevel: 2
+  Totalbet: 0
+  AnimaShootWait: 0.11
 --- !u!1 &1306339013
 GameObject:
   m_ObjectHideFlags: 0
@@ -5840,10 +5910,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1333594020}
   - component: {fileID: 1333594023}
-  - component: {fileID: 1333594022}
   - component: {fileID: 1333594021}
   m_Layer: 5
-  m_Name: Gun1
+  m_Name: Gun2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5892,36 +5961,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1333594022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1333594019}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1bc22a33ea429f8478f438c4bf5b3588, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1333594023
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6250,7 +6289,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1bc22a33ea429f8478f438c4bf5b3588, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.627451}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6588,7 +6627,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -4.7661276, y: -3.9912314}
+  m_Offset: {x: -4.7238398, y: -3.9860158}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -6599,7 +6638,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.962919, y: 1.9312916}
+  m_Size: {x: 2.5176487, y: 1.8998966}
   m_EdgeRadius: 0
 --- !u!1 &1481555904
 GameObject:
@@ -6770,7 +6809,19 @@ Transform:
   - {fileID: 948555648}
   m_Father: {fileID: 1257802041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1504618968
+--- !u!114 &1504618968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504618966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 529f098afd33dc04fb5726c23d04ac36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &1504618969
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6802,7 +6853,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -4.576907, y: -4.080292}
+  m_Offset: {x: -4.7574525, y: -4.0295362}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -6813,20 +6864,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.0964737, y: 1.8827403}
+  m_Size: {x: 2.6118116, y: 1.7799108}
   m_EdgeRadius: 0
---- !u!114 &1504618969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1504618966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 529f098afd33dc04fb5726c23d04ac36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1561989660
 GameObject:
   m_ObjectHideFlags: 0
@@ -7466,7 +7505,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -4.576907, y: -4.080292}
+  m_Offset: {x: -4.728356, y: -4.080292}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7477,7 +7516,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.0964737, y: 1.8827403}
+  m_Size: {x: 2.6829498, y: 1.88274}
   m_EdgeRadius: 0
 --- !u!114 &1658215053
 MonoBehaviour:
@@ -8823,7 +8862,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -4.7661276, y: -3.9912314}
+  m_Offset: {x: -4.7577133, y: -4.07537}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -8834,7 +8873,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.962919, y: 1.9312916}
+  m_Size: {x: 2.8018131, y: 1.7630155}
   m_EdgeRadius: 0
 --- !u!1 &1825989841
 GameObject:
@@ -9182,14 +9221,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9595ce5f8d2605479265feaa21cbd7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab_shoot: {fileID: 5219170759267054960, guid: 74226f71ce9972147b36056db5c2e7cd, type: 3}
-  turret: {fileID: 1872457738}
   Rate: 0
   Speed: 16
   Next_Shot: 0
   bulletLifetime: 1
-  Net: {fileID: 1481555907}
-  netAnimator: {fileID: 1481555907}
 --- !u!1 &1874945717
 GameObject:
   m_ObjectHideFlags: 0
@@ -10611,7 +10646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.627451}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

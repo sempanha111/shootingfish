@@ -10,6 +10,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text textTotal;
     [SerializeField] private Text textBet;
 
+    int activeLevel;
+
+    //NPC
+    [SerializeField] private Text[] textTotalNPC;
+    [SerializeField] private Text[] textBetNPC;
+
 
 
     private GameManager GM;
@@ -28,7 +34,19 @@ public class UIManager : MonoBehaviour
         textBet.text = st;
     }
 
-    int activeLevel;
+
+    //NPC
+    public void SetTextTotalNPC(int id, string st)
+    {
+        textTotalNPC[id - 1].text = st;
+    }
+
+    public void SetTextBetNPC(int id, string st)
+    {
+        textBetNPC[id - 1].text = st;
+    }
+
+
 
     
 

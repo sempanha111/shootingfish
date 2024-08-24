@@ -7,7 +7,7 @@ public class CoinManager : MonoBehaviour
 {
     public GameObject coinprefab;
     public Transform coinparent;
-    public Transform coinEnd;
+    public Transform[] coinEnd;
     public float moveDuration;
     public Ease moveEase;
 
@@ -24,7 +24,7 @@ public class CoinManager : MonoBehaviour
         GM = GameManager.Instance;
     }
 
-    public void coinAnima(Transform Fishpos){
+    public void coinAnima(Transform Fishpos, int BulletId){
 
 
 
@@ -47,7 +47,7 @@ public class CoinManager : MonoBehaviour
                 coinobject.transform.DOScale(Vector3.one * 0.01f,3.5f);
             });
 
-            coinobject.transform.DOMove(coinEnd.position,moveDuration).SetEase(moveEase).SetDelay(Random.Range(0.8f, 1f)).OnComplete(() => {
+            coinobject.transform.DOMove(coinEnd[BulletId].position,moveDuration).SetEase(moveEase).SetDelay(Random.Range(0.8f, 1f)).OnComplete(() => {
                 Destroy(coinobject);
             });   
 
