@@ -2,40 +2,37 @@ using UnityEngine;
 
 public class ShootingScript : MonoBehaviour
 {
-    public static ShootingScript Instance { get; private set; }
 
-    private WeaponsScripts ws;
     private BulletScript bs;
-    public float Rate = 0f; 
+    private GameManager GM;
     public float Speed = 16f;
-    public float Next_Shot = 0f;
-    public float bulletLifetime = 2f;
 
     private void Awake()
     {
 
-            Instance = this;
+
 
     }
 
     void Start()
     {
-        ws = GameManager.Instance.weaponsScripts;
+        GM = GameManager.Instance;
     }
 
-    public void ShootOnce(GameObject prefab_Bullet, Transform gunTransform, int Id)
+
+
+    public void ShootOnce(Transform gunTransform,int ActiveGun, int Id )
     {
 
-        GameObject bullet = Instantiate(prefab_Bullet, gunTransform.position, gunTransform.rotation);
+        GameObject bullet = Instantiate(GM.prefab_Bullet[0], gunTransform.position, gunTransform.rotation);
         bullet.GetComponent<Rigidbody2D>().velocity = gunTransform.up * Speed;
         bs = bullet.GetComponent<BulletScript>();
         bs.BulletId = Id;
+        bs.acitiveGun = ActiveGun;
 
-        Debug.Log("Shooting script id :" + Id);
-
-        // Destroy the bullet after a set lifetime
-        Destroy(bullet, bulletLifetime);
     }
+// 
+  
 
 
 }

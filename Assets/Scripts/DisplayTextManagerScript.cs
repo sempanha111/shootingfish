@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,18 +11,21 @@ public class DisplayTextManagerScript : MonoBehaviour
     public TextMeshProUGUI textPrefab;
     public Transform TextHolder;
 
-    public void Display(string st, Transform pos)
+
+
+
+    public void Display(string st, Vector3 pos)
     {
-        StartCoroutine(IEnumDisplay(st, pos));
+        StartCoroutine(IEnumDisplay(st,pos));
     }
 
-    private IEnumerator IEnumDisplay(string st, Transform pos)
+    private IEnumerator IEnumDisplay(string st, Vector3 pos)
     {
         yield return new WaitForSeconds(0.5f);
 
-        var Text = Instantiate(textPrefab, TextHolder);
+        
+        var Text = Instantiate(textPrefab, pos, Quaternion.identity, TextHolder);
         Text.text = st;
-        Text.transform.position = pos.position;//set position spawn text to position (pos==pos fish)
         Text.gameObject.SetActive(true);
 
         StartCoroutine(ScaleText(Text.transform));
@@ -36,7 +40,7 @@ public class DisplayTextManagerScript : MonoBehaviour
         float time = 0;
 
         Color originalColor = text.color;
-        Color targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0); 
+        Color targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
 
         while (time < duration)
         {

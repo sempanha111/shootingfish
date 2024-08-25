@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public Gun3 gun3;
 
 
+
+    public GameObject[] prefab_Bullet;
+    public Animator[] Net;
     public float Amount = 2000;
 
     void Awake()
@@ -75,8 +78,6 @@ public class GameManager : MonoBehaviour
                 {
                     gun1.AmountCoin += perIncrease;
                     Coinfish -= perIncrease;
-
-
 
                     yield return new WaitForSeconds(0.2f);
                 }

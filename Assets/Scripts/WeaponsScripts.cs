@@ -11,8 +11,7 @@ public class WeaponsScripts : MonoBehaviour
     public GameObject[] Gun;
     public Animator[] Anima_Gun;
     [SerializeField] public float[] Bet;
-    public GameObject[] prefab_Bullet; 
-    public Animator[] Net;
+
 
     public GameObject poinClick;
 
@@ -22,25 +21,25 @@ public class WeaponsScripts : MonoBehaviour
     public float Totalbet;
 
     private GameManager GM;
-    private ShootingScript shootScript;
+    private BulletScript bs;
 
 
     public GameObject  activeGun;
     void Start()
     {
-        shootScript = ShootingScript.Instance;
         GM = GameManager.Instance;
         ActivateGun(activeGunLevel);
     }
 
-    public void ActivateGun(int activeGunLevel)
+    public void ActivateGun(int gununLevelSet)
     {
         for (int i = 0; i < Gunlevel.Length; i++)
         {
-            Gunlevel[i].SetActive(i == activeGunLevel - 1);
+            Gunlevel[i].SetActive(i == gununLevelSet - 1);
         }
-        AlwayGetBet(activeGunLevel);
-        activeGun = Gun[activeGunLevel - 1];
+        AlwayGetBet(gununLevelSet);
+        activeGun = Gun[gununLevelSet - 1];
+        activeGunLevel = gununLevelSet;
     }
 
     private void AlwayGetBet(int gunLevel)
@@ -94,8 +93,10 @@ public class WeaponsScripts : MonoBehaviour
     {
         if(holding)
         {
+            
             if(timeToShoot <= Time.time){
             ShootingClick();
+            PoinMouseClick();
             timeToShoot = Time.time + 1/fireRate;//0+1/10 = 
             }
         }
@@ -107,9 +108,9 @@ public class WeaponsScripts : MonoBehaviour
         RotateActiveGun();
         if (GM.Amount >= Totalbet)
         {
-            PoinMouseClick();
+            
             StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
-            shootScript.ShootOnce(prefab_Bullet[activeGunLevel - 1], activeGun.transform, 0);
+            ShootOnce(activeGun.transform, activeGunLevel, 0);
             GM.CalculateTotalCoinWithBet();
         }
     }
@@ -122,6 +123,18 @@ public class WeaponsScripts : MonoBehaviour
      public void OnClickUp()
     {
         holding = false;
+    }
+
+    public void ShootOnce(Transform gunTransform,int ActiveGun, int Id )
+    {
+
+        GameObject bullet = Instantiate(GM.prefab_Bullet[ActiveGun - 1], gunTransform.position, gunTransform.rotation);
+        bullet.GetComponent<Rigidbody2D>().velocity = gunTransform.up * 16f;
+        bs = bullet.GetComponent<BulletScript>();
+        bs.BulletId = Id;
+        bs.acitiveGun = ActiveGun;
+
+
     }
 
 }

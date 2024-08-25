@@ -1,28 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using Unity.Mathematics;
+
 using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
 
     public int BulletId;
-    public static BulletScript Instance;
+    public int acitiveGun;
     // public GameObject netPrefab;
     [SerializeField] float netTime = 0.3f;
 
     [SerializeField] float damage = 1f;
 
-    private WeaponsScripts ws;
-
-    void Awake()
-    {
-        Instance = this;
-    }
+    private GameManager GM;
 
     private void Start() {
-        ws = GameManager.Instance.weaponsScripts;
+        GM = GameManager.Instance;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -45,17 +37,21 @@ public class BulletScript : MonoBehaviour
             }
             
             float fishCenterY = other.bounds.center.y;
-
-
             Vector3 netPosition = new Vector3(transform.position.x, fishCenterY, transform.position.z);
-            Animator netInstance = Instantiate(ws.Net[ws.activeGunLevel - 1], netPosition, Quaternion.identity);
 
-            // Debug.Log("BUlLet ID :" + BulletId);
+            var netInstance = Instantiate(GM.Net[acitiveGun - 1], netPosition, Quaternion.identity);
+
+
    
             Destroy(netInstance.gameObject, netTime);
 
             Destroy(gameObject);
         }
+    }
+
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 
 

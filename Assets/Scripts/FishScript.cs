@@ -46,12 +46,9 @@ public class FishScript : MonoBehaviour
     private void FishSystem(SpriteRenderer Fish, int BulletId)
     {
         if (IsDead())
-        {   
-            Debug.Log("Fish Has Been Die From BulletId:" + BulletId);
-            Fish.gameObject.SetActive(false);
-            GM.DisplayTextManagerScript.Display(("+" + CoinFish).ToString(), transform);
+        {
+            GM.DisplayTextManagerScript.Display(("+" + CoinFish).ToString(), transform.position);
             GM.coinManager.coinAnima(transform, BulletId);
-
 
             if(BulletId == 0){
                 GM.CalulateTotalCoinWithCoinFish(CoinFish);
@@ -60,6 +57,7 @@ public class FishScript : MonoBehaviour
                 GM.CalulateNPCCoinFish(CoinFish, BulletId);
             }
 
+            Destroy(gameObject);
         }
     }
 
@@ -74,12 +72,13 @@ public class FishScript : MonoBehaviour
         rb2d.velocity = transform.right * MoveSpeed;
     }
 
-    void OnBecameInvisible()
+    private void OnBecameInvisible()
     {
         GM.fishInScreenList.Remove(this);
+        Destroy(gameObject);
     }
 
-    void OnBecameVisible()
+    private void OnBecameVisible()
     {
         GM.fishInScreenList.Add(this);
     }

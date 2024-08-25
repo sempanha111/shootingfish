@@ -18,18 +18,15 @@ public class WeaponNPC : MonoBehaviour
     private GameObject[] Gun;
     private Animator[] Anima_Gun;
     private float[] Bet;
-    public GameObject[] prefab_Bullet;
-    public Animator[] Net;
     public int activeGunLevel = 1;
     public float Totalbet;
     [SerializeField] private float AnimaShootWait = 0.11f;
     private GameObject activeGun;
-    private ShootingScript shootingScript;
+    private BulletScript bs;
 
     void Start()
     {
         GM = GameManager.Instance;
-        shootingScript = ShootingScript.Instance;
         gun1 = GM.gun1;
         gun2 = GM.gun2;
         gun3 = GM.gun3;
@@ -81,15 +78,18 @@ public class WeaponNPC : MonoBehaviour
     }
 
 
-    public void ActivateGun(int activeGunLevel)
+    public void ActivateGun(int gunLevelSet)
     {
         for (int i = 0; i < Gunlevel.Length; i++)
         {
-            Gunlevel[i].SetActive(i == activeGunLevel - 1);
+            Gunlevel[i].SetActive(i == gunLevelSet - 1);
 
         }
-        GetEachBetGun(activeGunLevel);
-        activeGun = Gun[activeGunLevel - 1];
+        GetEachBetGun(gunLevelSet);
+        activeGun = Gun[gunLevelSet - 1];
+
+        activeGunLevel = gunLevelSet;
+        
 
     }
 
@@ -103,8 +103,19 @@ public class WeaponNPC : MonoBehaviour
     private float fireRate = 12;
     void Update()
     {
-        GM.UIManager.SetTextTotalNPC(id, gun1.AmountCoin.ToString());
+        
+        
         GM.UIManager.SetTextBetNPC(id, Totalbet.ToString());
+
+        if(id == 1){
+            GM.UIManager.SetTextTotalNPC(id, gun1.AmountCoin.ToString());
+        }
+        else if(id == 2){
+            GM.UIManager.SetTextTotalNPC(id, gun2.AmountCoin.ToString());
+        }
+        else{
+            GM.UIManager.SetTextTotalNPC(id, gun3.AmountCoin.ToString());
+        }
 
 
         if (targetFish == null)
@@ -118,9 +129,7 @@ public class WeaponNPC : MonoBehaviour
                 ShootingAIClick();
                 timeToShoot = Time.time + 5 / fireRate;
             }
-        }
-
-
+        }          
     }
 
 
@@ -128,8 +137,16 @@ public class WeaponNPC : MonoBehaviour
     {
         
         StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
-        shootingScript.ShootOnce(prefab_Bullet[activeGunLevel - 1], activeGun.transform, id);
-        gun1.AmountCoin -= Bet[activeGunLevel - 1];
+        ShootOnce(activeGun.transform, activeGunLevel, id);
+        if(id == 1){
+            gun1.AmountCoin -= Totalbet;
+        }
+        else if(id == 2){
+            gun2.AmountCoin -= Totalbet;
+        }
+        else{
+            gun3.AmountCoin -= Totalbet;
+        }
     }
 
 
@@ -177,6 +194,21 @@ public class WeaponNPC : MonoBehaviour
 
         return closestFish;
     }
+
+    public void ShootOnce(Transform gunTransform,int ActiveGun, int Id )
+    {
+
+        GameObject bullet = Instantiate(GM.prefab_Bullet[ActiveGun - 1], gunTransform.position, gunTransform.rotation);
+        bullet.GetComponent<Rigidbody2D>().velocity = gunTransform.up * 16f;
+        bs = bullet.GetComponent<BulletScript>();
+        bs.BulletId = Id;
+        bs.acitiveGun = ActiveGun;
+
+        // Debug.Log("ActiveGun:" + ActiveGun);
+
+    }
+
+
 
 
 
