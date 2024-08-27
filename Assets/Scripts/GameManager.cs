@@ -73,7 +73,6 @@ public class GameManager : MonoBehaviour
         switch (BulletId)
         {
             case 1:
-                Debug.Log("coin Gun1: " + gun1.AmountCoin);
                 while (Coinfish >= 0)
                 {
                     gun1.AmountCoin += perIncrease;

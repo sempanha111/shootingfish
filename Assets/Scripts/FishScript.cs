@@ -48,7 +48,7 @@ public class FishScript : MonoBehaviour
         if (IsDead())
         {
             GM.DisplayTextManagerScript.Display(("+" + CoinFish).ToString(), transform.position);
-            GM.coinManager.coinAnima(transform, BulletId);
+            GM.coinManager.coinAnima(this, BulletId);
 
             if(BulletId == 0){
                 GM.CalulateTotalCoinWithCoinFish(CoinFish);

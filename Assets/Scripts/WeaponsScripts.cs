@@ -53,14 +53,24 @@ public class WeaponsScripts : MonoBehaviour
         activeGun.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-    private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName, string idleAnimation)
+private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName, string idleAnimation)
+{
+    if (animator == null || !animator.gameObject.activeInHierarchy)
     {
-        animator.Play(animationName);
-
-        yield return new WaitForSeconds(AnimaShootWait);
-
-        animator.Play(idleAnimation);
+        yield break;
     }
+
+    animator.Play(animationName);
+
+    yield return new WaitForSeconds(AnimaShootWait);
+
+    if (animator == null || !animator.gameObject.activeInHierarchy)
+    {
+        yield break;
+    }
+
+    animator.Play(idleAnimation);
+}
 
     private float GetAngle(Transform gunTransform)
     {

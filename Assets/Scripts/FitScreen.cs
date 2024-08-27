@@ -25,6 +25,6 @@ public class FitScreen : MonoBehaviour
 
         // Set the scale of the sprite
         transform.localScale = new Vector3(scaleX, scaleY, 1f);
-        // Destroy(this);
+        Destroy(this);
     }
 }

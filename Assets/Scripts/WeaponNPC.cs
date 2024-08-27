@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-
-
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponNPC : MonoBehaviour
@@ -52,7 +51,7 @@ public class WeaponNPC : MonoBehaviour
                 Bet = gun1.Bet;
 
 
-                Debug.Log("Debug from GunNPC 1");
+
 
                 break;
             case 2:
@@ -61,7 +60,7 @@ public class WeaponNPC : MonoBehaviour
                 Anima_Gun = gun2.Anima_Gun;
                 Bet = gun2.Bet;
 
-                Debug.Log("Debug from GunNPC 2");
+
 
                 break;
             default:
@@ -70,7 +69,7 @@ public class WeaponNPC : MonoBehaviour
                 Anima_Gun = gun3.Anima_Gun;
                 Bet = gun3.Bet;
 
-                Debug.Log("Debug from GunNPC 3");
+
 
                 break;
 
@@ -89,7 +88,7 @@ public class WeaponNPC : MonoBehaviour
         activeGun = Gun[gunLevelSet - 1];
 
         activeGunLevel = gunLevelSet;
-        
+
 
     }
 
@@ -99,21 +98,24 @@ public class WeaponNPC : MonoBehaviour
     }
 
     FishScript targetFish = null;
-    private float timeToShoot= 0;
+    private float timeToShoot = 0;
     private float fireRate = 12;
     void Update()
     {
-        
-        
+
+
         GM.UIManager.SetTextBetNPC(id, Totalbet.ToString());
 
-        if(id == 1){
+        if (id == 1)
+        {
             GM.UIManager.SetTextTotalNPC(id, gun1.AmountCoin.ToString());
         }
-        else if(id == 2){
+        else if (id == 2)
+        {
             GM.UIManager.SetTextTotalNPC(id, gun2.AmountCoin.ToString());
         }
-        else{
+        else
+        {
             GM.UIManager.SetTextTotalNPC(id, gun3.AmountCoin.ToString());
         }
 
@@ -121,35 +123,38 @@ public class WeaponNPC : MonoBehaviour
         if (targetFish == null)
         {
             targetFish = FindFish();
+            //Change Gun
+
         }
         else
         {
-            if(timeToShoot <= Time.time){
+            if (timeToShoot <= Time.time)
+            {
                 RotateActiveGun();
                 ShootingAIClick();
                 timeToShoot = Time.time + 5 / fireRate;
             }
-        }          
+        }
     }
 
 
     public void ShootingAIClick()
     {
-        
         StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
         ShootOnce(activeGun.transform, activeGunLevel, id);
-        if(id == 1){
+        if (id == 1)
+        {
             gun1.AmountCoin -= Totalbet;
         }
-        else if(id == 2){
+        else if (id == 2)
+        {
             gun2.AmountCoin -= Totalbet;
         }
-        else{
+        else
+        {
             gun3.AmountCoin -= Totalbet;
         }
     }
-
-
     // Function 
     private void RotateActiveGun()
     {
@@ -166,20 +171,28 @@ public class WeaponNPC : MonoBehaviour
     }
     private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName, string idleAnimation)
     {
+        if (animator == null || !animator.gameObject.activeInHierarchy)
+        {
+            yield break;
+        }
+
         animator.Play(animationName);
 
         yield return new WaitForSeconds(AnimaShootWait);
 
-        animator.Play(idleAnimation);
+        if (animator == null || !animator.gameObject.activeInHierarchy)
+        {
+            yield break;
+        }
 
-        // Debug.Log("play Animatin banh in Animator Gun[" + (activeGunLevel - 1) +"] Shoot" + (activeGunLevel));
+        animator.Play(idleAnimation);
     }
+
 
     private FishScript FindFish()
     {
         FishScript[] Fishes = GM.fishInScreenList.ToArray();
         FishScript closestFish = null;
-
         float closestDistance = Mathf.Infinity;
 
         foreach (FishScript fish in Fishes)
@@ -192,10 +205,29 @@ public class WeaponNPC : MonoBehaviour
             }
         }
 
+        ChangeGun(closestFish);
         return closestFish;
     }
 
-    public void ShootOnce(Transform gunTransform,int ActiveGun, int Id )
+    void ChangeGun(FishScript fishscript)
+    {
+        if (fishscript == null)
+        {
+            return;
+        }
+
+        if (fishscript.Hp <= 40)
+        {
+            ActivateGun(1);
+        }
+        else
+        {
+            ActivateGun(2);
+        }
+    }
+
+
+    public void ShootOnce(Transform gunTransform, int ActiveGun, int Id)
     {
 
         GameObject bullet = Instantiate(GM.prefab_Bullet[ActiveGun - 1], gunTransform.position, gunTransform.rotation);
@@ -203,8 +235,6 @@ public class WeaponNPC : MonoBehaviour
         bs = bullet.GetComponent<BulletScript>();
         bs.BulletId = Id;
         bs.acitiveGun = ActiveGun;
-
-        // Debug.Log("ActiveGun:" + ActiveGun);
 
     }
 
