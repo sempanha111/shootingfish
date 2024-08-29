@@ -230,15 +230,15 @@ public class WeaponNPC : MonoBehaviour
         }
         else if (fishscript.Hp <= 50)
         {
-            ActivateGun(16);
+            ActivateGun(17);
         }
         else if (fishscript.Hp <= 60)
         {
-            ActivateGun(8);
+            ActivateGun(17);
         }
         else
         {
-            ActivateGun(4);
+            ActivateGun(17);
         }
     }
 

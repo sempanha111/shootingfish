@@ -1,13 +1,10 @@
-using System;
+
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DisplayTextManagerScript : MonoBehaviour
 {
-    public Camera mainCamera;
     public TextMeshProUGUI textPrefab;
     public Transform TextHolder;
 
@@ -23,7 +20,6 @@ public class DisplayTextManagerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        
         var Text = Instantiate(textPrefab, pos, Quaternion.identity, TextHolder);
         Text.text = st;
         Text.gameObject.SetActive(true);

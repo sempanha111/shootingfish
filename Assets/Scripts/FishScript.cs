@@ -15,7 +15,6 @@ public class FishScript : MonoBehaviour
     SpriteRenderer fishsprite;
 
 
-
     private GameManager GM;
 
     private void Start()
@@ -24,6 +23,7 @@ public class FishScript : MonoBehaviour
         GM = GameManager.Instance;
         MoveHandle();
         fishsprite = this.GetComponent<SpriteRenderer>();
+ 
     }
 
     private bool IsDead()
