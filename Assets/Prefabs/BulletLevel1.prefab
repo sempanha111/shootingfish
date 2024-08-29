@@ -172,5 +172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BulletId: 0
+  acitiveGun: 0
   netTime: 0.5
-  damage: 5
+  damage: 15

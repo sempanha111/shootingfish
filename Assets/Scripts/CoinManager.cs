@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEditor.Rendering;
-using System.Diagnostics;
 
 public class CoinManager : MonoBehaviour
 {

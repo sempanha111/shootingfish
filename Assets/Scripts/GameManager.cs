@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,11 +12,12 @@ public class GameManager : MonoBehaviour
     public UIManager UIManager { get; private set; }
     public DisplayTextManagerScript DisplayTextManagerScript { get; private set; }
     public CoinManager coinManager { get; private set; }
+    public Shoot shoot { get; private set;}
     public List<FishScript> fishInScreenList = new List<FishScript>();
     public Gun1 gun1;
     public Gun2 gun2;
     public Gun3 gun3;
-
+    public Color shadowColor;
 
 
     public GameObject[] prefab_Bullet;
@@ -29,9 +31,27 @@ public class GameManager : MonoBehaviour
         UIManager = GetComponent<UIManager>();
         DisplayTextManagerScript = GetComponent<DisplayTextManagerScript>();
         coinManager = GetComponent<CoinManager>();
+        shoot = GetComponent<Shoot>();
         gun1 = GetComponent<Gun1>();
         gun2 = GetComponent<Gun2>();
-        gun3 = GetComponent<Gun3>();
+        gun3 = GetComponent<Gun3>();      
+    }
+
+    void Start()
+    {
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
+
+        Application.lowMemory += OnLowMemory;
+    }
+
+    private void OnLowMemory()
+    {
+        Resources.UnloadUnusedAssets();
+        GC.Collect();
+
+        //More features, Do Delete Pooling
+
     }
 
     public void CalculateTotalCoinWithBet()

@@ -1,16 +1,21 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponsScripts : MonoBehaviour
 {
 
-    public Transform BullepositonToClone;
+
     public GameObject[] Gunlevel;
     public GameObject[] Gun;
     public Animator[] Anima_Gun;
     [SerializeField] public float[] Bet;
+
+
+    private List<GameObject> Listpoinclick = new List<GameObject>();
 
 
     public GameObject poinClick;
@@ -24,7 +29,7 @@ public class WeaponsScripts : MonoBehaviour
     private BulletScript bs;
 
 
-    public GameObject  activeGun;
+    public GameObject activeGun;
     void Start()
     {
         GM = GameManager.Instance;
@@ -53,24 +58,24 @@ public class WeaponsScripts : MonoBehaviour
         activeGun.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName, string idleAnimation)
-{
-    if (animator == null || !animator.gameObject.activeInHierarchy)
+    private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName, string idleAnimation)
     {
-        yield break;
+        if (animator == null || !animator.gameObject.activeInHierarchy)
+        {
+            yield break;
+        }
+
+        animator.Play(animationName);
+
+        yield return new WaitForSeconds(AnimaShootWait);
+
+        if (animator == null || !animator.gameObject.activeInHierarchy)
+        {
+            yield break;
+        }
+
+        animator.Play(idleAnimation);
     }
-
-    animator.Play(animationName);
-
-    yield return new WaitForSeconds(AnimaShootWait);
-
-    if (animator == null || !animator.gameObject.activeInHierarchy)
-    {
-        yield break;
-    }
-
-    animator.Play(idleAnimation);
-}
 
     private float GetAngle(Transform gunTransform)
     {
@@ -91,23 +96,38 @@ private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName,
         Vector3 mouseposition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseposition.z = 0;
 
-        GameObject poinClickMouse = Instantiate(poinClick, mouseposition, Quaternion.identity);
+        GameObject poinclickClone = Listpoinclick.FirstOrDefault(o => !o.activeSelf);
+        if(poinclickClone == null){
+            GameObject poininstan = Instantiate(poinClick);
+            Listpoinclick.Add(poininstan);
+            poinclickClone = poininstan;
+        }
+        poinclickClone.SetActive(true);
+        poinclickClone.transform.position = mouseposition;
+        poinclickClone.transform.rotation = Quaternion.identity;
 
-        Destroy(poinClickMouse, 0.2f);
+        StartCoroutine(IEnumResetpoin(poinclickClone));
     }
+
+    private IEnumerator IEnumResetpoin(GameObject poinclickClone){
+        yield return new WaitForSeconds(0.2f);
+        poinclickClone.SetActive(false);
+    }
+
     private bool holding = false;
-    private float timeToShoot= 0;
+    private float timeToShoot = 0;
     private float fireRate = 5;
 
     void Update()
     {
-        if(holding)
+        if (holding)
         {
-            
-            if(timeToShoot <= Time.time){
-            ShootingClick();
-            PoinMouseClick();
-            timeToShoot = Time.time + 1/fireRate;//0+1/10 = 
+
+            if (timeToShoot <= Time.time)
+            {
+                ShootingClick();
+                PoinMouseClick();
+                timeToShoot = Time.time + 1 / fireRate;//0+1/10 = 
             }
         }
     }
@@ -118,9 +138,9 @@ private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName,
         RotateActiveGun();
         if (GM.Amount >= Totalbet)
         {
-            
+
             StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
-            ShootOnce(activeGun.transform, activeGunLevel, 0);
+            GM.shoot.ShootOnce(activeGun.transform, activeGunLevel, 0);
             GM.CalculateTotalCoinWithBet();
         }
     }
@@ -130,21 +150,11 @@ private IEnumerator SwitchAndAnimateGun(Animator animator, string animationName,
         holding = true;
     }
 
-     public void OnClickUp()
+    public void OnClickUp()
     {
         holding = false;
     }
 
-    public void ShootOnce(Transform gunTransform,int ActiveGun, int Id )
-    {
-
-        GameObject bullet = Instantiate(GM.prefab_Bullet[ActiveGun - 1], gunTransform.position, gunTransform.rotation);
-        bullet.GetComponent<Rigidbody2D>().velocity = gunTransform.up * 16f;
-        bs = bullet.GetComponent<BulletScript>();
-        bs.BulletId = Id;
-        bs.acitiveGun = ActiveGun;
-
-
-    }
+   
 
 }

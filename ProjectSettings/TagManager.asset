@@ -45,6 +45,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Shadow
+    uniqueID: 2945585269
+    locked: 0
   - name: Fish
     uniqueID: 398302799
     locked: 0

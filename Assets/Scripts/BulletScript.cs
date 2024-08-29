@@ -6,12 +6,13 @@ public class BulletScript : MonoBehaviour
 
     public int BulletId;
     public int acitiveGun;
-    // public GameObject netPrefab;
     [SerializeField] float netTime = 0.3f;
 
     [SerializeField] float damage = 1f;
-
+    Color redcolor = new Color(1.0f, 0.58f, 0.58f, 9.88f);
     private GameManager GM;
+
+
 
     private void Start() {
         GM = GameManager.Instance;
@@ -26,13 +27,10 @@ public class BulletScript : MonoBehaviour
 
             if (fishSpriteRenderer != null)
             {
-                Color fishColor = fishSpriteRenderer.color;
-                Color colorFishBackup = fishColor;
-                fishColor.a = 0.60f;
-                fishSpriteRenderer.color = fishColor;
+                fishSpriteRenderer.color = redcolor;
 
-                getfishScript.ResetFishColor(fishSpriteRenderer,colorFishBackup);
-                getfishScript.TakeDamage(fishSpriteRenderer, damage, BulletId);
+                getfishScript.ResetFishColor(fishSpriteRenderer);
+                getfishScript.TakeDamage(fishSpriteRenderer, damage, BulletId, acitiveGun);
                 
             }
             
@@ -45,13 +43,13 @@ public class BulletScript : MonoBehaviour
    
             Destroy(netInstance.gameObject, netTime);
 
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
     void OnBecameInvisible()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
 

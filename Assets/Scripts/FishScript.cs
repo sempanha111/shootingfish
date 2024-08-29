@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class FishScript : MonoBehaviour
 {
-    [SerializeField] public float Hp = 5f;
+    [SerializeField] public float Hp;
     [SerializeField] public float CoinFish;
     [SerializeField] public float MoveSpeed;
 
+    private float HpBackup;
+
     private Rigidbody2D rb2d;
+
+    SpriteRenderer fishsprite;
 
 
 
@@ -16,8 +20,10 @@ public class FishScript : MonoBehaviour
 
     private void Start()
     {
+        HpBackup = Hp;
         GM = GameManager.Instance;
         MoveHandle();
+        fishsprite = this.GetComponent<SpriteRenderer>();
     }
 
     private bool IsDead()
@@ -26,44 +32,62 @@ public class FishScript : MonoBehaviour
     }
 
 
-    public void ResetFishColor(SpriteRenderer Fish, Color backUpColor)
+
+    void Resetcolor(SpriteRenderer fish)
     {
-        StartCoroutine(IEnumResetFishColor(Fish, backUpColor));
+        fish.color = new Color(1f, 1f, 1f, 1f);
+    }
+    public void ResetFishColor(SpriteRenderer Fish)
+    {
+        if (Fish == null || !Fish.gameObject.activeSelf) return;
+        StartCoroutine(IEnumResetFishColor(Fish));
     }
 
-    private IEnumerator IEnumResetFishColor(SpriteRenderer Fish, Color backUpColor)
+    private IEnumerator IEnumResetFishColor(SpriteRenderer Fish)
     {
         yield return new WaitForSeconds(0.1f);
-        Fish.color = backUpColor;
+        Fish.color = new Color(1f, 1f, 1f, 1f);
     }
 
-    public void TakeDamage(SpriteRenderer Fish, float Damage, int BulletId)
+    public void TakeDamage(SpriteRenderer Fish, float Damage, int BulletId, int acitiveGunlevel)
     {
         Hp -= Damage;
-        FishSystem(Fish, BulletId);
+        FishSystem(Fish, BulletId, acitiveGunlevel);
     }
 
-    private void FishSystem(SpriteRenderer Fish, int BulletId)
+    private void FishSystem(SpriteRenderer Fish, int BulletId, int acitiveGunlevel)
     {
         if (IsDead())
         {
-            GM.DisplayTextManagerScript.Display(("+" + CoinFish).ToString(), transform.position);
+            float Bet = GM.weaponsScripts.Bet[acitiveGunlevel - 1];
+            float coinAmount = CoinFish * Bet;
+            coinAmount = Mathf.Round(coinAmount * 100f) / 100f;
+
+            GM.DisplayTextManagerScript.Display(("+" + coinAmount).ToString(), transform.position);
             GM.coinManager.coinAnima(this, BulletId);
 
-            if(BulletId == 0){
-                GM.CalulateTotalCoinWithCoinFish(CoinFish);
+            if (BulletId == 0)
+            {
+                GM.CalulateTotalCoinWithCoinFish(coinAmount * Bet);
             }
-            else{
-                GM.CalulateNPCCoinFish(CoinFish, BulletId);
+            else
+            {
+                GM.CalulateNPCCoinFish(coinAmount, BulletId);
             }
 
-            Destroy(gameObject);
+
+            GM.fishInScreenList.Remove(this);
+
+
+            this.Hp = HpBackup;
+            Resetcolor(fishsprite);
+            gameObject.SetActive(false);
         }
     }
 
 
 
-    void MoveHandle()
+    public void MoveHandle()
     {
         if (rb2d == null)
         {
@@ -75,7 +99,8 @@ public class FishScript : MonoBehaviour
     private void OnBecameInvisible()
     {
         GM.fishInScreenList.Remove(this);
-        Destroy(gameObject);
+        Resetcolor(fishsprite);
+        gameObject.SetActive(false);
     }
 
     private void OnBecameVisible()
