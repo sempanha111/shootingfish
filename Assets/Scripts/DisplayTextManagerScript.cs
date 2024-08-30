@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class DisplayTextManagerScript : MonoBehaviour
 {
+    public Camera mainCamera;
     public TextMeshProUGUI textPrefab;
-    // public Text textPrefab;
     public Transform TextHolder;
 
 
@@ -23,15 +23,14 @@ public class DisplayTextManagerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
+        
         var Text = Instantiate(textPrefab, pos, Quaternion.identity, TextHolder);
         Text.text = st;
         Text.gameObject.SetActive(true);
-        Debug.Log("coin"+ st);
-        Debug.Log("pos"+ pos);
 
         StartCoroutine(ScaleText(Text.transform));
         yield return new WaitForSeconds(1f);
-        // StartCoroutine(IEnumResetDisplayText(Text));
+        StartCoroutine(IEnumResetDisplayText(Text));
     }
 
     private IEnumerator IEnumResetDisplayText(TextMeshProUGUI text)

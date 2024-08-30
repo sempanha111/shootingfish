@@ -1,15 +1,17 @@
-
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SpriteShadow : MonoBehaviour
 {
     public Vector3 offset;
-    public GameObject spriteChild;
     GameObject shadownClone;
+    // // Start is called before the first frame update
     void Start()
     {
-        // Instantiate the shadow clone and set the parent
-        shadownClone = Instantiate(spriteChild, transform);
+        shadownClone = Instantiate(new GameObject("Shadow"), transform);
+
         shadownClone.AddComponent<SpriteRenderer>();
         SpriteRenderer sprRnd = shadownClone.GetComponent<SpriteRenderer>();
         SpriteRenderer parentSprRnd = GetComponent<SpriteRenderer>();
@@ -23,14 +25,10 @@ public class SpriteShadow : MonoBehaviour
 
         float scale = shadownClone.transform.localScale.x;
         scale -= scale * 0.2f;
-
-
-
         shadownClone.transform.localScale = Vector3.one * scale;
+
         shadownClone.transform.position = transform.position + offset;
         shadownClone.transform.rotation = transform.rotation;
-
-        spriteChild = null;
     }
 
 

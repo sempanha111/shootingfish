@@ -186,7 +186,7 @@ public class SwapFishScript : MonoBehaviour
                         RotateForFish(FishObject.transform, RightPos, Random.Range(-2, 2));
                         SpriteFish = FishObject.GetComponent<SpriteRenderer>();
                         SpriteFish.sortingOrder = orderLayer;
-                        orderLayer+=2;
+                        orderLayer++;
                     }
                 }
             }

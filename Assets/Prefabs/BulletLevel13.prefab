@@ -174,4 +174,4 @@ MonoBehaviour:
   BulletId: 0
   acitiveGun: 0
   netTime: 0.4
-  damage: 75
+  damage: 65
