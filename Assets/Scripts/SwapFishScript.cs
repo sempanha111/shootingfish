@@ -12,7 +12,7 @@ public class SwapFishScript : MonoBehaviour
     public Transform RightPos;
 
     int orderLayer;
-    float SpawnNextTime = 70f;
+    float SpawnNextTime = 3f;
 
 
     private List<GameObject> fishpolling = new List<GameObject>();
@@ -40,7 +40,7 @@ public class SwapFishScript : MonoBehaviour
         {
             var (startPos, endPos) = GeneratePos();
             Boos(startPos, endPos);
-            SpawnNextTime = Time.time + 70f;
+            SpawnNextTime = Time.time + 5f;
         }
     }
 
@@ -164,7 +164,7 @@ public class SwapFishScript : MonoBehaviour
 
             SpriteRenderer SpriteFish = FishObject.GetComponent<SpriteRenderer>();
             SpriteFish.sortingOrder = orderLayer;
-            orderLayer++;
+            orderLayer += 2;
 
             if (FishId == 2 || FishId == 3)
             {
@@ -186,7 +186,7 @@ public class SwapFishScript : MonoBehaviour
                         RotateForFish(FishObject.transform, RightPos, Random.Range(-2, 2));
                         SpriteFish = FishObject.GetComponent<SpriteRenderer>();
                         SpriteFish.sortingOrder = orderLayer;
-                        orderLayer++;
+                        orderLayer += 2;
                     }
                 }
             }
@@ -235,7 +235,7 @@ public class SwapFishScript : MonoBehaviour
 
             SpriteRenderer SpriteFish = FishObject.GetComponent<SpriteRenderer>();
             SpriteFish.sortingOrder = orderLayer;
-            orderLayer++;
+            orderLayer += 2;
 
             if (FishId == 1 || FishId == Random.Range(2,4))
             {

@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpriteShadow : MonoBehaviour
 {
     public Vector3 offset;
     GameObject shadownClone;
-    // // Start is called before the first frame update
     void Start()
     {
-        shadownClone = Instantiate(new GameObject("Shadow"), transform);
+        shadownClone = Instantiate(GameManager.Instance.Shadow, transform);
 
         shadownClone.AddComponent<SpriteRenderer>();
         SpriteRenderer sprRnd = shadownClone.GetComponent<SpriteRenderer>();

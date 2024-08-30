@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public UIManager UIManager { get; private set; }
     public DisplayTextManagerScript DisplayTextManagerScript { get; private set; }
     public CoinManager coinManager { get; private set; }
+    public AnimatiorManager animatiorManager { get; private set; }
     public Shoot shoot { get; private set;}
     public List<FishScript> fishInScreenList = new List<FishScript>();
     public Gun1 gun1;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] prefab_Bullet;
     public Animator[] Net;
     public float Amount = 2000;
+    public GameObject Shadow;
 
     void Awake()
     {
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
         DisplayTextManagerScript = GetComponent<DisplayTextManagerScript>();
         coinManager = GetComponent<CoinManager>();
         shoot = GetComponent<Shoot>();
+        animatiorManager = GetComponent<AnimatiorManager>();
         gun1 = GetComponent<Gun1>();
         gun2 = GetComponent<Gun2>();
         gun3 = GetComponent<Gun3>();      

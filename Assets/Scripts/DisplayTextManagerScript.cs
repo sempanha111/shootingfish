@@ -11,9 +11,11 @@ public class DisplayTextManagerScript : MonoBehaviour
     public TextMeshProUGUI textPrefab;
     public Transform TextHolder;
 
-
-
-
+    // private GameManager GM;
+    void Start()
+    {
+        // GM = GameManager.Instance;
+    }
     public void Display(string st, Vector3 pos)
     {
         StartCoroutine(IEnumDisplay(st,pos));
@@ -29,6 +31,13 @@ public class DisplayTextManagerScript : MonoBehaviour
         Text.gameObject.SetActive(true);
 
         StartCoroutine(ScaleText(Text.transform));
+
+
+
+
+
+
+
         yield return new WaitForSeconds(1f);
         StartCoroutine(IEnumResetDisplayText(Text));
     }
@@ -38,7 +47,6 @@ public class DisplayTextManagerScript : MonoBehaviour
 
         float duration = 0.2f;
         float time = 0;
-
         Color originalColor = text.color;
         Color targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
 

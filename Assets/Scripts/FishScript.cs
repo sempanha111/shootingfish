@@ -7,6 +7,7 @@ public class FishScript : MonoBehaviour
     [SerializeField] public float Hp;
     [SerializeField] public float CoinFish;
     [SerializeField] public float MoveSpeed;
+    public int id;
 
     private float HpBackup;
 
@@ -63,8 +64,17 @@ public class FishScript : MonoBehaviour
             float coinAmount = CoinFish * Bet;
             coinAmount = Mathf.Round(coinAmount * 100f) / 100f;
 
-            GM.DisplayTextManagerScript.Display(("+" + coinAmount).ToString(), transform.position);
-            GM.coinManager.coinAnima(this, BulletId);
+            if (id == 13)
+            {
+                GM.animatiorManager.playParticle(transform.position);
+                GM.animatiorManager.PlayAnima(transform.position, 1, BulletId);
+            }
+            else
+            {
+                GM.DisplayTextManagerScript.Display(("+" + coinAmount).ToString(), transform.position);
+                GM.coinManager.coinAnima(this, BulletId);
+            }
+
 
             if (BulletId == 0)
             {
