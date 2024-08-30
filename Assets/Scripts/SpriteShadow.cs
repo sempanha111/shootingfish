@@ -10,7 +10,6 @@ public class SpriteShadow : MonoBehaviour
     {
         // Instantiate the shadow clone and set the parent
         shadownClone = Instantiate(spriteChild, transform);
-
         shadownClone.AddComponent<SpriteRenderer>();
         SpriteRenderer sprRnd = shadownClone.GetComponent<SpriteRenderer>();
         SpriteRenderer parentSprRnd = GetComponent<SpriteRenderer>();
@@ -30,6 +29,8 @@ public class SpriteShadow : MonoBehaviour
         shadownClone.transform.localScale = Vector3.one * scale;
         shadownClone.transform.position = transform.position + offset;
         shadownClone.transform.rotation = transform.rotation;
+
+        spriteChild = null;
     }
 
 
