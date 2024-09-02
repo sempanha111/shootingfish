@@ -34,128 +34,83 @@ public class CoinManager : MonoBehaviour
         float timeToLoop = CalculateTimeToLoop(fishcoin);
         // float timeToLoop = 5;
 
-        Vector3[] squareOffsets = new Vector3[] { };
+        Vector3[] diamondOffsets = new Vector3[] { };
+
+        float basePadding = 0.18f; // Base padding for small numbers
+        float paddingIncrement = 0.1f; // Smaller increment to space out coins more subtly
+
+        // Calculate the actual padding dynamically based on the number of coins
+        float actualPadding = basePadding + ((int)timeToLoop - 1) * paddingIncrement;
 
         switch ((int)timeToLoop)
         {
             case 1:
-                squareOffsets = new Vector3[]
+                diamondOffsets = new Vector3[]
                 {
             new Vector3(0f, 0f, 0f) // Center
                 };
                 break;
             case 2:
-                squareOffsets = new Vector3[]
+                diamondOffsets = new Vector3[]
                 {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f)   // Bottom-right
+            new Vector3(-actualPadding, 0f, 0f),  // Left
+            new Vector3(actualPadding, 0f, 0f)    // Right
                 };
                 break;
             case 3:
-                squareOffsets = new Vector3[]
+                diamondOffsets = new Vector3[]
                 {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(0f, 0.25f, 0f)       // Top-center
+            new Vector3(0f, actualPadding, 0f),   // Top
+            new Vector3(-actualPadding, -actualPadding, 0f), // Bottom-left
+            new Vector3(actualPadding, -actualPadding, 0f)   // Bottom-right
                 };
                 break;
             case 4:
-                squareOffsets = new Vector3[]
+                diamondOffsets = new Vector3[]
                 {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f)    // Top-right
+            new Vector3(-actualPadding, 0f, 0f),  // Left
+            new Vector3(actualPadding, 0f, 0f),   // Right
+            new Vector3(0f, actualPadding, 0f),   // Top
+            new Vector3(0f, -actualPadding, 0f)   // Bottom
                 };
                 break;
             case 5:
-                squareOffsets = new Vector3[]
+                diamondOffsets = new Vector3[]
                 {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f),   // Top-right
-            new Vector3(0f, 0f, 0f)          // Center
+            new Vector3(-actualPadding, 0f, 0f),  // Left
+            new Vector3(actualPadding, 0f, 0f),   // Right
+            new Vector3(0f, actualPadding, 0f),   // Top
+            new Vector3(0f, -actualPadding, 0f),  // Bottom
+            new Vector3(0f, 0f, 0f)               // Center
                 };
                 break;
             case 6:
-                squareOffsets = new Vector3[]
+                diamondOffsets = new Vector3[]
                 {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f),   // Top-right
-            new Vector3(0f, 0f, 0f),         // Center
-            new Vector3(0f, -0.5f, 0f)       // Bottom-center
-                };
-                break;
-            case 7:
-                squareOffsets = new Vector3[]
-                {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f),   // Top-right
-            new Vector3(0f, 0f, 0f),         // Center
-            new Vector3(0f, -0.5f, 0f),      // Bottom-center
-            new Vector3(0f, 0.5f, 0f)        // Top-center
-                };
-                break;
-            case 8:
-                squareOffsets = new Vector3[]
-                {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f),   // Top-right
-            new Vector3(0f, 0f, 0f),         // Center
-            new Vector3(0f, -0.5f, 0f),      // Bottom-center
-            new Vector3(0f, 0.5f, 0f),       // Top-center
-            new Vector3(-0.5f, 0f, 0f)       // Left-center
-                };
-                break;
-            case 9:
-                squareOffsets = new Vector3[]
-                {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f),   // Top-right
-            new Vector3(0f, 0f, 0f),         // Center
-            new Vector3(0f, -0.5f, 0f),      // Bottom-center
-            new Vector3(0f, 0.5f, 0f),       // Top-center
-            new Vector3(-0.5f, 0f, 0f),      // Left-center
-            new Vector3(0.5f, 0f, 0f)        // Right-center
-                };
-                break;
-            case 10:
-                squareOffsets = new Vector3[]
-                {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f),   // Top-right
-            new Vector3(0f, 0f, 0f),         // Center
-            new Vector3(0f, -0.5f, 0f),      // Bottom-center
-            new Vector3(0f, 0.5f, 0f),       // Top-center
-            new Vector3(-0.5f, 0f, 0f),      // Left-center
-            new Vector3(0.5f, 0f, 0f),       // Right-center
-            new Vector3(-0.5f, -0.5f, 0f)    // Bottom-left corner
+            new Vector3(-actualPadding, 0f, 0f),     // Left
+            new Vector3(actualPadding, 0f, 0f),      // Right
+            new Vector3(0f, actualPadding, 0f),      // Top
+            new Vector3(0f, -actualPadding, 0f),     // Bottom
+            new Vector3(-actualPadding * 0.5f, actualPadding * 0.5f, 0f), // Top-left
+            new Vector3(actualPadding * 0.5f, -actualPadding * 0.5f, 0f)  // Bottom-right
                 };
                 break;
             default:
-                // Default case for more than 10, reusing 4-point square layout
-                squareOffsets = new Vector3[]
+                // For 7 or more coins, distribute them in a circular pattern
+                List<Vector3> offsets = new List<Vector3>();
+
+                // Calculate an angle step based on the number of coins
+                float angleStep = 360f / timeToLoop;
+                for (int i = 0; i < timeToLoop; i++)
                 {
-            new Vector3(-0.25f, -0.25f, 0f), // Bottom-left
-            new Vector3(0.25f, -0.25f, 0f),  // Bottom-right
-            new Vector3(-0.25f, 0.25f, 0f),  // Top-left
-            new Vector3(0.25f, 0.25f, 0f)    // Top-right
-                };
+                    float angle = i * angleStep * Mathf.Deg2Rad; // Convert degrees to radians
+                    float x = Mathf.Cos(angle) * actualPadding;
+                    float y = Mathf.Sin(angle) * actualPadding;
+                    offsets.Add(new Vector3(x, y, 0f));
+                }
+                diamondOffsets = offsets.ToArray();
                 break;
         }
-
-
 
         for (int i = 0; i <= timeToLoop; i++)
         {
@@ -176,9 +131,9 @@ public class CoinManager : MonoBehaviour
                 coinsprite.color = col;
             }
 
-            int index = (i + 1) % squareOffsets.Length;
+            int index = (i + 1) % diamondOffsets.Length;
 
-            Vector3 offset = squareOffsets[index];
+            Vector3 offset = diamondOffsets[index];
             coinobject.transform.position = offset + fishPos;
 
 
@@ -198,20 +153,26 @@ public class CoinManager : MonoBehaviour
         // Clamp the fishcoin value to ensure it's within the expected range
         float clampedFishcoin = Mathf.Clamp(fishcoin, 0.1f, 500f);
 
-        // Define the input range and the corresponding output range
-        float inputMin = 0.1f;
-        float inputMax = 500f;
-        float outputMin = 2f;  // Desired minimum value for timeToLoop
-        float outputMax = 40f; // Desired maximum value for timeToLoop
+        // Define key points for fishcoin and their corresponding timeToLoop values
+        float[] fishcoinPoints = { 0.1f, 0.3f, 1f, 2f, 5f, 10f, 50f, 100f, 500f };
+        float[] timeToLoopPoints = { 1f, 1f, 2f, 3f, 5f, 7f, 10f, 15f, 20f };
 
-        // Calculate the normalized value of fishcoin in the input range
-        float normalizedFishcoin = (clampedFishcoin - inputMin) / (inputMax - inputMin);
+        // Find the correct interval and interpolate
+        for (int i = 0; i < fishcoinPoints.Length - 1; i++)
+        {
+            if (clampedFishcoin >= fishcoinPoints[i] && clampedFishcoin <= fishcoinPoints[i + 1])
+            {
+                // Linear interpolation between the two key points
+                float t = (clampedFishcoin - fishcoinPoints[i]) / (fishcoinPoints[i + 1] - fishcoinPoints[i]);
+                return Mathf.Lerp(timeToLoopPoints[i], timeToLoopPoints[i + 1], t);
+            }
+        }
 
-        // Interpolate between outputMin and outputMax based on the normalized value
-        float timeToLoop = Mathf.Lerp(outputMin, outputMax, normalizedFishcoin);
-
-        return timeToLoop;
+        // Fallback in case of unexpected input, though clamping should prevent this
+        return timeToLoopPoints[timeToLoopPoints.Length - 1];
     }
+
+
 
 
     public void MoveObject(GameObject obj, Transform targetEnd, float delay)
@@ -223,9 +184,9 @@ public class CoinManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        float speed = 15f; 
+        float speed = 15f;
         Vector3 startScale = new Vector3(0.1f, 0.1f, 0);
-        Vector3 endScale = Vector3.zero; 
+        Vector3 endScale = Vector3.zero;
         float initialDistance = Vector2.Distance(obj.transform.position, targetEnd.position); // Initial distance to the target
         float dist = initialDistance;
 
@@ -235,10 +196,10 @@ public class CoinManager : MonoBehaviour
 
             dist = Vector2.Distance(obj.transform.position, targetEnd.position);
 
-            float scaleFactor = dist / initialDistance; 
+            float scaleFactor = dist / initialDistance;
             obj.transform.localScale = Vector3.Lerp(endScale, startScale, scaleFactor);
 
-            yield return null; 
+            yield return null;
         }
 
         if (obj != null)

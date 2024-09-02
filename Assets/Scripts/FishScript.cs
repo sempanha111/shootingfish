@@ -67,7 +67,7 @@ public class FishScript : MonoBehaviour
             if (id == 13)
             {
                 GM.animatiorManager.playParticle(transform.position);
-                GM.animatiorManager.PlayAnima(transform.position, 1, BulletId);
+                GM.animatiorManager.PlayCoin(transform.position, 1, BulletId);
             }
             else
             {
@@ -88,7 +88,8 @@ public class FishScript : MonoBehaviour
 
             GM.fishInScreenList.Remove(this);
 
-
+       
+            fishsprite.flipY = false;
             this.Hp = HpBackup;
             Resetcolor(fishsprite);
             gameObject.SetActive(false);

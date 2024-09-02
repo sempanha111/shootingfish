@@ -40,7 +40,7 @@ public class SwapFishScript : MonoBehaviour
         {
             var (startPos, endPos) = GeneratePos();
             Boos(startPos, endPos);
-            SpawnNextTime = Time.time + 5f;
+            SpawnNextTime = Time.time + 30f;
         }
     }
 
@@ -192,12 +192,7 @@ public class SwapFishScript : MonoBehaviour
             }
 
 
-            if (FishId == 9 || FishId == 14)
-            {
-                SpriteFish.flipY = true;
-            }
-
-            yield return new WaitForSeconds(Random.Range(1f, 2.1f));
+            yield return new WaitForSeconds(Random.Range(1f, 1.1f));
 
         }
     }
@@ -268,7 +263,7 @@ public class SwapFishScript : MonoBehaviour
                 SpriteFish.flipY = true;
             }
 
-            yield return new WaitForSeconds(Random.Range(1f, 2.1f));
+            yield return new WaitForSeconds(Random.Range(1f, 1.1f));
 
         }
     }
