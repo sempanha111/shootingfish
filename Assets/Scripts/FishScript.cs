@@ -7,6 +7,9 @@ public class FishScript : MonoBehaviour
     [SerializeField] public float Hp;
     [SerializeField] public float CoinFish;
     [SerializeField] public float MoveSpeed;
+
+    [SerializeField] private float minSpeed = 10f;
+    [SerializeField] private float maxSpeed = 20f;
     public int id;
 
     private float HpBackup;
@@ -14,6 +17,7 @@ public class FishScript : MonoBehaviour
     private Rigidbody2D rb2d;
 
     SpriteRenderer fishsprite;
+    Animator animator;
 
 
 
@@ -25,6 +29,17 @@ public class FishScript : MonoBehaviour
         GM = GameManager.Instance;
         MoveHandle();
         fishsprite = this.GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+
+        if (id == 13)
+        {
+            StartCoroutine(ChangeSpeedRoutine());
+        }
+        else
+        {
+            StartCoroutine(ChangeSpeedNormalFish());
+        }
+   
     }
 
     private bool IsDead()
@@ -68,6 +83,12 @@ public class FishScript : MonoBehaviour
             {
                 GM.animatiorManager.playParticle(transform.position);
                 GM.animatiorManager.PlayCoin(transform.position, 1, BulletId);
+
+                if (BulletId == 0)
+                {
+                    GM.SoundManager.PlaySoundBigwinCoin1();
+                }
+
             }
             else
             {
@@ -79,6 +100,16 @@ public class FishScript : MonoBehaviour
             if (BulletId == 0)
             {
                 GM.CalulateTotalCoinWithCoinFish(coinAmount * Bet);
+                if (coinAmount < 100)
+                {
+
+                    GM.SoundManager.PlaySoundCoin1();
+                }
+                else
+                {
+                    GM.SoundManager.PlaySoundCoin2();
+                }
+                Debug.Log(coinAmount);
             }
             else
             {
@@ -88,7 +119,9 @@ public class FishScript : MonoBehaviour
 
             GM.fishInScreenList.Remove(this);
 
-       
+
+
+
             fishsprite.flipY = false;
             this.Hp = HpBackup;
             Resetcolor(fishsprite);
@@ -96,7 +129,79 @@ public class FishScript : MonoBehaviour
         }
     }
 
+    private IEnumerator ChangeSpeedRoutine()
+    {
+        // First speed = Normal
 
+        rb2d.velocity = transform.right * MoveSpeed;
+
+
+        Debug.Log($"First Normal Speed: {MoveSpeed}");
+
+        // Keep first speed for a while
+        yield return new WaitForSeconds(Random.Range(5f, 7f));
+
+        while (gameObject.activeInHierarchy)
+        {
+            int state = Random.Range(0, 3);
+
+            switch (state)
+            {
+                case 0: // Slow
+                    MoveSpeed = Random.Range(1f, 1.5f);
+                    break;
+
+                case 1: // Normal
+                    MoveSpeed = Random.Range(2.1f, 2.5f);
+                    break;
+
+                case 2: // Fast
+                    MoveSpeed = Random.Range(2f, 2.9f);
+                    break;
+            }
+
+            rb2d.velocity = transform.right * MoveSpeed;
+            UpdateAnimationSpeed();
+
+            float keepTime = Random.Range(3f, 5f);
+
+            Debug.Log($"State: {state}, Speed: {MoveSpeed}, Time: {keepTime}");
+
+            yield return new WaitForSeconds(keepTime);
+        }
+    }
+    private IEnumerator ChangeSpeedNormalFish()
+    {
+        rb2d.velocity = transform.right * MoveSpeed;
+        yield return new WaitForSeconds(Random.Range(2f, 5f));
+
+        while (gameObject.activeInHierarchy)
+        {
+            float change = Random.Range(-0.5f, 1.5f);
+
+            MoveSpeed += change;
+
+            MoveSpeed = Mathf.Clamp(MoveSpeed, -1.5f, 1.5f);
+
+            rb2d.velocity = transform.right * MoveSpeed;
+            UpdateAnimationSpeed();
+
+            yield return new WaitForSeconds(Random.Range(6f, 10f));
+        }
+    }
+
+
+
+    private void UpdateAnimationSpeed()
+    {
+        if (animator == null) return;
+
+        // Example: speed 3 = animation 1x
+        animator.speed = MoveSpeed / 3f;
+
+        // Prevent too slow or too fast
+        animator.speed = Mathf.Clamp(animator.speed, 0.5f, 3f);
+    }
 
     public void MoveHandle()
     {
@@ -104,6 +209,8 @@ public class FishScript : MonoBehaviour
         {
             rb2d = GetComponent<Rigidbody2D>();
         }
+
+
         rb2d.velocity = transform.right * MoveSpeed;
     }
 
