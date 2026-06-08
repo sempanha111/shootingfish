@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     public WeaponsScripts weaponsScripts { get; private set; }
     public UIManager UIManager { get; private set; }
+    public SoundManager SoundManager { get; private set; }
     public DisplayTextManagerScript DisplayTextManagerScript { get; private set; }
     public CoinManager coinManager { get; private set; }
     public AnimatiorManager animatiorManager { get; private set; }
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
         gun1 = GetComponent<Gun1>();
         gun2 = GetComponent<Gun2>();
         gun3 = GetComponent<Gun3>();      
+        SoundManager = GetComponent<SoundManager>();      
     }
 
     void Start()

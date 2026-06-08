@@ -19,7 +19,7 @@ public class WeaponNPC : MonoBehaviour
     private float[] Bet;
     public int activeGunLevel = 1;
     public float Totalbet;
-    [SerializeField] private float AnimaShootWait = 0.11f;
+    [SerializeField] private float AnimaShootWait = 0.15f;
     private GameObject activeGun;
     private BulletScript bs;
 
@@ -122,12 +122,12 @@ public class WeaponNPC : MonoBehaviour
 
         if (targetFish == null || !targetFish.gameObject.activeSelf)
         {
-          
+
             targetFish = FindFish();
 
             if (targetFish == null)
             {
-                return; 
+                return;
             }
 
         }
@@ -147,7 +147,8 @@ public class WeaponNPC : MonoBehaviour
     {
         StartCoroutine(SwitchAndAnimateGun(Anima_Gun[activeGunLevel - 1], "Shoot" + (activeGunLevel), "Idle" + (activeGunLevel)));
         GM.shoot.ShootOnce(activeGun.transform, activeGunLevel, id);
-        switch(id){
+        switch (id)
+        {
             case 1:
                 gun1.AmountCoin -= Totalbet;
                 break;
@@ -224,21 +225,61 @@ public class WeaponNPC : MonoBehaviour
             return;
         }
 
-        if (fishscript.Hp <= 40)
+        if (fishscript.Hp <= 50)
         {
-            ActivateGun(17);
+            ActivateGun(1);
         }
-        else if (fishscript.Hp <= 50)
+        else if (fishscript.Hp <= 100)
         {
-            ActivateGun(16);
+            ActivateGun(2);
         }
-        else if (fishscript.Hp <= 60)
+        else if (fishscript.Hp <= 200)
+        {
+            ActivateGun(3);
+        }
+        else if (fishscript.Hp <= 300)
+        {
+            ActivateGun(4);
+        }
+        else if (fishscript.Hp <= 400)
+        {
+            ActivateGun(5);
+        }
+        else if (fishscript.Hp <= 500)
+        {
+            ActivateGun(6);
+        }
+        else if (fishscript.Hp <= 600)
+        {
+            ActivateGun(7);
+        }
+        else if (fishscript.Hp <= 700)
         {
             ActivateGun(8);
         }
+        else if (fishscript.Hp <= 800)
+        {
+            ActivateGun(9);
+        }
+        else if (fishscript.Hp <= 900)
+        {
+            ActivateGun(10);
+        }
+        else if (fishscript.Hp <= 1100)
+        {
+            ActivateGun(11);
+        }
+        else if (fishscript.Hp <= 1200)
+        {
+            ActivateGun(12);
+        }
+        else if (fishscript.Hp <= 1300)
+        {
+            ActivateGun(13);
+        }
         else
         {
-            ActivateGun(4);
+            ActivateGun(2);
         }
     }
 
