@@ -98,7 +98,7 @@ public class WeaponNPC : MonoBehaviour
     }
 
     private float timeToShoot = 0;
-    private float fireRate = 5;
+    private float fireRate = 4;
     FishScript targetFish;
     void Update()
     {

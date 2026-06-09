@@ -7,9 +7,6 @@ public class FishScript : MonoBehaviour
     [SerializeField] public float Hp;
     [SerializeField] public float CoinFish;
     [SerializeField] public float MoveSpeed;
-
-    [SerializeField] private float minSpeed = 10f;
-    [SerializeField] private float maxSpeed = 20f;
     public int id;
 
     private float HpBackup;
@@ -175,19 +172,19 @@ public class FishScript : MonoBehaviour
         rb2d.velocity = transform.right * MoveSpeed;
         yield return new WaitForSeconds(Random.Range(2f, 5f));
 
-        while (gameObject.activeInHierarchy)
-        {
-            float change = Random.Range(-0.5f, 1.5f);
+        // while (gameObject.activeInHierarchy)
+        // {
+        //     float change = Random.Range(-0.5f, 1.5f);
 
-            MoveSpeed += change;
+        //     MoveSpeed += change;
 
-            MoveSpeed = Mathf.Clamp(MoveSpeed, -1.5f, 1.5f);
+        //     MoveSpeed = Mathf.Clamp(MoveSpeed, -1.5f, 1.5f);
 
-            rb2d.velocity = transform.right * MoveSpeed;
-            UpdateAnimationSpeed();
+        //     rb2d.velocity = transform.right * MoveSpeed;
+        //     UpdateAnimationSpeed();
 
-            yield return new WaitForSeconds(Random.Range(6f, 10f));
-        }
+        //     yield return new WaitForSeconds(Random.Range(6f, 10f));
+        // }
     }
 
 
