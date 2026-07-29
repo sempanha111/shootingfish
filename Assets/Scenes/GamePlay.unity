@@ -726,53 +726,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b611e8b173ba0f49866fbbb679e9c72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundRenderer: {fileID: 1825989842}
+  levelBackgrounds:
+  - {fileID: 21300000, guid: a2074205b17f18d4da11613a803e3f86, type: 3}
+  - {fileID: 21300000, guid: c466e5d43be54ce48aaa6c9332bc0558, type: 3}
+  - {fileID: 21300000, guid: a2074205b17f18d4da11613a803e3f86, type: 3}
+  - {fileID: 21300000, guid: ae6013841cd55ce4fbe59e7bac63a8dd, type: 3}
+  - {fileID: 21300000, guid: ae6013841cd55ce4fbe59e7bac63a8dd, type: 3}
+  - {fileID: 21300000, guid: ae6013841cd55ce4fbe59e7bac63a8dd, type: 3}
   Fish:
+  - {fileID: 1024892613}
+  - {fileID: 149339243}
+  - {fileID: 2146987444}
+  - {fileID: 678040747}
+  - {fileID: 1459479734}
   - {fileID: 1614572702}
-  - {fileID: 811188953}
+  - {fileID: 2094273069}
+  - {fileID: 1651315769}
+  - {fileID: 581701659}
   - {fileID: 1742905482}
   - {fileID: 1682916385}
-  - {fileID: 427260899}
-  - {fileID: 742742882}
-  - {fileID: 1397723571}
-  - {fileID: 1142002485}
-  - {fileID: 397273584}
-  - {fileID: 325418646}
-  - {fileID: 672660423}
-  - {fileID: 1721155383}
-  - {fileID: 149339243}
-  - {fileID: 188335257}
-  - {fileID: 2061237116}
-  - {fileID: 453794105}
-  - {fileID: 1541698670}
-  - {fileID: 1641307699}
-  - {fileID: 1130876993}
-  - {fileID: 228177461}
-  - {fileID: 1563227339}
+  - {fileID: 811188953}
   - {fileID: 1751736073}
-  - {fileID: 201873168}
-  - {fileID: 1615201383}
-  - {fileID: 285515417}
+  - {fileID: 1641307699}
+  - {fileID: 427260899}
+  - {fileID: 1142002485}
+  - {fileID: 1563227339}
+  - {fileID: 453794105}
+  - {fileID: 1397723571}
+  - {fileID: 228177461}
+  - {fileID: 1130876993}
+  - {fileID: 1995150566}
+  - {fileID: 1541698670}
+  - {fileID: 742742882}
+  - {fileID: 855152695}
   - {fileID: 1768008852}
-  - {fileID: 525237650}
-  - {fileID: 900240229}
   - {fileID: 894024323}
   - {fileID: 1124514804}
-  - {fileID: 1995150566}
-  - {fileID: 248632849}
-  - {fileID: 855152695}
+  - {fileID: 1615201383}
   - {fileID: 991025446}
-  - {fileID: 131064236}
-  - {fileID: 2146987444}
-  - {fileID: 1024892613}
+  - {fileID: 248632849}
+  - {fileID: 325418646}
+  - {fileID: 525237650}
+  - {fileID: 201873168}
+  - {fileID: 397273584}
+  - {fileID: 188335257}
+  - {fileID: 285515417}
+  - {fileID: 672660423}
+  - {fileID: 1721155383}
+  - {fileID: 876086201}
   - {fileID: 83296953}
+  - {fileID: 131064236}
+  - {fileID: 2061237116}
+  - {fileID: 900240229}
+  - {fileID: 174381741}
   FishSpawnPosition: {fileID: 1306339014}
   LeftPos: {fileID: 2084749224}
   RightPos: {fileID: 575463568}
-  currentLevel: 1
-  regularSpawnIntervalMin: 2.8
-  regularSpawnIntervalMax: 5
-  bossSpawnInterval: 70
-  delayBeforeNextLevel: 3
+  TopPos: {fileID: 0}
+  BottomPos: {fileID: 0}
+  BombCrabPrefab: {fileID: 0}
+  LightningChainPrefab: {fileID: 0}
+  currentLevelState: 0
+  levelTimer: 0
+  tideChangeDuration: 10
+  loopMultiplier: 0
+  isEndlessMode: 0
 --- !u!114 &23999492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1040,7 +1059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd969029131dfb443917c09631923775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BullepositonToClone: {fileID: 978064737}
+  BullepositonToClone: {fileID: 0}
 --- !u!114 &23999496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2159,7 +2178,7 @@ Transform:
   m_GameObject: {fileID: 83296953}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.85, y: -0.8, z: -0.047829404}
+  m_LocalPosition: {x: -31.05, y: -0.41, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2211,10 +2230,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 190
+  CoinFish: 30
+  MoveSpeed: 0.8
   id: 38
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &83296958
 Rigidbody2D:
   serializedVersion: 4
@@ -2828,7 +2850,7 @@ Transform:
   m_GameObject: {fileID: 131064236}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.8, y: -2.46, z: -0.047829404}
+  m_LocalPosition: {x: -27.72, y: -0.36, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2880,10 +2902,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 195
+  CoinFish: 30
+  MoveSpeed: 0.8
   id: 35
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &131064241
 Rigidbody2D:
   serializedVersion: 4
@@ -3225,8 +3250,8 @@ Transform:
   m_GameObject: {fileID: 149339243}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.28, y: -1.79, z: -0.047829404}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -28.99, y: -6.35, z: -0.0478}
+  m_LocalScale: {x: 1.1071, y: 1.1071, z: 1.1071}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -3316,10 +3341,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1220
-  CoinFish: 20
-  MoveSpeed: 1
+  Hp: 1400
+  CoinFish: 120
+  MoveSpeed: 0.75
   id: 11
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &149339248
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3866,7 +3894,7 @@ Transform:
   m_GameObject: {fileID: 174381741}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.56, y: -3.67, z: -0.047829404}
+  m_LocalPosition: {x: -17.84, y: -0.66, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3918,10 +3946,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
+  Hp: 150
   CoinFish: 28
   MoveSpeed: 0.53
   id: 42
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &174381746
 Rigidbody2D:
   serializedVersion: 4
@@ -4181,7 +4212,7 @@ Transform:
   m_GameObject: {fileID: 188335257}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.05, y: -0.0156093575, z: -0.047829404}
+  m_LocalPosition: {x: -22.93, y: 2.05, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4199,10 +4230,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1330
-  CoinFish: 22
-  MoveSpeed: 0.53
+  Hp: 165
+  CoinFish: 25
+  MoveSpeed: 0.9
   id: 12
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &188335260
 Rigidbody2D:
   serializedVersion: 4
@@ -4548,7 +4582,7 @@ Transform:
   m_GameObject: {fileID: 201873168}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.48, y: 3.04, z: -0.047829404}
+  m_LocalPosition: {x: -28.06, y: 1.97, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4600,10 +4634,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 155
+  CoinFish: 23
+  MoveSpeed: 0.8
   id: 23
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &201873173
 Rigidbody2D:
   serializedVersion: 4
@@ -4982,7 +5019,7 @@ Transform:
   m_GameObject: {fileID: 228177461}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.71, y: -1.27, z: -0.047829404}
+  m_LocalPosition: {x: -12.49, y: 5.57, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5034,10 +5071,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 39
+  CoinFish: 6
+  MoveSpeed: 1.2
   id: 20
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &228177466
 Rigidbody2D:
   serializedVersion: 4
@@ -5256,7 +5296,7 @@ Transform:
   m_GameObject: {fileID: 248632849}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.09, y: 2.95, z: -0.047829404}
+  m_LocalPosition: {x: -11.37, y: 3.81, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5308,10 +5348,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 140
+  CoinFish: 20
+  MoveSpeed: 1
   id: 32
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &248632854
 Rigidbody2D:
   serializedVersion: 4
@@ -5586,7 +5629,7 @@ Transform:
   m_GameObject: {fileID: 285515417}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.94, y: -0.07, z: -0.047829404}
+  m_LocalPosition: {x: -19.03, y: 1.91, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5638,10 +5681,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 170
+  CoinFish: 26
+  MoveSpeed: 0.8
   id: 25
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &285515422
 Rigidbody2D:
   serializedVersion: 4
@@ -6163,7 +6209,7 @@ Transform:
   m_GameObject: {fileID: 325418646}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.43, y: 2.68, z: -0.047829404}
+  m_LocalPosition: {x: -8.66, y: 4.14, z: -0.047829404}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6281,10 +6327,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 800
-  CoinFish: 14
-  MoveSpeed: 1
+  Hp: 145
+  CoinFish: 21
+  MoveSpeed: 0.9
   id: 8
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &325418653
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -7582,7 +7631,7 @@ Transform:
   m_GameObject: {fileID: 397273584}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.74, y: -1.52, z: -0.047829404}
+  m_LocalPosition: {x: -25.8, y: 1.96, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7700,10 +7749,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 700
-  CoinFish: 12
-  MoveSpeed: 1
+  Hp: 160
+  CoinFish: 24
+  MoveSpeed: 0.8
   id: 7
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &397273591
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -8335,7 +8387,7 @@ Transform:
   m_GameObject: {fileID: 427260899}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.4, y: 2.1, z: -0.047829404}
+  m_LocalPosition: {x: -21.12, y: 5.51, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8353,10 +8405,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1250
-  CoinFish: 26
-  MoveSpeed: 1.2
+  Hp: 33
+  CoinFish: 4
+  MoveSpeed: 1.5
   id: 14
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &427260902
 Rigidbody2D:
   serializedVersion: 4
@@ -8856,7 +8911,7 @@ Transform:
   m_GameObject: {fileID: 453794105}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.98, y: 3.12, z: 0}
+  m_LocalPosition: {x: -15.84, y: 5.36, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8908,10 +8963,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1600
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 37
+  CoinFish: 5
+  MoveSpeed: 1.3
   id: 16
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &453794110
 Rigidbody2D:
   serializedVersion: 4
@@ -9549,6 +9607,7 @@ GameObject:
   m_Component:
   - component: {fileID: 500359124}
   - component: {fileID: 500359123}
+  - component: {fileID: 500359125}
   m_Layer: 0
   m_Name: coin
   m_TagString: Untagged
@@ -9597,7 +9656,7 @@ SpriteRenderer:
   m_SortingLayerID: 30273009
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ecc8bf01e3323cb48be2e6123feb8d35, type: 3}
+  m_Sprite: {fileID: 1318811866, guid: 914f8a2ca53862c448b1b1bbfb0cf746, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -9623,6 +9682,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 667088984}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &500359125
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500359122}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: da2ea46f2031eb842a008e2d2bb88586, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &503747394
 GameObject:
   m_ObjectHideFlags: 0
@@ -14941,7 +15021,7 @@ Transform:
   m_GameObject: {fileID: 525237650}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.77, y: 2.98, z: -0.047829404}
+  m_LocalPosition: {x: -30.25, y: 2.21, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14993,10 +15073,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 150
+  CoinFish: 22
+  MoveSpeed: 0.9
   id: 27
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &525237655
 Rigidbody2D:
   serializedVersion: 4
@@ -15738,7 +15821,7 @@ Transform:
   m_GameObject: {fileID: 581701659}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.56, y: 1.94, z: -0.047829404}
+  m_LocalPosition: {x: 5.83, y: -5.24, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15790,10 +15873,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
+  Hp: 270
+  CoinFish: 2750
   MoveSpeed: 0.53
   id: 40
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &581701664
 Rigidbody2D:
   serializedVersion: 4
@@ -22480,7 +22566,7 @@ Transform:
   m_GameObject: {fileID: 672660423}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.87, y: 1.28, z: -0.047829404}
+  m_LocalPosition: {x: -15.54, y: 1.75, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22598,10 +22684,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 900
-  CoinFish: 16
-  MoveSpeed: 1
+  Hp: 175
+  CoinFish: 27
+  MoveSpeed: 0.9
   id: 9
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &672660430
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -22742,7 +22831,7 @@ Transform:
   m_GameObject: {fileID: 678040747}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.85, y: -2.4, z: -0.047829404}
+  m_LocalPosition: {x: -18.25, y: -5.75, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22794,10 +22883,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 1800
+  CoinFish: 160
+  MoveSpeed: 0.65
   id: 39
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &678040752
 Rigidbody2D:
   serializedVersion: 4
@@ -23401,8 +23493,8 @@ Transform:
   m_GameObject: {fileID: 717736407}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.06, y: 0.02, z: 0}
+  m_LocalScale: {x: 1.3054, y: 1.3054, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1301518897}
@@ -23626,7 +23718,7 @@ Transform:
   m_GameObject: {fileID: 742742882}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.98, y: -1.87, z: 0}
+  m_LocalPosition: {x: -26.33, y: 3.78, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23717,10 +23809,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 400
-  CoinFish: 8
-  MoveSpeed: 1
+  Hp: 105
+  CoinFish: 13
+  MoveSpeed: 1.2
   id: 4
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &742742887
 Rigidbody2D:
   serializedVersion: 4
@@ -24703,7 +24798,7 @@ Transform:
   m_GameObject: {fileID: 811188953}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.6, y: 3.64, z: 0}
+  m_LocalPosition: {x: -25.27, y: 5.47, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24821,10 +24916,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 50
+  Hp: 28
   CoinFish: 3
-  MoveSpeed: 1.2
+  MoveSpeed: 1.7
   id: 1
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &811188960
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -25587,7 +25685,7 @@ Transform:
   m_GameObject: {fileID: 855152695}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.09, y: 1.4, z: -0.047829404}
+  m_LocalPosition: {x: -24.22, y: 3.99, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -25639,10 +25737,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 110
+  CoinFish: 14
+  MoveSpeed: 1.1
   id: 33
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &855152700
 Rigidbody2D:
   serializedVersion: 4
@@ -26145,7 +26246,7 @@ Transform:
   m_GameObject: {fileID: 876086201}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.89, y: -0.8, z: -0.047829404}
+  m_LocalPosition: {x: -8.81, y: 2.1, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26197,10 +26298,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 185
+  CoinFish: 29
+  MoveSpeed: 0.8
   id: 44
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &876086206
 Rigidbody2D:
   serializedVersion: 4
@@ -26594,7 +26698,7 @@ Transform:
   m_GameObject: {fileID: 894024323}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.69, y: -0.58, z: -0.047829404}
+  m_LocalPosition: {x: -19.28, y: 3.76, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26646,10 +26750,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 120
+  CoinFish: 16
+  MoveSpeed: 1.1
   id: 29
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &894024328
 Rigidbody2D:
   serializedVersion: 4
@@ -26946,7 +27053,7 @@ Transform:
   m_GameObject: {fileID: 900240229}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.69, y: 1.35, z: -0.047829404}
+  m_LocalPosition: {x: -20.44, y: -0.8, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26998,10 +27105,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 205
+  CoinFish: 35
+  MoveSpeed: 0.8
   id: 28
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &900240234
 Rigidbody2D:
   serializedVersion: 4
@@ -28454,7 +28564,7 @@ Transform:
   m_GameObject: {fileID: 991025446}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.8, y: -0.36, z: -0.047829404}
+  m_LocalPosition: {x: -13.34, y: 3.88, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28506,10 +28616,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 135
+  CoinFish: 19
+  MoveSpeed: 1
   id: 34
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &991025451
 Rigidbody2D:
   serializedVersion: 4
@@ -29484,8 +29597,8 @@ Transform:
   m_GameObject: {fileID: 1024892613}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.22, y: 0.86, z: -0.047829404}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -35.03, y: -6.7999997, z: -0.0478}
+  m_LocalScale: {x: 1.0941, y: 1.0941, z: 1.0941}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -29536,10 +29649,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 1200
+  CoinFish: 100
+  MoveSpeed: 0.8
   id: 37
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1024892618
 Rigidbody2D:
   serializedVersion: 4
@@ -30759,7 +30875,7 @@ Transform:
   m_GameObject: {fileID: 1124514804}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.69, y: -1.84, z: -0.047829404}
+  m_LocalPosition: {x: -17.6, y: 3.91, z: -0.047829404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30811,10 +30927,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 125
+  CoinFish: 17
+  MoveSpeed: 1
   id: 30
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1124514809
 Rigidbody2D:
   serializedVersion: 4
@@ -31039,7 +31158,7 @@ Transform:
   m_GameObject: {fileID: 1130876993}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.82, y: -0.15, z: -0.047829404}
+  m_LocalPosition: {x: -10.74, y: 5.43, z: -0.047829404}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -31091,10 +31210,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 40
+  CoinFish: 6
+  MoveSpeed: 1.2
   id: 19
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1130876998
 Rigidbody2D:
   serializedVersion: 4
@@ -31343,8 +31465,8 @@ Transform:
   m_GameObject: {fileID: 1142002485}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.9, y: 2.4, z: -0.047829404}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalPosition: {x: -19.65, y: 5.51, z: -0.0478}
+  m_LocalScale: {x: 1.3176, y: 1.3176, z: 0.8784}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -31461,10 +31583,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 600
-  CoinFish: 10
-  MoveSpeed: 1
+  Hp: 34
+  CoinFish: 5
+  MoveSpeed: 1.4
   id: 6
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &1142002492
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -32852,8 +32977,8 @@ Transform:
   m_GameObject: {fileID: 1235253749}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.094, y: 0.038, z: 0}
+  m_LocalScale: {x: 1.1734, y: 1.1734, z: 1.1734}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1301518897}
@@ -35391,8 +35516,8 @@ Transform:
   m_GameObject: {fileID: 1397723571}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.45, y: 3.91, z: -0.047829404}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalPosition: {x: -14.27, y: 5.4, z: -0.0478}
+  m_LocalScale: {x: 1.26075, y: 1.26075, z: 0.8405}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -35509,10 +35634,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 500
-  CoinFish: 9
-  MoveSpeed: 1
+  Hp: 38
+  CoinFish: 6
+  MoveSpeed: 1.3
   id: 5
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &1397723578
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -36331,7 +36459,7 @@ Transform:
   m_GameObject: {fileID: 1459479734}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.56, y: -1.77, z: -0.047829404}
+  m_LocalPosition: {x: -12.309999, y: -6.1, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36383,10 +36511,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 200
+  CoinFish: 180
+  MoveSpeed: 0.6
   id: 41
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1459479739
 Rigidbody2D:
   serializedVersion: 4
@@ -37422,7 +37553,7 @@ Transform:
   m_GameObject: {fileID: 1541698670}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.98, y: 2.15, z: -0.047829404}
+  m_LocalPosition: {x: -28.24, y: 3.95, z: -0.047829404}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37474,10 +37605,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 102
+  CoinFish: 13
+  MoveSpeed: 1.2
   id: 17
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1541698675
 Rigidbody2D:
   serializedVersion: 4
@@ -38011,7 +38145,7 @@ Transform:
   m_GameObject: {fileID: 1563227339}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.65, y: -2.18, z: -0.047829404}
+  m_LocalPosition: {x: -17.54, y: 5.4, z: -0.047829404}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -38063,10 +38197,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 36
+  CoinFish: 5
+  MoveSpeed: 1.4
   id: 21
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1563227344
 Rigidbody2D:
   serializedVersion: 4
@@ -38499,8 +38636,8 @@ Transform:
   m_GameObject: {fileID: 1594077672}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.99724734, w: 0.07414711}
-  m_LocalPosition: {x: 0.49, y: 0.31, z: 0}
-  m_LocalScale: {x: 1.0437962, y: 1.0437962, z: 0}
+  m_LocalPosition: {x: 0.74, y: 0.47, z: 0}
+  m_LocalScale: {x: 1.6107067, y: 2.1747513, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1301518897}
@@ -38848,8 +38985,8 @@ Transform:
   m_GameObject: {fileID: 1614572702}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.0506, y: 1.1704, z: -0.047829404}
-  m_LocalScale: {x: 2.05965, y: 2.05965, z: 1.3731}
+  m_LocalPosition: {x: -5.74, y: -6.2599998, z: -0.047829404}
+  m_LocalScale: {x: 1.9333935, y: 1.6491617, z: 1.3731}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -38866,10 +39003,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1240
-  CoinFish: 24
-  MoveSpeed: 1
+  Hp: 2000
+  CoinFish: 180
+  MoveSpeed: 0.6
   id: 13
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1614572705
 Rigidbody2D:
   serializedVersion: 4
@@ -39120,7 +39260,7 @@ Transform:
   m_GameObject: {fileID: 1615201383}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.49, y: 1.92, z: -0.047829404}
+  m_LocalPosition: {x: -15.64, y: 3.82, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -39172,10 +39312,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 130
+  CoinFish: 18
+  MoveSpeed: 1
   id: 24
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1615201388
 Rigidbody2D:
   serializedVersion: 4
@@ -39585,8 +39728,8 @@ Transform:
   m_GameObject: {fileID: 1641307699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.88, y: 0.88, z: -0.047829404}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalPosition: {x: -22.458, y: 5.5341, z: -0.0478}
+  m_LocalScale: {x: 1.4800271, y: 1.4800271, z: 0.74001354}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -39637,10 +39780,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 31
+  CoinFish: 4
+  MoveSpeed: 1.5
   id: 18
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1641307704
 Rigidbody2D:
   serializedVersion: 4
@@ -40007,7 +40153,7 @@ Transform:
   m_GameObject: {fileID: 1651315769}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.89, y: 2.24, z: -0.047829404}
+  m_LocalPosition: {x: 2.68, y: -5.38, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40059,10 +40205,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 2500
+  CoinFish: 240
+  MoveSpeed: 0.55
   id: 43
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1651315774
 Rigidbody2D:
   serializedVersion: 4
@@ -40832,7 +40981,7 @@ Transform:
   m_GameObject: {fileID: 1682916385}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.6, y: 3.1, z: 0}
+  m_LocalPosition: {x: -26.570004, y: 5.4599996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40950,10 +41099,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 300
-  CoinFish: 5
-  MoveSpeed: 1
+  Hp: 26
+  CoinFish: 3
+  MoveSpeed: 1.7
   id: 3
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &1682916392
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -42051,8 +42203,8 @@ Transform:
   m_GameObject: {fileID: 1721155383}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.76, y: -0.0156093575, z: -0.047829404}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -12.18, y: 2.57, z: -0.0478}
+  m_LocalScale: {x: 0.8819, y: 0.8819, z: 0.8819}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -42069,10 +42221,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1000
-  CoinFish: 18
-  MoveSpeed: 1
+  Hp: 180
+  CoinFish: 28
+  MoveSpeed: 0.9
   id: 10
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &1721155390
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -42604,7 +42759,7 @@ Transform:
   m_GameObject: {fileID: 1742905482}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.5, y: 3.7, z: 0}
+  m_LocalPosition: {x: -27.950003, y: 5.5199995, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42722,10 +42877,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 100
-  CoinFish: 4
-  MoveSpeed: 1.3
+  Hp: 25
+  CoinFish: 3
+  MoveSpeed: 1.8
   id: 2
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!60 &1742905489
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -42846,7 +43004,7 @@ Transform:
   m_GameObject: {fileID: 1751736073}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.59, y: -3.34, z: -0.047829404}
+  m_LocalPosition: {x: -23.49, y: 5.49, z: -0.047829404}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42898,10 +43056,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 30
+  CoinFish: 4
+  MoveSpeed: 1.6
   id: 22
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1751736078
 Rigidbody2D:
   serializedVersion: 4
@@ -43239,7 +43400,7 @@ Transform:
   m_GameObject: {fileID: 1768008852}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.94, y: -2.6, z: -0.047829404}
+  m_LocalPosition: {x: -21.33, y: 3.91, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43291,10 +43452,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 115
+  CoinFish: 15
+  MoveSpeed: 1.1
   id: 26
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1768008857
 Rigidbody2D:
   serializedVersion: 4
@@ -43783,7 +43947,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1825989843}
   - component: {fileID: 1825989842}
-  - component: {fileID: 1825989844}
   - component: {fileID: 1825989845}
   m_Layer: 0
   m_Name: BG
@@ -43860,19 +44023,6 @@ Transform:
   - {fileID: 147870146}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1825989844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1825989841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e02f81056349bdc43aa90f7e02f28d76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 1825989842}
 --- !u!114 &1825989845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51392,7 +51542,7 @@ Transform:
   m_GameObject: {fileID: 1995150566}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.69, y: -3.25, z: -0.047829404}
+  m_LocalPosition: {x: -30.52, y: 3.77, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51444,10 +51594,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 100
+  CoinFish: 12
+  MoveSpeed: 1.2
   id: 31
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &1995150571
 Rigidbody2D:
   serializedVersion: 4
@@ -57239,7 +57392,7 @@ Transform:
   m_GameObject: {fileID: 2061237116}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.13, y: 3.36, z: -0.047829404}
+  m_LocalPosition: {x: -23.75, y: -0.53, z: -0.047829404}
   m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57257,10 +57410,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1100
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 200
+  CoinFish: 30
+  MoveSpeed: 0.8
   id: 15
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &2061237119
 Rigidbody2D:
   serializedVersion: 4
@@ -57686,7 +57842,7 @@ Transform:
   m_GameObject: {fileID: 2094273069}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.89, y: -3.42, z: -0.047829404}
+  m_LocalPosition: {x: -0.92, y: -5.73, z: -0.047829404}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57738,10 +57894,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 2250
+  CoinFish: 240
+  MoveSpeed: 0.55
   id: 45
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &2094273074
 Rigidbody2D:
   serializedVersion: 4
@@ -58889,8 +59048,8 @@ Transform:
   m_GameObject: {fileID: 2146987444}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.4, y: 3.3, z: -0.047829404}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -24.21, y: -6.75, z: -0.0478}
+  m_LocalScale: {x: 1.1794, y: 1.1794, z: 1.1794}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1843384026}
@@ -58941,10 +59100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02f3183ea4cf25428d04e8cc9673ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 1700
-  CoinFish: 28
-  MoveSpeed: 0.53
+  Hp: 600
+  CoinFish: 140
+  MoveSpeed: 0.75
   id: 36
+  gimmickType: 0
+  gimmickRadius: 4
+  gimmickDamage: 50
 --- !u!50 &2146987449
 Rigidbody2D:
   serializedVersion: 4

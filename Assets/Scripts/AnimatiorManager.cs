@@ -17,21 +17,23 @@ public class AnimatiorManager : MonoBehaviour
     private List<GameObject> ListAnimator = new List<GameObject>();
     private List<GameObject> ListCoinAnimator = new List<GameObject>();
     private List<ParticleSystem> Listparticle = new List<ParticleSystem>();
-
+    
+    // NEW: Pool for the Jackpot UI text
+    private List<TextMeshProUGUI> ListTextUI = new List<TextMeshProUGUI>();
 
     public TextMeshProUGUI CointextUI;
 
     Vector3 offet;
     private GameManager GM;
+    
     private void Start()
     {
         GM = GameManager.Instance;
     }
 
-
     private ParticleSystem Getparticle()
     {
-        ParticleSystem particleClone = Listparticle.FirstOrDefault(o => !o.isPlaying);
+        ParticleSystem particleClone = Listparticle.FirstOrDefault(o => !o.isPlaying && !o.gameObject.activeSelf);
         if (particleClone == null)
         {
             GameObject particleInstance = Instantiate(partical, particleParent);
@@ -40,6 +42,7 @@ public class AnimatiorManager : MonoBehaviour
         }
         return particleClone;
     }
+
     public void playParticle(Vector3 pos)
     {
         ParticleSystem particle = Getparticle();
@@ -52,7 +55,7 @@ public class AnimatiorManager : MonoBehaviour
     private IEnumerator ReturnParticleToPoll(ParticleSystem particle)
     {
         yield return new WaitForSeconds(3f);
-        if (partical != null)
+        if (particle != null)
         {
             particle.Stop();
             particle.Clear();
@@ -73,29 +76,22 @@ public class AnimatiorManager : MonoBehaviour
         coin_clone.transform.position = pos;
         coin_clone.SetActive(true);
 
-
         StartCoroutine(IEnumMove(coin_clone, BulletId));
     }
+    
     private IEnumerator IEnumMove(GameObject obj, int BulletId)
     {
-
         yield return new WaitForSeconds(0.8f);
 
-
-        if (BulletId == 0 || BulletId == 1)
-        {
-            offet = new Vector3(0, 2f, 0);
-        }
-        else
-        {
-            offet = new Vector3(0, -2f, 0);
-        }
+        if (BulletId == 0 || BulletId == 1) offet = new Vector3(0, 2f, 0);
+        else offet = new Vector3(0, -2f, 0);
 
         Vector3 end_pos = GunPos[BulletId].position + offet;
 
         float speed = 50f;
         float initDistance = Vector2.Distance(obj.transform.position, end_pos);
         float distance = initDistance;
+        
         while (distance > 1)
         {
             float Factor = distance / initDistance;
@@ -106,8 +102,8 @@ public class AnimatiorManager : MonoBehaviour
 
         StartCoroutine(PlayAnima(obj.transform.position, 1));
         obj.SetActive(false);
-
     }
+    
     public IEnumerator PlayAnima(Vector3 pos, int index)
     {
         GameObject anima_clone = ListAnimator.FirstOrDefault(o => !o.activeSelf && o.name == "AnimationFish" + index + "(Clone)");
@@ -120,14 +116,22 @@ public class AnimatiorManager : MonoBehaviour
         anima_clone.transform.position = pos;
         anima_clone.SetActive(true);
 
-        TextMeshProUGUI Textclone = Instantiate(CointextUI,pos + new Vector3(0, -0.7f,0), Quaternion.identity, GM.DisplayTextManagerScript.TextHolder);
-        Textclone.text = "Win "+ 190.ToString();
-        Textclone.gameObject.SetActive(true);
+        // Recycle the text UI instead of instantiating!
+        TextMeshProUGUI textClone = ListTextUI.FirstOrDefault(t => !t.gameObject.activeSelf);
+        if (textClone == null)
+        {
+            textClone = Instantiate(CointextUI, pos + new Vector3(0, -0.7f, 0), Quaternion.identity, GM.DisplayTextManagerScript.TextHolder);
+            ListTextUI.Add(textClone);
+        }
 
+        textClone.transform.position = pos + new Vector3(0, -0.7f, 0);
+        textClone.text = "Win " + 190.ToString(); // You might want to pass the actual win amount here eventually!
+        textClone.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(3f);
-        Destroy(Textclone.gameObject);
+        
+        // Put them to sleep!
+        textClone.gameObject.SetActive(false);
         anima_clone.SetActive(false);
     }
-
 }

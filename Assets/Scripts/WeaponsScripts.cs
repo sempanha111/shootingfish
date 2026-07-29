@@ -13,8 +13,7 @@ public class WeaponsScripts : MonoBehaviour
     public GameObject[] Gun;
     public Animator[] Anima_Gun;
     [SerializeField] public float[] Bet;
-
-
+    
     private List<GameObject> Listpoinclick = new List<GameObject>();
 
 

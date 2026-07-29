@@ -36,8 +36,8 @@ public class CoinManager : MonoBehaviour
 
         Vector3[] diamondOffsets = new Vector3[] { };
 
-        float basePadding = 0.18f; // Base padding for small numbers
-        float paddingIncrement = 0.1f; // Smaller increment to space out coins more subtly
+        float basePadding = 0.20f; // Base padding for small numbers
+        float paddingIncrement = 0.12f; // Smaller increment to space out coins more subtly
 
         // Calculate the actual padding dynamically based on the number of coins
         float actualPadding = basePadding + ((int)timeToLoop - 1) * paddingIncrement;
@@ -224,7 +224,7 @@ public class CoinManager : MonoBehaviour
 
 
         Vector3 startScale = transform.localScale;
-        Vector3 targetScale = Vector3.one * 0.12f;
+        Vector3 targetScale = Vector3.one * 0.10f;
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition + new Vector3(0, 0.3f, 0);
 
