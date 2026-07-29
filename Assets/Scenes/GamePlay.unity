@@ -787,11 +787,90 @@ MonoBehaviour:
   BottomPos: {fileID: 0}
   BombCrabPrefab: {fileID: 0}
   LightningChainPrefab: {fileID: 0}
+  bigBossStartIndex: 0
+  bigBossEndIndex: 8
+  smallFishStartIndex: 9
+  smallFishEndIndex: 20
+  mediumFishStartIndex: 21
+  mediumFishEndIndex: 40
+  miniBossStartIndex: 41
+  miniBossEndIndex: 43
+  extraNormalFishStartIndex: 44
+  level1BossTargets: 00000000
+  level2BossTargets: 0100000002000000
+  level3BossTargets: 03000000
+  level4BossTargets: 0400000005000000
+  level5BossTargets: 06000000
+  level6BossTargets: 0700000008000000
+  level1Warmup: 18
+  warmupIncreasePerLevel: 7
+  bossWarningBaseDelay: 3
+  bossWarningIncreasePerLevel: 0.6
+  betweenTargetBossBaseDelay: 6
+  betweenTargetBossIncreasePerLevel: 1
+  postBossRecoveryBaseDelay: 4
+  postBossRecoveryIncreasePerLevel: 0.8
+  tideChangeBaseDuration: 4
+  tideChangeIncreasePerLevel: 0.7
+  ambientDelayMin: 1.8
+  ambientDelayMax: 3.2
+  paradeDelayMin: 6
+  paradeDelayMax: 10
+  maxActiveFishBase: 28
+  maxActiveFishPerLevel: 3
+  earlyLevelParadeWaves: 2
+  advancedLevelParadeWaves: 3
+  preBossParadeBaseGap: 3.2
+  preBossParadeGapPerLevel: 0.55
+  preBossFinalPauseBase: 1.5
+  preBossFinalPausePerLevel: 0.3
+  preBossMiniBossBaseChance: 0.12
+  preBossMiniBossChancePerLevel: 0.05
+  preBossMiniBossLeadBaseDelay: 4.5
+  preBossMiniBossLeadPerLevel: 0.55
+  preBossSpaceWaitTimeout: 6
+  preBossExtraFishCapacity: 15
+  paradeFishPerGroupBase: 6
+  paradeFishPerGroupPerLevel: 1
+  paradeFishPerGroupMaximum: 10
+  paradeLaneSpacing: 2.6
+  paradeFishHorizontalGap: 1.05
+  paradeSpeedMultiplierBase: 1.55
+  paradeSpeedMultiplierPerLevel: 0.07
+  enableBossArrivalEvents: 1
+  cameraShakeTarget: {fileID: 0}
+  bossEventBaseDuration: 1.3
+  bossEventDurationPerLevel: 0.25
+  bossEventBaseShakeStrength: 0.07
+  bossEventShakeStrengthPerLevel: 0.035
+  bossEventBackgroundTintStrength: 0.28
+  bossArrivalEventEffects: []
+  bossEventEffectSpawnPoint: {fileID: 0}
+  bossArrivalExtraBaseDelay: 3
+  bossArrivalExtraPerLevel: 0.8
+  normalHpPerLevel: 0.03
+  normalRewardPerLevel: 0.025
+  normalSpeedPerLevel: 0.015
+  miniBossBaseHpMultiplier: 1.15
+  miniBossHpPerLevel: 0.1
+  miniBossRewardPerLevel: 0.08
+  miniBossSpeedPerLevel: 0.02
+  bossBaseHpMultiplier: 1.25
+  bossHpPerLevel: 0.15
+  bossRewardPerLevel: 0.12
+  bossSpeedPerLevel: 0.02
+  endlessHpPerLoop: 0.1
+  endlessRewardPerLoop: 0.08
+  endlessSpeedPerLoop: 0.02
+  maxScalingLoops: 10
   currentLevelState: 0
-  levelTimer: 0
-  tideChangeDuration: 10
-  loopMultiplier: 0
+  currentPhase: 0
   isEndlessMode: 0
+  loopMultiplier: 0
+  levelTimer: 0
+  targetBossNumber: 0
+  targetBossTotal: 0
+  defeatedBossCount: 0
 --- !u!114 &23999492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2168,7 +2247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &83296954
 Transform:
   m_ObjectHideFlags: 0
@@ -2840,7 +2919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &131064237
 Transform:
   m_ObjectHideFlags: 0
@@ -3240,7 +3319,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &149339244
 Transform:
   m_ObjectHideFlags: 0
@@ -3884,7 +3963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &174381742
 Transform:
   m_ObjectHideFlags: 0
@@ -4202,7 +4281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &188335258
 Transform:
   m_ObjectHideFlags: 0
@@ -4572,7 +4651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &201873169
 Transform:
   m_ObjectHideFlags: 0
@@ -5009,7 +5088,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &228177462
 Transform:
   m_ObjectHideFlags: 0
@@ -5286,7 +5365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &248632850
 Transform:
   m_ObjectHideFlags: 0
@@ -5619,7 +5698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &285515418
 Transform:
   m_ObjectHideFlags: 0
@@ -5964,6 +6043,9 @@ MonoBehaviour:
   activeGunLevel: 1
   Totalbet: 0
   AnimaShootWait: 0.15
+  screenPadding: 0.15
+  reactionDelay: 0.4
+  randomVariance: 2
 --- !u!210 &316606273
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -6199,7 +6281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &325418647
 Transform:
   m_ObjectHideFlags: 0
@@ -7621,7 +7703,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &397273585
 Transform:
   m_ObjectHideFlags: 0
@@ -8377,7 +8459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &427260900
 Transform:
   m_ObjectHideFlags: 0
@@ -8901,7 +8983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &453794106
 Transform:
   m_ObjectHideFlags: 0
@@ -15011,7 +15093,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &525237651
 Transform:
   m_ObjectHideFlags: 0
@@ -15811,7 +15893,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &581701660
 Transform:
   m_ObjectHideFlags: 0
@@ -22556,7 +22638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &672660424
 Transform:
   m_ObjectHideFlags: 0
@@ -22821,7 +22903,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &678040748
 Transform:
   m_ObjectHideFlags: 0
@@ -23708,7 +23790,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &742742883
 Transform:
   m_ObjectHideFlags: 0
@@ -24788,7 +24870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &811188954
 Transform:
   m_ObjectHideFlags: 0
@@ -25675,7 +25757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &855152696
 Transform:
   m_ObjectHideFlags: 0
@@ -26236,7 +26318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &876086202
 Transform:
   m_ObjectHideFlags: 0
@@ -26688,7 +26770,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &894024324
 Transform:
   m_ObjectHideFlags: 0
@@ -27043,7 +27125,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &900240230
 Transform:
   m_ObjectHideFlags: 0
@@ -28554,7 +28636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &991025447
 Transform:
   m_ObjectHideFlags: 0
@@ -29587,7 +29669,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1024892614
 Transform:
   m_ObjectHideFlags: 0
@@ -30865,7 +30947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1124514805
 Transform:
   m_ObjectHideFlags: 0
@@ -31148,7 +31230,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1130876994
 Transform:
   m_ObjectHideFlags: 0
@@ -31422,6 +31504,9 @@ MonoBehaviour:
   activeGunLevel: 1
   Totalbet: 0
   AnimaShootWait: 0.15
+  screenPadding: 0.15
+  reactionDelay: 0.4
+  randomVariance: 2
 --- !u!210 &1133964632
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -31455,7 +31540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1142002486
 Transform:
   m_ObjectHideFlags: 0
@@ -33399,6 +33484,9 @@ MonoBehaviour:
   activeGunLevel: 1
   Totalbet: 0
   AnimaShootWait: 0.15
+  screenPadding: 0.15
+  reactionDelay: 0.4
+  randomVariance: 2
 --- !u!1 &1263987729
 GameObject:
   m_ObjectHideFlags: 0
@@ -35506,7 +35594,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1397723572
 Transform:
   m_ObjectHideFlags: 0
@@ -36449,7 +36537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1459479735
 Transform:
   m_ObjectHideFlags: 0
@@ -37543,7 +37631,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1541698671
 Transform:
   m_ObjectHideFlags: 0
@@ -38135,7 +38223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1563227340
 Transform:
   m_ObjectHideFlags: 0
@@ -38975,7 +39063,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1614572703
 Transform:
   m_ObjectHideFlags: 0
@@ -39250,7 +39338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1615201384
 Transform:
   m_ObjectHideFlags: 0
@@ -39718,7 +39806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1641307700
 Transform:
   m_ObjectHideFlags: 0
@@ -40143,7 +40231,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1651315770
 Transform:
   m_ObjectHideFlags: 0
@@ -40971,7 +41059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1682916386
 Transform:
   m_ObjectHideFlags: 0
@@ -42093,7 +42181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &1721155385
 Rigidbody2D:
   serializedVersion: 4
@@ -42749,7 +42837,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1742905483
 Transform:
   m_ObjectHideFlags: 0
@@ -42994,7 +43082,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1751736074
 Transform:
   m_ObjectHideFlags: 0
@@ -43390,7 +43478,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1768008853
 Transform:
   m_ObjectHideFlags: 0
@@ -51532,7 +51620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1995150567
 Transform:
   m_ObjectHideFlags: 0
@@ -57382,7 +57470,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2061237117
 Transform:
   m_ObjectHideFlags: 0
@@ -57832,7 +57920,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2094273070
 Transform:
   m_ObjectHideFlags: 0
@@ -59038,7 +59126,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2146987445
 Transform:
   m_ObjectHideFlags: 0
