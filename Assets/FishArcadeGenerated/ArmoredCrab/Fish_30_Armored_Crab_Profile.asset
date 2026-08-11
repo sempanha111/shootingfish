@@ -1,0 +1,258 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928dff963ddf87f4ba0bc8c954240ae7, type: 3}
+  m_Name: Fish_30_Armored_Crab_Profile
+  m_EditorClassIdentifier: 
+  displayName: Armored Crab
+  damageResistance: 0.28
+  useUnscaledTime: 1
+  disableCollidersDuringSequence: 1
+  allowNormalNetBackgroundEffect: 0
+  rewardTiming: 0
+  enableConvulsion: 1
+  convulsionDuration: 0.75
+  convulsionPositionStrength: 0.51
+  convulsionRotationDegrees: 5.8
+  convulsionScaleStrength: 0.099
+  convulsionRedStrength: 1
+  convulsionFrequency: 0.19
+  convulsionAnimatorTrigger: 
+  convulsionSound: {fileID: 0}
+  convulsionEffectPrefab: {fileID: 5175188194210925290, guid: 441d825a37dae3447b77fff813d21b43, type: 3}
+  convulsionEffectVisibleDuration: 1
+  enableMainCharge: 1
+  mainChargeDuration: 0.05
+  mainChargeScale: 1.59
+  mainChargePulseStrength: 0.3
+  mainChargePulseFrequency: 0.47
+  mainChargeRotationSpeed: 240.2
+  mainChargeRedStrength: 1
+  mainDeathAnimatorTrigger: 
+  mainChargeSound: {fileID: 0}
+  chargePresentationOrder: 1
+  playNetBoomAtCharge: 1
+  chargeNetBoomIndex: 5
+  chargeNetBoomCount: 1
+  chargeNetBoomInterval: 0
+  chargeNetBoomReadDuration: 0
+  chargeEffectDelayAfterNetBoom: 0
+  chargeStage2BMinimumDuration: 0
+  chargeEffectPrefabs:
+  - {fileID: 6933344716466671473, guid: 2d132f4bdfd1aa04ea3c822df2ec9957, type: 3}
+  chargeEffectScatterRadius: 0.09
+  chargeEffectOffset: {x: -1.11, y: -1.12}
+  chargeEffectScale: 0.63
+  chargeEffectVisibleDuration: 0.41
+  startChargeEarthquakeWithEffects: 1
+  chargeCameraShakeStrength: 1.01
+  chargeCameraShakeDuration: 1.02
+  enableFullScreenMovement: 1
+  routeMode: 0
+  automaticRoutePointCount: 3
+  manualRoutePoints: []
+  viewportEdgePadding: 0.3
+  movementSpeed: 8.7
+  movementArrivalDistance: 3.39
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.011184692
+      value: 0.99661255
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.48355788
+      value: 0.7185287
+      inSlope: -0.65735584
+      outSlope: -0.65735584
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99999464
+      value: 0.9439015
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  movementScale: 2.4
+  movementStartRotationSpeed: 84.5
+  movementEndRotationSpeed: 97.4
+  movementRedStrength: 1
+  movementPulseStrength: 0.1149
+  movementSound: {fileID: 0}
+  enableContinuousMovementShake: 1
+  continuousMovementShakeStrength: 0.12
+  continuousMovementShakeDuration: 0.37
+  continuousMovementShakeInterval: 0.37
+  playNetBoomAtRoutePoints: 1
+  movementNetBoomIndex: 0
+  movementNetBoomCount: 1
+  movementExplosionInterval: 1.21
+  movementExplosionScatterRadius: 1.79
+  movementEffectsMatchOwnerSorting: 1
+  movementNetBoomOffset: {x: 0, y: 0}
+  movementNetBoomScale: 1.74
+  movementNetBoomSortingOrderOffset: 3
+  movementArrivalEffectPrefabs:
+  - {fileID: 1267488871486319335, guid: 3279f7fcdbedc864ba7216bb5bebdd30, type: 3}
+  movementArrivalEffectOffset: {x: 0, y: 0}
+  movementArrivalEffectScale: 0.01
+  movementArrivalEffectSortingOrderOffset: -100
+  movementArrivalEffectVisibleDuration: 1.67
+  movementArrivalSound: {fileID: 0}
+  movementArrivalShakeStrength: 0.38
+  movementArrivalShakeDuration: 0.27
+  movementAreaDamage:
+    enabled: 1
+    damage: 802.8
+    radius: 4.68
+    useDistanceFalloff: 1
+    minimumFalloffMultiplier: 0.35
+    maximumTargets: 30
+    fishLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    smallMultiplier: 1.2
+    mediumMultiplier: 0.55
+    specialMultiplier: 0.35
+    miniBossMultiplier: 0.15
+    mainBossMultiplier: 0
+    mainBossImmune: 1
+    specialFishImmune: 0
+    requestReaction: 1
+    reactionDuration: 0.81
+    reactionScaleStrength: 0.18
+    reactionRotationDegrees: 144
+    reactionRedStrength: 0.85
+  certificateTiming: 1
+  useExistingCertificateSystem: 0
+  certificatePrefabIndex: -1
+  directCertificatePrefab: {fileID: 0}
+  certificateAfterRoutePoint: 2
+  certificatePosition: 1
+  certificateCustomViewport: {x: 0.5, y: 0.5}
+  certificateSpawnDelay: 0.1
+  certificateVisibleDuration: 2.2
+  certificateScale: 1
+  certificateRotation: 0
+  certificateSortingOrder: 3400
+  certificateSound: {fileID: 0}
+  approachFinalAttacker: 0
+  attackerViewportOffset: {x: 0, y: 0.12}
+  attackerApproachSpeed: 3.8
+  attackerPauseDuration: 0.18
+  finalTarget: 3
+  finalCustomViewport: {x: 0.5, y: 0.5}
+  finalMoveSpeed: 3.2
+  finalChargeDuration: 0.82
+  finalChargeScale: 2.35
+  finalChargeRotationSpeed: 430
+  finalChargeRedStrength: 0.96
+  finalChargePulseStrength: 0.1
+  finalChargeSound: {fileID: 0}
+  finalChargeShakeStrength: 0.29
+  finalChargeShakeDuration: 0.7
+  mainBombExplosionPrefab: {fileID: 820378974308782713, guid: 15dec236bbe41ec4ebf9129a084d3bc6, type: 3}
+  mainBombVisibleDuration: 1.85
+  mainBombScale: 0.01
+  mainBombSortingOrder: 3600
+  finalExplosionSound: {fileID: 0}
+  backgroundNetBoomCount: 1
+  finalNetBoomIndex: 0
+  backgroundExplosionRadius: 1.01
+  backgroundExplosionInterval: 1.41
+  backgroundExplosionScaleRange: {x: 3.17, y: 3.26}
+  additionalFinalExplosionPrefabs: []
+  finalEffectVisibleDuration: 0
+  finalExplosionShakeStrength: 0.43
+  finalExplosionShakeDuration: 0.9
+  finalAreaDamage:
+    enabled: 1
+    damage: 1550
+    radius: 5.83
+    useDistanceFalloff: 1
+    minimumFalloffMultiplier: 0.304
+    maximumTargets: 33
+    fishLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    smallMultiplier: 1.25
+    mediumMultiplier: 0.7
+    specialMultiplier: 0.42
+    miniBossMultiplier: 0.18
+    mainBossMultiplier: 0
+    mainBossImmune: 1
+    specialFishImmune: 0
+    requestReaction: 1
+    reactionDuration: 0.46
+    reactionScaleStrength: 0.295
+    reactionRotationDegrees: 337
+    reactionRedStrength: 1
+  enableSlowMotion: 0
+  slowMotionTimeScale: 0.159
+  slowMotionDuration: 0.43
+  enableBossSkill: 0
+  bossSkillIndex: -1
+  bossSkillDelay: 0.12
+  bossSkillPosition: 1
+  bossSkillCustomViewport: {x: 0.5, y: 0.5}
+  bossSkillScale: 1
+  bossSkillRotation: 0
+  bossSkillVisibleDuration: 0
+  bossSkillSortingOrder: 3700
+  bossSkillSound: {fileID: 0}
+  bossSkillVisualOnly: 1
+  bossSkillAreaDamage:
+    enabled: 0
+    damage: 500
+    radius: 2.5
+    useDistanceFalloff: 1
+    minimumFalloffMultiplier: 0.35
+    maximumTargets: 12
+    fishLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    smallMultiplier: 1.2
+    mediumMultiplier: 0.58
+    specialMultiplier: 0.38
+    miniBossMultiplier: 0.18
+    mainBossMultiplier: 0.05
+    mainBossImmune: 1
+    specialFishImmune: 0
+    requestReaction: 1
+    reactionDuration: 0.16
+    reactionScaleStrength: 0.1
+    reactionRotationDegrees: 42
+    reactionRedStrength: 0.7
+  optionalFinalDeathPrefab: {fileID: 0}
+  optionalFinalPrefabDelay: 0
+  optionalFinalPrefabVisibleDuration: 0
+  optionalFinalPrefabScale: 1
+  optionalFinalPrefabRotation: 0
+  optionalFinalPrefabSortingOrder: 3800
+  optionalFinalPrefabSound: {fileID: 0}
+  hideBodyAfterExplosionDelay: 0.1
+  finalCleanupDelay: 0.65
+  stopCameraShakeOnCleanup: 1
+  restoreTimeScaleOnCleanup: 1

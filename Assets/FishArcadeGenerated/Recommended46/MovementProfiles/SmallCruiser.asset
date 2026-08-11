@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c255333863b9b646a397fade23bd93b, type: 3}
+  m_Name: SmallCruiser
+  m_EditorClassIdentifier: 
+  healthyStyles:
+  - style: 0
+    weight: 50
+  - style: 1
+    weight: 30
+  - style: 3
+    weight: 20
+  aggressiveStyles:
+  - style: 1
+    weight: 30
+  - style: 2
+    weight: 30
+  - style: 6
+    weight: 25
+  - style: 5
+    weight: 15
+  criticalStyles:
+  - style: 2
+    weight: 45
+  - style: 6
+    weight: 35
+  - style: 5
+    weight: 20
+  enableOrganicSteering: 1
+  velocitySmoothTime: 0.18
+  healthyTurnDegreesPerSecond: 78
+  aggressiveTurnDegreesPerSecond: 96.72
+  criticalTurnDegreesPerSecond: 113.100006
+  minimumWaypointViewportDistance: 0.48
+  waypointReachDistance: 0.48
+  waypointLifetimeRange: {x: 3.8, y: 7.2}
+  wanderAngleDegrees: 8.5
+  wanderFrequency: 0.32
+  speedPulseMultiplierRange: {x: 0.9, y: 1.1}
+  speedPulseDurationRange: {x: 2.8, y: 5.4}
+  styleHoldDurationRange: {x: 4.5, y: 8}
+  styleChangeChanceAfterHold: 0.45
+  spreadRoutesAcrossViewport: 1
+  centerAvoidanceHalfHeight: 0.14
+  trafficLaneJitter: 0.055
+  crossCenterLaneChangeChance: 0.08
+  orbitAnchorViewportInset: 0.27
+  offscreenLoopChance: 0.22
+  maximumOffscreenLoops: 1
+  offscreenViewportPadding: 0.1
+  offscreenReturnTimeout: 9
+  loopCooldown: 7
+  naturalLifetimeRange: {x: 16, y: 28}
+  stuckCheckInterval: 1.15
+  minimumStuckTravelDistance: 0.1
+  stuckRecoverySpeedMultiplier: 0.85
+  enableReactiveHitMotion: 1
+  microConvulsionChancePerHit: 0.32
+  repeatedMicroConvulsionChance: 0.68
+  sustainedFireHitCount: 2
+  sustainedFireWindow: 0.55
+  fireReleaseGracePeriod: 0.34
+  microConvulsionDurationRange: {x: 0.055, y: 0.13}
+  microConvulsionRecoveryRange: {x: 0.07, y: 0.18}
+  microConvulsionScaleStrength: 0.035
+  reactionMovementSpeedMultiplier: 0.78
+  microConvulsionAnimatorTrigger: HitFlinch
+  sustainedFireAnimatorBool: UnderFire

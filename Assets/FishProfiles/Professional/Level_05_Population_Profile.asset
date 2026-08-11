@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc28d7de161e0e944bddf768a5f33378, type: 3}
+  m_Name: Level_05_Population_Profile
+  m_EditorClassIdentifier: 
+  levelNumber: 5
+  displayName: Twin Current
+  smallFishPercentage: 0.38
+  mediumFishPercentage: 0.62
+  largeFishPercentage: 0.2
+  specialFishPercentage: 0.08
+  commonPercentage: 0.46
+  uncommonPercentage: 0.31
+  rarePercentage: 0.19
+  epicPercentage: 0.04
+  maximumActiveFish: 30
+  minimumActiveFish: 18
+  maximumLargeFish: 5
+  maximumGroups: 5
+  bossSpawnTiming: 5.5
+  fishHealthMultiplier: 1.2
+  fishSpeedMultiplier: 1.08
+  rewardMultiplier: 1.2
+  evasiveBehaviorChance: 0.18
+  complexRouteChance: 0.32

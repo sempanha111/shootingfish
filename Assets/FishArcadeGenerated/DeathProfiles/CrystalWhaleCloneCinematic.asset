@@ -1,0 +1,376 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad3997b615be8448ae953f4240df0da, type: 3}
+  m_Name: CrystalWhaleCloneCinematic
+  m_EditorClassIdentifier: 
+  enableCustomCloneDeathEffect: 1
+  requiredFishId: 41
+  waitForExistingDeathPresentation: 1
+  additionalStartDelay: 0.05
+  useUnscaledTime: 0
+  hideOriginalFishDuringCinematic: 1
+  baseCloneScaleMultiplier: 0.75
+  cloneOpacity: 1
+  includeShadowVisuals: 0
+  cloneShadowOpacity: 0.18
+  useFishSorting: 1
+  cloneSortingOrderOffset: 30
+  cloneSortingOrderStep: 1
+  keepAnimatorPlaying: 1
+  animatorStartMode: 0
+  specificAnimatorStateName: 
+  specificAnimatorLayer: 0
+  specificAnimatorNormalizedTime: 0
+  animatorSpeedMultiplier: 1
+  forceAnimatorAlwaysAnimate: 1
+  keepAnimatorPlayingDuringFormation: 1
+  keepAnimatorPlayingDuringSpin: 1
+  keepAnimatorPlayingDuringSeparation: 1
+  keepAnimatorPlayingAtDestination: 1
+  keepAnimatorPlayingDuringFinalMerge: 1
+  cloneCount: 4
+  formationCenterViewport: {x: 0.5, y: 0.5}
+  formationRadiusSpace: 0
+  formationRadius: 0.15
+  formationStartingAngle: 90
+  autoDistributeClonesAroundCircle: 1
+  formationBuildDuration: 0.13
+  formationBuildCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  formationFacing: 2
+  spriteForwardAngleDegrees: 0
+  formationRotationEnabled: 1
+  formationRotationSpeed: 180
+  formationRotationStartingAngle: 0
+  formationClockwise: 0
+  spinWaitDuration: 2.1
+  formationRotationDuration: 1.4
+  continueFormationRotationUntilNextStage: 1
+  limitFormationRotationByTurns: 0
+  maximumFormationTurns: 2.33
+  individualFishRotationEnabled: 1
+  individualFishRotationSpeed: 90
+  individualFishRotationClockwise: 0
+  continueIndividualRotationDuringSeparation: 1
+  continueIndividualRotationAtDestination: 1
+  continueIndividualRotationDuringFinalMerge: 0
+  aggressiveOutAndBackEnabled: 1
+  aggressiveOutAndBackRepeats: 2
+  aggressiveOutScreenViewportPadding: 0.1
+  aggressiveEnsureFullyOffscreen: 1
+  aggressiveWindUpFormationRadiusMultiplier: 0.16
+  aggressiveWindUpDuration: 0.065
+  aggressiveOutboundSpeed: 7.7
+  aggressiveReturnSpeed: 10.8
+  aggressiveOutsideHoldDuration: 0.035
+  aggressiveRepeatSpeedMultiplier: 1.12
+  aggressiveOutboundCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 4.8
+      outSlope: 4.8
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.72
+      value: 0.93
+      inSlope: 0.65
+      outSlope: 0.65
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  aggressiveReturnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 3.8
+      outSlope: 3.8
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.78
+      value: 0.95
+      inSlope: 0.55
+      outSlope: 0.55
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  aggressiveLungeScaleStrength: 0.14
+  aggressiveFaceMovementDirection: 1
+  aggressiveContinueIndividualRotation: 0
+  keepAnimatorPlayingDuringAggressiveDash: 1
+  aggressiveAnimatorSpeedMultiplier: 1.25
+  globalSeparationSpeed: 1.7
+  globalSeparationDurationOverride: 0
+  separationMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotateWhileMoving: 1
+  waitForAllClones: 1
+  delayAfterAllClonesReady: 0.2
+  delayAfterLastCloneArrives: 0.35
+  finalCenterMode: 0
+  finalCenterViewport: {x: 0.5, y: 0.5}
+  finalCenterWorldPosition: {x: 0, y: 0, z: 0}
+  finalCenterMovementSpeed: 18
+  finalCenterDurationOverride: 0
+  finalCenterMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.4
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2.6
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  faceFinalCenterWhileMoving: 1
+  finalRotationEnabled: 1
+  finalRotationSpeed: 180
+  finalRotationClockwise: 0
+  finalScaleMultiplier: 0.88
+  finalScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  enableFinalMergeColorTint: 0
+  finalMergeTintColor: {r: 1, g: 1, b: 1, a: 1}
+  finalMergeTintStrength: 0.35
+  finalMergeTintCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  playIndexedNetBoom: 1
+  finalNetBoomEffectIndex: 4
+  finalNetBoomScaleMultiplier: 1.4
+  finalNetBoomSortingOrderOffset: 160
+  finalBoomPrefab: {fileID: 0}
+  finalBoomSpawnOffset: {x: 0, y: 0}
+  finalBoomScale: {x: 1.4, y: 1.4}
+  finalBoomRotationDegrees: 0
+  finalBoomVisibleDuration: 0
+  finalBoomHideDelay: 0.15
+  finalBoomSortingOrderOffset: 180
+  additionalFinalEffects: []
+  finalBackgroundEffectPrefab: {fileID: 0}
+  finalBackgroundEffectOffset: {x: 0, y: 0}
+  finalBackgroundEffectScale: {x: 1.12, y: 1.13}
+  finalBackgroundEffectRotationDegrees: 1.39
+  finalBackgroundEffectVisibleDuration: 0.88
+  finalBackgroundEffectHideDelay: 1.8
+  finalBackgroundSortingOrderOffset: 80
+  playFinalNetBoomSound: 1
+  finalNetBoomSoundIndex: 3
+  playFinalCameraShake: 1
+  finalCameraShakeStrength: 0.38
+  finalCameraShakeDuration: 0.38
+  finalAreaDamage:
+    enabled: 1
+    damage: 1200
+    radius: 3.2
+    useDistanceFalloff: 1
+    minimumFalloffMultiplier: 0.35
+    maximumTargets: 16
+    fishLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    smallMultiplier: 1.2
+    mediumMultiplier: 0.7
+    specialMultiplier: 0.42
+    miniBossMultiplier: 0.18
+    mainBossMultiplier: 0
+    mainBossImmune: 1
+    specialFishImmune: 0
+    requestReaction: 1
+    reactionDuration: 0.16
+    reactionScaleStrength: 0.1
+    reactionRotationDegrees: 42
+    reactionRedStrength: 0.7
+  hideClonesAfterBoomDelay: 0.06
+  cleanupDelay: 0.45
+  clones:
+  - overrideFormationAngle: 0
+    formationAngleDegrees: 0
+    scaleMultiplier: 1
+    individualRotationSpeedOverride: -1
+    destinationMode: 0
+    destinationViewport: {x: 0.5, y: 0.8}
+    destinationWorldPosition: {x: 0, y: 0, z: 0}
+    movementSpeedOverride: -1
+    movementDurationOverride: -1
+    destinationWaitDuration: 0.25
+    finalMovementSpeedOverride: -1
+  - overrideFormationAngle: 0
+    formationAngleDegrees: 0
+    scaleMultiplier: 1
+    individualRotationSpeedOverride: -1
+    destinationMode: 0
+    destinationViewport: {x: 0.8, y: 0.5}
+    destinationWorldPosition: {x: 0, y: 0, z: 0}
+    movementSpeedOverride: -1
+    movementDurationOverride: -1
+    destinationWaitDuration: 0.25
+    finalMovementSpeedOverride: -1
+  - overrideFormationAngle: 0
+    formationAngleDegrees: 0
+    scaleMultiplier: 1
+    individualRotationSpeedOverride: -1
+    destinationMode: 0
+    destinationViewport: {x: 0.5, y: 0.2}
+    destinationWorldPosition: {x: 0, y: 0, z: 0}
+    movementSpeedOverride: -1
+    movementDurationOverride: -1
+    destinationWaitDuration: 0.25
+    finalMovementSpeedOverride: -1
+  - overrideFormationAngle: 0
+    formationAngleDegrees: 0
+    scaleMultiplier: 1
+    individualRotationSpeedOverride: -1
+    destinationMode: 0
+    destinationViewport: {x: 0.2, y: 0.5}
+    destinationWorldPosition: {x: 0, y: 0, z: 0}
+    movementSpeedOverride: -1
+    movementDurationOverride: -1
+    destinationWaitDuration: 0.25
+    finalMovementSpeedOverride: -1

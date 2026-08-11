@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c255333863b9b646a397fade23bd93b, type: 3}
+  m_Name: MiniBossProfile
+  m_EditorClassIdentifier: 
+  healthyStyles:
+  - style: 7
+    weight: 50
+  - style: 9
+    weight: 30
+  - style: 2
+    weight: 20
+  aggressiveStyles:
+  - style: 8
+    weight: 45
+  - style: 7
+    weight: 35
+  - style: 2
+    weight: 20
+  criticalStyles:
+  - style: 14
+    weight: 60
+  - style: 8
+    weight: 25
+  - style: 7
+    weight: 15
+  enableOrganicSteering: 1
+  velocitySmoothTime: 0.25
+  healthyTurnDegreesPerSecond: 58
+  aggressiveTurnDegreesPerSecond: 71.92
+  criticalTurnDegreesPerSecond: 84.100006
+  minimumWaypointViewportDistance: 0.56
+  waypointReachDistance: 0.7
+  waypointLifetimeRange: {x: 5, y: 8.5}
+  wanderAngleDegrees: 5.5
+  wanderFrequency: 0.18
+  speedPulseMultiplierRange: {x: 0.9, y: 1.07}
+  speedPulseDurationRange: {x: 4.8, y: 7.8}
+  styleHoldDurationRange: {x: 7, y: 11}
+  styleChangeChanceAfterHold: 0.34
+  spreadRoutesAcrossViewport: 1
+  centerAvoidanceHalfHeight: 0.17
+  trafficLaneJitter: 0.035
+  crossCenterLaneChangeChance: 0.04
+  orbitAnchorViewportInset: 0.3
+  offscreenLoopChance: 0.1
+  maximumOffscreenLoops: 1
+  offscreenViewportPadding: 0.14
+  offscreenReturnTimeout: 12
+  loopCooldown: 12
+  naturalLifetimeRange: {x: 34, y: 50}
+  stuckCheckInterval: 1.35
+  minimumStuckTravelDistance: 0.07
+  stuckRecoverySpeedMultiplier: 0.95
+  enableReactiveHitMotion: 1
+  microConvulsionChancePerHit: 0.42
+  repeatedMicroConvulsionChance: 0.72
+  sustainedFireHitCount: 2
+  sustainedFireWindow: 0.55
+  fireReleaseGracePeriod: 0.34
+  microConvulsionDurationRange: {x: 0.07, y: 0.15}
+  microConvulsionRecoveryRange: {x: 0.07, y: 0.18}
+  microConvulsionScaleStrength: 0.05
+  reactionMovementSpeedMultiplier: 0.72
+  microConvulsionAnimatorTrigger: HitFlinch
+  sustainedFireAnimatorBool: UnderFire

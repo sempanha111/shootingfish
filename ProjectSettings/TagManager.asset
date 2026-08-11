@@ -51,11 +51,17 @@ TagManager:
   - name: Fish
     uniqueID: 398302799
     locked: 0
+  - name: Effect
+    uniqueID: 2270591223
+    locked: 0
   - name: Net
     uniqueID: 4192309537
     locked: 0
   - name: Gun
     uniqueID: 30273009
+    locked: 0
+  - name: FreezeFX
+    uniqueID: 3833159125
     locked: 0
   - name: UI
     uniqueID: 2682815031

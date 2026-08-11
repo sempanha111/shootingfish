@@ -1,0 +1,226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa73838c4c8924a4da83db10c50ca430, type: 3}
+  m_Name: EpicBoss_44
+  m_EditorClassIdentifier: 
+  applyAdditionalStatMultipliers: 0
+  hpMultiplier: 1
+  rewardMultiplier: 1
+  movementSpeedMultiplier: 1
+  entranceDuration: 3.2
+  entranceSpeedMultiplier: 0.5
+  entranceTargetHorizontalViewport: 0.28
+  entranceTargetVerticalViewport: 0.5
+  introductionHoldDuration: 0.8
+  requestDirectorIntroductionParade: 1
+  introductionParadeWaveCount: 1
+  introductionParadeWaveGap: 0.75
+  introductionAnimatorTrigger: BossIntro
+  introductionEffectPrefab: {fileID: 0}
+  introductionEffectOffset: {x: 0, y: 0, z: 0}
+  introductionEffectVisibleDuration: 0
+  introductionEffectHideDelay: 0.2
+  introductionSounds: []
+  slowSpeedMultiplier: 0.38
+  fastSpeedMultiplier: 0.85
+  speedCycleDurationRange: {x: 5, y: 8}
+  smoothTurnDegreesPerSecond: 38
+  velocitySmoothTime: 0.3
+  roamWanderAngleDegrees: 4.5
+  roamWanderFrequency: 0.18
+  viewportBoundaryPadding: 0.15
+  emergencyOutsideTolerance: 0.07
+  targetReachDistance: 0.65
+  targetChangeDelayRange: {x: 3, y: 6}
+  targetPauseRange: {x: 0.15, y: 0.4}
+  largeTurnChance: 0.55
+  minimumLargeTurnAngle: 60
+  minimumTargetViewportDistance: 0.42
+  avoidCentralArenaPocket: 1
+  centerAvoidanceHalfWidth: 0.16
+  centerAvoidanceHalfHeight: 0.18
+  centerTargetChance: 0.08
+  boundaryReturnSpeedMultiplier: 1.05
+  aggressiveMovementHealthThreshold: 0.58
+  criticalMovementHealthThreshold: 0.24
+  aggressiveMovementSpeedMultiplier: 1.12
+  criticalMovementSpeedMultiplier: 1.24
+  criticalTurnSpeedMultiplier: 1.25
+  stuckCheckInterval: 1.25
+  minimumStuckTravelDistance: 0.08
+  enableCinematicOffscreenPasses: 1
+  cinematicPassChance: 0.16
+  cinematicPassIntervalRange: {x: 16, y: 25}
+  cinematicPassOutsideViewportPadding: 0.1
+  cinematicPassSpeedMultiplier: 0.95
+  cinematicOutsideArcSpeedMultiplier: 2.1
+  cinematicReturnArcVerticalShift: 0.3
+  cinematicPassMaximumDuration: 10
+  firstConvulsionThreshold: 0.8
+  fakeDeathThreshold: 0.62
+  strongConvulsionThreshold: 0.32
+  firstConvulsionAnimatorTrigger: BossConvulsion
+  firstConvulsionDuration: 0.45
+  firstConvulsionPositionStrength: 0.06
+  firstConvulsionRotationStrength: 4
+  firstConvulsionEffectPrefab: {fileID: 0}
+  firstConvulsionSounds: []
+  fakeDeathAnimatorTrigger: BossFakeDeath
+  fakeDeathDuration: 1.1
+  fakeRewardMode: 1
+  fakeRewardFixedAmount: 25
+  fakeRewardPercentOfFinalReward: 0.02
+  fakeRewardMaximum: 8000
+  fakeRewardCollectibleChance: 0.35
+  showFakeRewardText: 1
+  revealVisualOnlyRewardWithQuestionMark: 1
+  fakeRewardCoinAnimationCount: 2
+  fakeRewardCoinAnimationInterval: 0.12
+  fakeRewardCoinAnimationSpread: 0.45
+  fakeRewardPlayBossCoinBurst: 1
+  fakeRewardBossCoinBurstEffectIndex: 0
+  fakeRewardPlayNetBoom: 1
+  fakeRewardNetBoomIndex: 0
+  fakeDeathEffectPrefab: {fileID: 0}
+  fakeDeathSounds: []
+  strongConvulsionAnimatorTrigger: BossStrongConvulsion
+  strongConvulsionDuration: 0.75
+  strongConvulsionPositionStrength: 0.1
+  strongConvulsionRotationStrength: 7
+  strongConvulsionEffectPrefab: {fileID: 0}
+  strongConvulsionSounds: []
+  enableReactiveFireConvulsions: 1
+  sustainedFireHitCount: 2
+  sustainedFireWindow: 0.55
+  fireReleaseGracePeriod: 0.34
+  microConvulsionChancePerHit: 0.42
+  repeatMicroConvulsionChance: 0.72
+  microConvulsionDurationRange: {x: 0.07, y: 0.15}
+  microConvulsionRecoveryRange: {x: 0.08, y: 0.18}
+  microConvulsionPositionStrength: 0.025
+  microConvulsionScaleStrength: 0.05
+  microConvulsionRotationStrength: 2.5
+  reactiveMovementSpeedMultiplier: 0.72
+  reactiveConvulsionAnimatorTrigger: BossHitFlinch
+  sustainedFireAnimatorBool: BossUnderFire
+  enableRandomSkills: 1
+  firstSkillDelayRange: {x: 7, y: 11}
+  skillIntervalRange: {x: 10, y: 16}
+  preventImmediateSkillRepeat: 1
+  randomSkills:
+  - enabled: 0
+    skillType: 0
+    weight: 0
+    animatorTrigger: 
+    windUpDuration: 0.4
+    activeDuration: 0.8
+    recoveryDuration: 0.5
+    movementSpeedMultiplier: 2.2
+    cameraShakeStrength: 0.12
+    cameraShakeDuration: 0.8
+    effectPrefab: {fileID: 0}
+    effectOffset: {x: 0, y: 0, z: 0}
+    effectVisibleDuration: 0
+    effectHideDelay: 0.15
+    soundClips: []
+  - enabled: 0
+    skillType: 1
+    weight: 0
+    animatorTrigger: 
+    windUpDuration: 0.4
+    activeDuration: 0.7
+    recoveryDuration: 0.5
+    movementSpeedMultiplier: 2.2
+    cameraShakeStrength: 0.08
+    cameraShakeDuration: 0.45
+    effectPrefab: {fileID: 0}
+    effectOffset: {x: 0, y: 0, z: 0}
+    effectVisibleDuration: 0
+    effectHideDelay: 0.15
+    soundClips: []
+  - enabled: 1
+    skillType: 2
+    weight: 2
+    animatorTrigger: 
+    windUpDuration: 0.4
+    activeDuration: 0.9
+    recoveryDuration: 0.5
+    movementSpeedMultiplier: 1.8
+    cameraShakeStrength: 0.12
+    cameraShakeDuration: 0.6
+    effectPrefab: {fileID: 0}
+    effectOffset: {x: 0, y: 0, z: 0}
+    effectVisibleDuration: 0
+    effectHideDelay: 0.15
+    soundClips: []
+  - enabled: 1
+    skillType: 3
+    weight: 1.5
+    animatorTrigger: 
+    windUpDuration: 0.4
+    activeDuration: 0.75
+    recoveryDuration: 0.5
+    movementSpeedMultiplier: 2.4
+    cameraShakeStrength: 0.06
+    cameraShakeDuration: 0.4
+    effectPrefab: {fileID: 0}
+    effectOffset: {x: 0, y: 0, z: 0}
+    effectVisibleDuration: 0
+    effectHideDelay: 0.15
+    soundClips: []
+  - enabled: 1
+    skillType: 4
+    weight: 1
+    animatorTrigger: 
+    windUpDuration: 0.4
+    activeDuration: 0.65
+    recoveryDuration: 0.5
+    movementSpeedMultiplier: 2.2
+    cameraShakeStrength: 0.1
+    cameraShakeDuration: 0.55
+    effectPrefab: {fileID: 0}
+    effectOffset: {x: 0, y: 0, z: 0}
+    effectVisibleDuration: 0
+    effectHideDelay: 0.15
+    soundClips: []
+  - enabled: 0
+    skillType: 5
+    weight: 0
+    animatorTrigger: 
+    windUpDuration: 0.4
+    activeDuration: 0.65
+    recoveryDuration: 0.5
+    movementSpeedMultiplier: 2.2
+    cameraShakeStrength: 0.16
+    cameraShakeDuration: 0.65
+    effectPrefab: {fileID: 0}
+    effectOffset: {x: 0, y: 0, z: 0}
+    effectVisibleDuration: 0
+    effectHideDelay: 0.15
+    soundClips: []
+  deathAnimatorTrigger: BossDeath
+  deathAnimationDuration: 2.4
+  disableCollidersDuringDeath: 1
+  deathEffectPrefab: {fileID: 0}
+  deathEffectOffset: {x: 0, y: 0, z: 0}
+  deathEffectVisibleDuration: 2
+  deathEffectHideDelay: 0.25
+  deathSounds: []
+  deathCameraShakeStrength: 0.1
+  deathCameraShakeDuration: 0.7
+  deathImpactScaleMultiplier: 1.16
+  deathTumbleDegrees: 52
+  deathDriftDistance: 0.7
+  deathFadeStartNormalized: 0.62
+  deathEffectPulseCount: 3
+  deathEffectPulseInterval: 0.38
+  finalDeathShakeMultiplier: 0.55

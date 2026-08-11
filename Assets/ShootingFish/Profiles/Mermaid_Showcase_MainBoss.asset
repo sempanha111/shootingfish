@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c255333863b9b646a397fade23bd93b, type: 3}
+  m_Name: Mermaid_Showcase_MainBoss
+  m_EditorClassIdentifier: 
+  healthyStyles:
+  - style: 13
+    weight: 58
+  - style: 10
+    weight: 34
+  - style: 12
+    weight: 8
+  aggressiveStyles:
+  - style: 10
+    weight: 40
+  - style: 13
+    weight: 30
+  - style: 11
+    weight: 20
+  - style: 12
+    weight: 10
+  criticalStyles:
+  - style: 10
+    weight: 38
+  - style: 13
+    weight: 27
+  - style: 14
+    weight: 25
+  - style: 11
+    weight: 10
+  enableOrganicSteering: 1
+  velocitySmoothTime: 0.28
+  healthyTurnDegreesPerSecond: 44
+  aggressiveTurnDegreesPerSecond: 60
+  criticalTurnDegreesPerSecond: 72
+  minimumWaypointViewportDistance: 0.5
+  waypointReachDistance: 0.58
+  waypointLifetimeRange: {x: 5.5, y: 8.5}
+  wanderAngleDegrees: 4
+  wanderFrequency: 0.2
+  speedPulseMultiplierRange: {x: 0.9, y: 1.05}
+  speedPulseDurationRange: {x: 4, y: 7}
+  styleHoldDurationRange: {x: 7, y: 11}
+  styleChangeChanceAfterHold: 0.68
+  spreadRoutesAcrossViewport: 1
+  centerAvoidanceHalfHeight: 0.12
+  trafficLaneJitter: 0.04
+  crossCenterLaneChangeChance: 0.12
+  orbitAnchorViewportInset: 0.3
+  offscreenLoopChance: 0
+  maximumOffscreenLoops: 0
+  offscreenViewportPadding: 0.1
+  offscreenReturnTimeout: 8
+  loopCooldown: 8
+  naturalLifetimeRange: {x: 60, y: 90}
+  stuckCheckInterval: 1
+  minimumStuckTravelDistance: 0.08
+  stuckRecoverySpeedMultiplier: 1
+  enableReactiveHitMotion: 1
+  microConvulsionChancePerHit: 0.14
+  repeatedMicroConvulsionChance: 0.34
+  sustainedFireHitCount: 3
+  sustainedFireWindow: 0.65
+  fireReleaseGracePeriod: 0.36
+  microConvulsionDurationRange: {x: 0.05, y: 0.09}
+  microConvulsionRecoveryRange: {x: 0.1, y: 0.18}
+  microConvulsionScaleStrength: 0.018
+  reactionMovementSpeedMultiplier: 0.88
+  microConvulsionAnimatorTrigger: HitFlinch
+  sustainedFireAnimatorBool: UnderFire

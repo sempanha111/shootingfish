@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d2a33646558ba43a3f6b66fa200ceb, type: 3}
+  m_Name: SmallDeath
+  m_EditorClassIdentifier: 
+  rewardCalculationMode: 1
+  rewardMultiplier: 1
+  maximumSmallShotBonusPercent: 0
+  minimumReward: 0
+  maximumReward: 0
+  rewardTextStyle: 1
+  customRewardTextPrefab: {fileID: 0}
+  playStandardCoinAnimation: 1
+  coinAnimationPlayCount: 1
+  coinAnimationInterval: 0
+  coinAnimationSpreadRadius: 0.1
+  playMainBossSkillInFrontGun: 0
+  mainBossFrontGunSkillIndex: -1
+  playBossCoinBurst: 0
+  bossCoinBurstEffectIndex: 0
+  playNetBoom: 0
+  netBoomEffectIndex: 0
+  customDeathEffect: {fileID: 0}
+  customEffectHideDelay: 0.1
+  enableCinematicDeathMotion: 1
+  deathAnimatorTrigger: Death
+  deathDuration: 0.24
+  rewardBeatNormalized: 0.22
+  impactScaleMultiplier: 1.07
+  deathDriftDistance: 0.16
+  deathTumbleDegrees: 10
+  fadeStartNormalized: 0.58
+  fadeSpriteRenderers: 1
+  disableCollidersDuringDeath: 1
+  deathCameraShakeStrength: 0
+  deathCameraShakeDuration: 0
+  customEffectPulseCount: 1
+  customEffectPulseInterval: 0.1
+  playCenterScreenDeathPrefab: 0
+  centerScreenDeathPrefabs: []
+  centerScreenDeathPrefabSelection: 0
+  centerScreenDeathPrefabIndex: 0
+  centerScreenDeathPrefabChance: 1
+  minimumCenterScreenDeathPrefabReward: 0
+  centerScreenDeathPrefabSpace: 0
+  centerScreenDeathPrefabOverlap: 0
+  centerScreenDeathViewportPosition: {x: 0.5, y: 0.5}
+  centerScreenDeathCanvasOffset: {x: 0, y: 0}
+  centerScreenDeathWorldOffset: {x: 0, y: 0}
+  centerScreenDeathScaleMultiplier: 1
+  centerScreenDeathVisibleDuration: 0
+  centerScreenDeathHideDelay: 0.15
+  centerScreenDeathUseUnscaledTime: 1
+  playBigWinSound: 0
+  bigWinSoundIndex: -1
+  certificateChance: 0
+  minimumCertificateWin: 0

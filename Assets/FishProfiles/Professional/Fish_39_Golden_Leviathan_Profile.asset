@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d025593ac0af65e4693ea4198546ba09, type: 3}
+  m_Name: Fish_39_Golden_Leviathan_Profile
+  m_EditorClassIdentifier: 
+  fishId: 39
+  displayName: Golden Leviathan
+  fishCategory: Main Boss
+  fishTier: 4
+  rarity: 5
+  sizeClass: 5
+  rewardValue: 6759.9995
+  health: 9540
+  damageResistance: 0.18
+  spawnWeight: 0.01
+  minimumLevel: 1
+  maximumSimultaneousCount: 1
+  combatBalanceVersion: 14
+  movementBalanceVersion: 15
+  minimumSpeed: 0.88
+  maximumSpeed: 1.55
+  acceleration: 1.45
+  deceleration: 1.85
+  turnSpeed: 54
+  turnFrequency: 2.4
+  routeLengthRange: {x: 1.25, y: 2.65}
+  preferredSwimmingDepth: 0.5
+  horizontalMovementPreference: 0.75
+  verticalMovementPreference: 0.25
+  centerCrossingChance: 0.64
+  edgeRouteChance: 0.08
+  curveStrength: 0.7
+  wobbleAmount: 0.045
+  wobbleFrequency: 0.42
+  pauseChance: 0.12
+  pauseDurationRange: {x: 0.25, y: 1.15}
+  burstSpeedChance: 0.08
+  burstSpeedMultiplier: 1.35
+  offScreenWaitingTimeRange: {x: 1.5, y: 4}
+  returnChance: 1
+  preferredEntryDirection: 0
+  preferredExitDirection: 7
+  swimmingPattern: 15
+  routeWeights:
+  - route: 0
+    weight: 0.12
+  - route: 1
+    weight: 0.6
+  - route: 2
+    weight: 1.85
+  - route: 3
+    weight: 1.8
+  - route: 4
+    weight: 0.05
+  - route: 5
+    weight: 1.15
+  - route: 8
+    weight: 0.75
+  behavior: 41288
+  lowHealthEscapeThreshold: 0.2
+  evasionStrength: 0.25
+  playerApproachStrength: 0.2
+  canJoinSchool: 0
+  minimumGroupSize: 1
+  maximumGroupSize: 1
+  leaderChance: 0.2
+  formationType: 6
+  followDistance: 0.75
+  separationDistance: 0.5
+  alignmentStrength: 0.55
+  cohesionStrength: 0.45
+  groupSpeedVariation: 0.06
+  groupEntryDelayRange: {x: 0.06, y: 0.22}
+  groupExitsTogether: 1
+  minimumSpawnDistance: 2.45
+  minimumSwimmingDistance: 2.1
+  overlapCheckInterval: 0.45
+  routeAdjustmentStrength: 0.26
+  maximumRouteCorrectionAttempts: 8
+  fishSizeSpacingMultiplier: 1.55
+  schoolingSpacingMultiplier: 0.58
+  animatorSpeedMultiplier: 0.9
+  tailMovementSpeed: 0.82
+  bodySwayAmount: 0.055
+  flipDirection: 1
+  shadowOffset: {x: 0.23, y: -0.43}
+  shadowScale: 1
+  shadowOpacity: 0.42
+  shadowSortingOrder: -1
+  turnAnimation: 
+  hitAnimation: 
+  deathAnimation: 
+  entryEffect: {fileID: 0}
+  exitEffect: {fileID: 0}
+  bossEffect: {fileID: 0}
+  rareFishEffect: {fileID: 0}
+  useBossMovement: 1
+  bossMinimumSpeed: 0.86
+  bossMaximumSpeed: 1.58
+  bossAcceleration: 1.45
+  bossDeceleration: 1.85
+  bossTurnSpeed: 54
+  bossEnterNearPlayerChance: 0.28
+  bossCrossCenterChance: 0.74
+  bossWideRouteChance: 0.7
+  bossRouteDistanceRange: {x: 1.45, y: 3}
+  bossPauseDurationRange: {x: 0.2, y: 1.2}
+  screenEdgePadding: 0.1
+  bossReturnDelayRange: {x: 1.4, y: 4}
+  bossEnterAndRetreatChance: 0.18
+  bossLoopRouteChance: 0.2
+  bossUseLongBodySteering: 0
+  bossSteeringDegreesPerSecond: 28
+  bossRetreatOutsideOnly: 0
+  bossSpeedChangeIntervalRange: {x: 1.4, y: 3.6}
+  bossPauseChance: 0.22
+  bossNormalWorldSpeedCap: 0
+  ignoreReactiveHitMotion: 0

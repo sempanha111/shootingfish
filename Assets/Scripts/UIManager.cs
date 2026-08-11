@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -123,6 +120,12 @@ public class UIManager : MonoBehaviour
     public void GoHome()
     {
         Time.timeScale = 1f;
+
+        if (GM != null)
+        {
+            GM.SavePlayerCoinNow();
+        }
+
         SceneManager.LoadScene(1);
     }
     public void PauseGame()

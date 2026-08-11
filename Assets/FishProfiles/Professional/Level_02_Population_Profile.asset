@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc28d7de161e0e944bddf768a5f33378, type: 3}
+  m_Name: Level_02_Population_Profile
+  m_EditorClassIdentifier: 
+  levelNumber: 2
+  displayName: Arrowhead School
+  smallFishPercentage: 0.45
+  mediumFishPercentage: 0.55
+  largeFishPercentage: 0.14
+  specialFishPercentage: 0.05
+  commonPercentage: 0.58
+  uncommonPercentage: 0.27
+  rarePercentage: 0.13
+  epicPercentage: 0.02
+  maximumActiveFish: 25
+  minimumActiveFish: 15
+  maximumLargeFish: 3
+  maximumGroups: 3
+  bossSpawnTiming: 4.8
+  fishHealthMultiplier: 1.05
+  fishSpeedMultiplier: 1.02
+  rewardMultiplier: 1.05
+  evasiveBehaviorChance: 0.075
+  complexRouteChance: 0.14
