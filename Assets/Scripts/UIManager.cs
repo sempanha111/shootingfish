@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour
             GM.SavePlayerCoinNow();
         }
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
     public void PauseGame()
     {

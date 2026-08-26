@@ -11,6 +11,16 @@ public class SoundManager : MonoBehaviour
     public AudioSource SoundCoin1;
     public AudioSource SoundCoin2;
 
+    [Header("Gun Shooting Sounds")]
+    [Tooltip("Fallback sound played when the player's own gun fires.")]
+    public AudioSource gunShootSound;
+
+    [Tooltip("Optional gun shoot sound variations. Randomly selected if populated, otherwise uses gunShootSound.")]
+    public AudioSource[] gunShootSounds;
+
+    [Tooltip("Sound played when Big Rocket is launched.")]
+    public AudioSource rocketShootSound;
+
     [FormerlySerializedAs("BigwinCoin1")]
     public AudioSource bigWinFallback;
 
@@ -38,6 +48,7 @@ public class SoundManager : MonoBehaviour
     [Tooltip("Optional variations for the Main Boss front-gun reward skill. -1 selects a random valid source without immediate repeats.")]
     public AudioSource[] mainBossFrontGunSkillSounds;
 
+    private int lastGunShootIndex = -1;
     private int lastBigWinIndex = -1;
     private int lastBossArrivalIndex = -1;
     private int lastBossDefeatIndex = -1;
@@ -52,6 +63,34 @@ public class SoundManager : MonoBehaviour
     public void PlayClickSound()
     {
         PlaySafe(Click);
+    }
+
+    public void PlayGunShootSound(int requestedIndex = -1)
+    {
+        AudioSource selected = GetRequestedOrRandom(
+            gunShootSounds,
+            requestedIndex,
+            ref lastGunShootIndex
+        );
+
+        if (selected == null)
+        {
+            selected = gunShootSound;
+        }
+
+        PlaySafe(selected);
+    }
+
+    public void PlayRocketShootSound()
+    {
+        if (rocketShootSound != null)
+        {
+            PlaySafe(rocketShootSound);
+        }
+        else
+        {
+            PlayGunShootSound();
+        }
     }
 
     public void PlaySoundCoin1()
@@ -238,11 +277,11 @@ public class SoundManager : MonoBehaviour
         lastIndex = selectedIndex;
         return selectedIndex >= 0 ? sources[selectedIndex] : null;
     }
+
     [System.Obsolete("Use bigWinFallback instead.")]
     public AudioSource BigwinCoin1
     {
         get { return bigWinFallback; }
         set { bigWinFallback = value; }
     }
-
 }

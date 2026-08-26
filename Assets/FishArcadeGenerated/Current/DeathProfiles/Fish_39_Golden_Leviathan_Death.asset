@@ -41,7 +41,7 @@ MonoBehaviour:
   netBoomPositionOffset: {x: 100, y: 100}
   netBoomScatterRadius: 0.63
   netBoomScaleMultiplier: 1.35
-  customDeathEffect: {fileID: 4591828527829975111, guid: 43f76d6454288c149bc2bffb543fd26e, type: 3}
+  customDeathEffect: {fileID: 0}
   customDeathEffectStartDelay: 1.2
   customDeathEffectPositionOffset: {x: 0, y: 0}
   customDeathEffectScatterRadius: 0.18

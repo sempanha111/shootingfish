@@ -11394,7 +11394,6 @@ GameObject:
   - component: {fileID: 1805597374}
   - component: {fileID: 1805597376}
   - component: {fileID: 1805597377}
-  - component: {fileID: 1805597378}
   m_Layer: 0
   m_Name: HomeScreenController
   m_TagString: Untagged
@@ -11458,30 +11457,6 @@ MonoBehaviour:
   policyButton: {fileID: 0}
   closeButton: {fileID: 0}
   hideOnStart: 1
---- !u!114 &1805597378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1805597373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 560816ec5f0420346940254c307ff381, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgMusic: {fileID: 0}
-  Click: {fileID: 0}
-  SoundCoin1: {fileID: 0}
-  SoundCoin2: {fileID: 0}
-  bigWinFallback: {fileID: 0}
-  bigWinSounds: []
-  bossArrivalSounds: []
-  bossDefeatSounds: []
-  netBoomFallback: {fileID: 0}
-  netBoomSounds: []
-  mainBossFrontGunSkillFallback: {fileID: 0}
-  mainBossFrontGunSkillSounds: []
 --- !u!1 &1808567964
 GameObject:
   m_ObjectHideFlags: 0
@@ -11516,7 +11491,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -4.670044, y: -0.92004395}
+  m_AnchoredPosition: {x: -4.669922, y: -0.92004395}
   m_SizeDelta: {x: 93.47, y: 104.65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1808567966

@@ -12,6 +12,16 @@ public class WeaponsScripts : MonoBehaviour
         RocketAutoShot
     }
 
+    [Header("Gun Shooting Sounds")]
+    [Tooltip("Optional custom audio clip played when firing normal gun. If empty, SoundManager.PlayGunShootSound is used.")]
+    [SerializeField] private AudioClip customShootAudioClip;
+
+    [Tooltip("Optional custom audio clip played when firing Big Rocket. If empty, SoundManager.PlayRocketShootSound is used.")]
+    [SerializeField] private AudioClip customRocketAudioClip;
+
+    [Tooltip("Optional local AudioSource on the player gun GameObject.")]
+    [SerializeField] private AudioSource localGunAudioSource;
+
     [Header("Existing Normal Guns - Keep Existing Values")]
     public GameObject[] Gunlevel;
     public GameObject[] Gun;
@@ -153,10 +163,6 @@ public class WeaponsScripts : MonoBehaviour
     private Coroutine bigRocketUiScaleRoutine;
     private Coroutine targetLockUiScaleRoutine;
 
-    /// <summary>
-    /// Read-only skill state for custom buttons and companion ability controllers.
-    /// Target lifetime validation prevents pooled fish from being returned.
-    /// </summary>
     public FishScript CurrentTrackedFish
     {
         get { return IsTrackedFishValid() ? trackedFish : null; }
@@ -172,19 +178,11 @@ public class WeaponsScripts : MonoBehaviour
         get { return IsRocketMode; }
     }
 
-    /// <summary>
-    /// True when the player has enabled manual target-lock preference.
-    /// Auto Shot can temporarily override this preference without turning it off.
-    /// </summary>
     public bool TargetLockEnabled
     {
         get { return targetLockEnabled; }
     }
 
-    /// <summary>
-    /// True while manual Target Lock controls either the normal gun or
-    /// Big Rocket single-target mode. Auto Shot always takes priority.
-    /// </summary>
     public bool ManualTargetLockActive
     {
         get { return IsManualTargetLockActive; }
@@ -308,13 +306,6 @@ public class WeaponsScripts : MonoBehaviour
         normalGunLevelBeforeRocket = safeLevel;
     }
 
-    /// <summary>
-    /// Toggles manual fish target lock. After the player clicks a fish, manual
-    /// lock can continuously fire at that exact fish. It never searches for a
-    /// replacement target. When the fish dies, is pooled, or leaves the visible
-    /// screen, firing stops, the marker is cleared, and the player must click
-    /// another fish. Auto Shot always has priority and may retarget normally.
-    /// </summary>
     public void ToggleTargetLock()
     {
         SetTargetLockEnabled(!targetLockEnabled);
@@ -330,7 +321,6 @@ public class WeaponsScripts : MonoBehaviour
         SetTargetLockEnabled(false);
     }
 
-    // Compatibility aliases for Unity Button OnClick dropdowns.
     public void LockTarget()
     {
         ToggleTargetLock();
@@ -352,8 +342,6 @@ public class WeaponsScripts : MonoBehaviour
         targetLockEnabled = enabled;
         holding = false;
 
-        // Auto Shot keeps control while active. Otherwise changing manual lock
-        // starts with a clean target and requires an intentional fish click.
         if (!IsAutoShotEnabled)
         {
             ClearTrackedFish();
@@ -362,14 +350,6 @@ public class WeaponsScripts : MonoBehaviour
         RefreshSkillUiScale();
     }
 
-    /// <summary>
-    /// Enables GPS tracking with the currently selected normal gun. Auto Shot
-    /// immediately searches for a visible living fish and keeps
-    /// reacquiring when that fish dies or leaves the screen. A manual fish
-    /// click can still override the selected target. Auto Shot bullets ignore
-    /// non-target fish and continue toward the selected fish. Auto Shot takes
-    /// priority over manual Target Lock and keeps automatic replacement enabled.
-    /// </summary>
     public void AutoShot()
     {
         if (IsAutoShotEnabled)
@@ -388,9 +368,6 @@ public class WeaponsScripts : MonoBehaviour
             return;
         }
 
-        // Keep a valid manually locked fish as Auto Shot's first target.
-        // From this point onward Auto Shot owns the target and may replace it
-        // automatically when it dies or leaves the visible screen.
         bool keepCurrentTarget = IsTrackedFishValid();
 
         fireMode = PlayerFireMode.AutoShotNormal;
@@ -422,10 +399,6 @@ public class WeaponsScripts : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Changes the visual to Big Rocket. Auto Shot can be enabled at the same
-    /// time; otherwise each fish click fires one Rocket.
-    /// </summary>
     public void ActivateRocketSkill()
     {
         if (IsRocketMode)
@@ -472,7 +445,6 @@ public class WeaponsScripts : MonoBehaviour
         RefreshSkillUiScale();
     }
 
-    // Compatibility aliases make the UI event easy to find in Unity.
     public void ActivateBigRocketSkill()
     {
         ActivateRocketSkill();
@@ -632,8 +604,6 @@ public class WeaponsScripts : MonoBehaviour
 
         if (isActive)
         {
-            // Support the user's hierarchy where RocketGun is nested inside
-            // one GunLevel object. Do not activate unrelated scene parents.
             GameObject owningLevel = FindRocketOwningGunLevel();
             Transform parent = rocketGunVisual.transform.parent;
 
@@ -839,9 +809,6 @@ public class WeaponsScripts : MonoBehaviour
 
         if (fireMode == PlayerFireMode.RocketSingleShot)
         {
-            // Target Lock can own Big Rocket exactly like the normal gun.
-            // It repeatedly fires at the manually selected fish and stops
-            // without selecting a replacement when that fish becomes invalid.
             if (IsManualRocketTargetLockActive && targetLockAutoFire)
             {
                 TryFireLockedRocketNow();
@@ -852,10 +819,6 @@ public class WeaponsScripts : MonoBehaviour
 
         if (IsManualNormalTargetLockActive)
         {
-            // Target Lock owns this exact fish only. With Auto Fire enabled,
-            // one click starts continuous target-exclusive fire until the fish
-            // dies, is pooled, or leaves the visible camera area. It never
-            // acquires a replacement; Auto Shot is the mode that may retarget.
             if (targetLockAutoFire || holding)
             {
                 TryShootLockedTargetNow();
@@ -892,7 +855,6 @@ public class WeaponsScripts : MonoBehaviour
         }
         else
         {
-            // Avoid retrying every frame when the current balance is too low.
             timeToShoot = Time.time + 0.15f;
         }
     }
@@ -906,8 +868,6 @@ public class WeaponsScripts : MonoBehaviour
 
         if (!TryFireSingleRocket(trackedFish))
         {
-            // Avoid retrying every frame if the balance or prefab setup is not
-            // ready. A successful shot schedules the normal Rocket interval.
             nextRocketShotTime = Time.time + 0.15f;
         }
     }
@@ -926,8 +886,6 @@ public class WeaponsScripts : MonoBehaviour
             return true;
         }
 
-        // Avoid retrying every frame if the balance or Rocket prefab setup is
-        // not ready. The manual lock remains on the same target.
         nextRocketShotTime = Time.time + 0.15f;
         return false;
     }
@@ -949,7 +907,6 @@ public class WeaponsScripts : MonoBehaviour
             return true;
         }
 
-        // Prevent a failed balance or prefab check from retrying every frame.
         timeToShoot = Time.time + 0.15f;
         return false;
     }
@@ -1034,6 +991,7 @@ public class WeaponsScripts : MonoBehaviour
         }
 
         PlayNormalGunAnimation();
+        PlayNormalGunShootSound();
         return true;
     }
 
@@ -1052,6 +1010,44 @@ public class WeaponsScripts : MonoBehaviour
                     "Idle" + activeGunLevel
                 )
             );
+        }
+    }
+
+    private void PlayNormalGunShootSound()
+    {
+        if (localGunAudioSource != null && customShootAudioClip != null)
+        {
+            localGunAudioSource.PlayOneShot(customShootAudioClip);
+            return;
+        }
+
+        if (GM == null)
+        {
+            GM = GameManager.Instance;
+        }
+
+        if (GM != null && GM.SoundManager != null)
+        {
+            GM.SoundManager.PlayGunShootSound();
+        }
+    }
+
+    private void PlayRocketShootSound()
+    {
+        if (localGunAudioSource != null && customRocketAudioClip != null)
+        {
+            localGunAudioSource.PlayOneShot(customRocketAudioClip);
+            return;
+        }
+
+        if (GM == null)
+        {
+            GM = GameManager.Instance;
+        }
+
+        if (GM != null && GM.SoundManager != null)
+        {
+            GM.SoundManager.PlayRocketShootSound();
         }
     }
 
@@ -1079,9 +1075,6 @@ public class WeaponsScripts : MonoBehaviour
 
     private void ProcessTargetInputOncePerFrame()
     {
-        // Unity UI may invoke PointerDown and PointerClick for one physical
-        // click on different frames. This guard keeps one target selection and
-        // one manual Rocket launch per physical click.
         if (lastTargetInputFrame == Time.frameCount ||
             Time.unscaledTime - lastTargetInputTime < 0.12f)
         {
@@ -1314,11 +1307,6 @@ public class WeaponsScripts : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// Lets a Rocket already in flight reacquire a new visible fish when its
-    /// original target dies or leaves the screen. Retargeting is allowed only
-    /// while Rocket Auto Shot remains active.
-    /// </summary>
     public bool TryGetAutomaticRocketRetarget(
         FishScript previousTarget,
         out FishScript replacementTarget,
@@ -1391,8 +1379,6 @@ public class WeaponsScripts : MonoBehaviour
             return;
         }
 
-        // Compatibility fallback for older GPS prefabs that still use an
-        // Animator instead of RotateZoomLooper.
         Animator markerAnimator =
             gpsMarkerInstance.GetComponentInChildren<Animator>(true);
 
@@ -1466,8 +1452,6 @@ public class WeaponsScripts : MonoBehaviour
 
         float shotCost;
 
-        // Big Rocket has its own Inspector-configured arcade-coin cost. The
-        // normal per-gun Bet array remains untouched.
         if (!GM.TryPayFixedShotCost(
                 0,
                 bigRocketShotCost,
@@ -1481,7 +1465,6 @@ public class WeaponsScripts : MonoBehaviour
         Transform rocketAim = GetRocketAimTransform();
         RotateTransformAt(rocketAim, targetPosition);
 
-        // Exact same origin as Shoot.TryShootOnce for the normal gun.
         Vector3 spawnPosition = activeGun.transform.position;
         Vector3 direction = (targetPosition - spawnPosition).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) *
@@ -1510,6 +1493,7 @@ public class WeaponsScripts : MonoBehaviour
             Mathf.Max(0.05f, rocketMinimumSecondsBetweenShots);
 
         TryPlayRocketShootAnimation();
+        PlayRocketShootSound();
 
         return true;
     }
@@ -1541,9 +1525,6 @@ public class WeaponsScripts : MonoBehaviour
             }
         }
 
-        // Some gun controllers expose a direct animation state instead of a
-        // Trigger parameter. Support both layouts without producing Unity's
-        // "Parameter does not exist" console error.
         for (int layer = 0; layer < rocketGunAnimator.layerCount; layer++)
         {
             string fullStateName =
@@ -1593,9 +1574,6 @@ public class WeaponsScripts : MonoBehaviour
 
     private static void PrepareRocketObject(GameObject rocket)
     {
-        // A Rocket prefab is often copied from a normal bullet. Disable every
-        // inherited BulletScript, including scripts placed on child objects,
-        // so only BigRocketBullet owns its trigger collision.
         BulletScript[] inheritedNormalBullets =
             rocket.GetComponentsInChildren<BulletScript>(true);
 
@@ -1690,8 +1668,6 @@ public class WeaponsScripts : MonoBehaviour
         }
         else if (GM != null)
         {
-            // Safe fallback for old scenes. Assign Rocket Net Effect Prefab to
-            // make the Rocket independent from the normal per-gun Net array.
             GM.SpawnNet(gunLevel, impactPosition, rocketNetVisibleTime);
         }
 
@@ -1790,8 +1766,6 @@ public class WeaponsScripts : MonoBehaviour
         rocketAreaDamagedFish.Clear();
         int targetLimit = Mathf.Clamp(rocketMaximumAreaTargets, 1, 64);
 
-        // Always apply the direct hit exactly once, even when the target's
-        // collider was disabled by an old prefab setting.
         TryDamageRocketFish(
             directTarget,
             directTargetLifeVersion,
@@ -1870,8 +1844,6 @@ public class WeaponsScripts : MonoBehaviour
             targetSprite = fish.GetComponentInChildren<SpriteRenderer>();
         }
 
-        // Every fish receives one independent HP calculation. Fish killed by
-        // the blast runs its normal reward path, so each valid kill pays out.
         fish.TakeRocketDamage(targetSprite, damage, 0, gunLevel);
     }
 
@@ -1909,8 +1881,6 @@ public class WeaponsScripts : MonoBehaviour
         damageCircle.offset = Vector2.zero;
         damageCircle.radius = Mathf.Max(0.05f, radius);
 
-        // OverlapCircleNonAlloc performs the one-frame HP scan. Keeping this
-        // visual collider disabled prevents duplicate trigger callbacks.
         damageCircle.enabled = false;
     }
 
