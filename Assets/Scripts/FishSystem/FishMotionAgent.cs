@@ -51,6 +51,12 @@ public sealed class FishMotionAgent : MonoBehaviour
     private Transform followTarget;
     private Vector3 followLocalOffset;
     private bool escortFollow;
+    private bool paradeFollow;
+    private Vector3 paradeFollowExitTarget;
+    private float paradeFollowCorrection = 3.8f;
+    private float paradeFollowCatchUpMultiplier = 1.65f;
+    private float paradeFollowWobble = 0.035f;
+    private float paradeFollowPhase;
 
     private Vector2 desiredVelocity;
     private Vector2 spacingCorrection;
@@ -281,6 +287,12 @@ public sealed class FishMotionAgent : MonoBehaviour
         followTarget = null;
         followLocalOffset = Vector3.zero;
         escortFollow = false;
+        paradeFollow = false;
+        paradeFollowExitTarget = Vector3.zero;
+        paradeFollowCorrection = 3.8f;
+        paradeFollowCatchUpMultiplier = 1.65f;
+        paradeFollowWobble = 0.035f;
+        paradeFollowPhase = 0f;
         desiredVelocity = Vector2.zero;
         spacingCorrection = Vector2.zero;
         scriptedSweepAmplitude = 0f;
@@ -301,6 +313,7 @@ public sealed class FishMotionAgent : MonoBehaviour
         routePointIndex = 0;
         transitionExitScheduled = false;
         followTarget = null;
+        paradeFollow = false;
         desiredVelocity = Vector2.zero;
         spacingCorrection = Vector2.zero;
 
@@ -361,6 +374,7 @@ public sealed class FishMotionAgent : MonoBehaviour
         bossEscaping = false;
         transitionExitScheduled = false;
         followTarget = null;
+        paradeFollow = false;
         scriptedRoute = true;
         scriptedSweepAmplitude = Mathf.Max(0f, sweepAmplitude);
         scriptedSweepFrequency = Mathf.Max(0.25f, sweepFrequency);
@@ -403,6 +417,7 @@ public sealed class FishMotionAgent : MonoBehaviour
         followTarget = leader;
         followLocalOffset = localOffset;
         escortFollow = isEscort;
+        paradeFollow = false;
         routePointCount = 0;
         routePointIndex = 0;
         routeEndsOutside = false;
@@ -410,6 +425,40 @@ public sealed class FishMotionAgent : MonoBehaviour
         bossEscaping = false;
         runtimeState = FishRuntimeState.GroupFollowing;
         SelectNewCruiseSpeed();
+    }
+
+    public void ConfigureParadeFollow(
+        Transform leader,
+        Vector3 localOffset,
+        Vector3 exitTarget,
+        float correction,
+        float catchUpMultiplier,
+        float slotWobble
+    )
+    {
+        if (externalMovementAuthority)
+        {
+            return;
+        }
+
+        followTarget = leader;
+        followLocalOffset = localOffset;
+        escortFollow = false;
+        paradeFollow = true;
+        paradeFollowExitTarget = exitTarget;
+        paradeFollowCorrection = Mathf.Max(0.5f, correction);
+        paradeFollowCatchUpMultiplier = Mathf.Max(1f, catchUpMultiplier);
+        paradeFollowWobble = Mathf.Max(0f, slotWobble);
+        paradeFollowPhase = Mathf.Abs(GetInstanceID() % 997) * 0.031f;
+        routePointCount = 0;
+        routePointIndex = 0;
+        routeEndsOutside = false;
+        transitionExitScheduled = false;
+        bossEscaping = false;
+        runtimeState = FishRuntimeState.GroupFollowing;
+        currentCruiseSpeed = owner != null
+            ? Mathf.Max(0.05f, owner.MoveSpeed)
+            : Mathf.Max(0.05f, currentCruiseSpeed);
     }
 
     public void ConfigureBossMovement()
@@ -642,12 +691,25 @@ public sealed class FishMotionAgent : MonoBehaviour
         if (followTarget == null || !followTarget.gameObject.activeInHierarchy)
         {
             followTarget = null;
-            BuildNormalRoute(FishRoutePattern.GroupRoute);
+
+            if (paradeFollow)
+            {
+                paradeFollow = false;
+                ConfigureScriptedRoute(
+                    paradeFollowExitTarget,
+                    FishScript.SwimStyle.LaneGlide,
+                    0f,
+                    1f
+                );
+            }
+            else
+            {
+                BuildNormalRoute(FishRoutePattern.GroupRoute);
+            }
             return;
         }
 
         Vector3 desiredPosition = followTarget.TransformPoint(followLocalOffset);
-        Vector2 toSlot = desiredPosition - transform.position;
         Vector2 leaderVelocity = Vector2.zero;
         Rigidbody2D leaderBody = followTarget.GetComponent<Rigidbody2D>();
         if (leaderBody != null)
@@ -655,17 +717,40 @@ public sealed class FishMotionAgent : MonoBehaviour
             leaderVelocity = leaderBody.velocity;
         }
 
-        float correction = escortFollow ? 2.1f : 1.5f;
+        if (paradeFollow && paradeFollowWobble > 0f)
+        {
+            Vector2 forward = leaderVelocity.sqrMagnitude > 0.0025f
+                ? leaderVelocity.normalized
+                : (Vector2)followTarget.right;
+            Vector2 perpendicular = new Vector2(-forward.y, forward.x);
+            float wobble = Mathf.Sin(
+                Time.time * 1.7f + paradeFollowPhase
+            ) * paradeFollowWobble;
+            desiredPosition += (Vector3)(perpendicular * wobble);
+        }
+
+        Vector2 toSlot = desiredPosition - transform.position;
+        float correction = paradeFollow
+            ? paradeFollowCorrection
+            : escortFollow ? 2.1f : 1.5f;
         desiredVelocity = leaderVelocity + toSlot * correction;
 
-        float maximum = Mathf.Max(
-            owner != null ? owner.MoveSpeed * 1.35f : 3f,
-            currentCruiseSpeed
-        );
+        float maximum = paradeFollow
+            ? Mathf.Max(
+                owner != null
+                    ? owner.MoveSpeed * paradeFollowCatchUpMultiplier
+                    : 3f,
+                leaderVelocity.magnitude * paradeFollowCatchUpMultiplier
+            )
+            : Mathf.Max(
+                owner != null ? owner.MoveSpeed * 1.35f : 3f,
+                currentCruiseSpeed
+            );
         desiredVelocity = Vector2.ClampMagnitude(desiredVelocity, maximum);
 
         UpdateSpacingCorrection(true);
-        desiredVelocity += spacingCorrection * maximum * 0.35f;
+        desiredVelocity += spacingCorrection * maximum *
+            (paradeFollow ? 0.18f : 0.35f);
         ApplyVelocityAndFacing(deltaTime);
 
         if (FishScreenBounds.IsFullyOutside(

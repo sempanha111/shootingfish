@@ -218,9 +218,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishTier: 4
   useArrayIndexTierFallback: 0
-  deathProfile: {fileID: 11400000, guid: 3c82660e9cbe494408dbf3afedaccdfd, type: 2}
+  deathProfile: {fileID: 11400000, guid: 2b8c9bce09ef1b54498478c375a363c4, type: 2}
   movementProfile: {fileID: 11400000, guid: 5304f947abc888342a7d9202f90e4dc5, type: 2}
-  gameplayProfile: {fileID: 11400000, guid: de77840ba7d8e484fb8c0167b0d70669, type: 2}
+  gameplayProfile: {fileID: 11400000, guid: be632d78c348ef1408ad212a390e1778, type: 2}
   useProfessionalMotionAgent: 1
   professionalMotionAgent: {fileID: 4915412480758875956}
   professionalProfileSpeedScale: 1
@@ -267,8 +267,8 @@ MonoBehaviour:
   forcedLevelExitSpeedMultiplier: 2.4
   forcedLevelExitTurnDegreesPerSecond: 220
   forcedLevelExitExtraDistance: 1
-  Hp: 165000
-  CoinFish: 250000
+  Hp: 68000
+  CoinFish: 91000
   MoveSpeed: 0.5
   id: 41
   gimmickType: 0
@@ -372,6 +372,7 @@ MonoBehaviour:
   cloneDestinationOverrides: []
   sequenceRunning: 0
   activeBulletId: 0
+  activeGunLevel: 0
   ownerRotationAtDeathStart: 0
 --- !u!1 &2494616469682738534
 GameObject:

@@ -10,6 +10,17 @@ public class SwapFishScript : MonoBehaviour
     private readonly List<GameObject> activeTargetBosses =
         new List<GameObject>();
     private bool openingParadePresentationRunning;
+    private readonly HashSet<FishScript> activeParadeFish =
+        new HashSet<FishScript>();
+    private ParadeState paradeState = ParadeState.Completed;
+    private bool paradeSessionRunning;
+    private bool paradeSpawningComplete;
+    private bool paradeHasBeenVisible;
+    private bool paradeTimeoutExitRequested;
+    private float paradeSessionStartedAt;
+    private float paradeTimeoutExitRequestedAt;
+    private string activeParadeReason = string.Empty;
+    private Coroutine periodicParadeCoroutine;
     public enum GameLevel
     {
         Level1_Beginner,
@@ -31,6 +42,16 @@ public class SwapFishScript : MonoBehaviour
         TideChange
     }
 
+    public enum ParadeState
+    {
+        Preparing,
+        Spawning,
+        Entering,
+        Active,
+        Exiting,
+        Completed
+    }
+
     private enum ParadeEntrySide
     {
         Left,
@@ -49,7 +70,12 @@ public class SwapFishScript : MonoBehaviour
         Grid,
         Diamond,
         TwinColumn,
-        LeaderAndFollowers
+        LeaderAndFollowers,
+        VerticalLine,
+        VFormation,
+        Spiral,
+        MixedFormation,
+        ProtectedCenter
     }
 
     private enum BossGuardFormationStyle
@@ -360,10 +386,45 @@ public class SwapFishScript : MonoBehaviour
     {
         OrganizedParadePattern.StraightLine,
         OrganizedParadePattern.Arrow,
-        OrganizedParadePattern.Diamond,
-        OrganizedParadePattern.TwinColumn,
+        OrganizedParadePattern.VFormation,
+        OrganizedParadePattern.Grid,
         OrganizedParadePattern.Wave
     };
+
+    [Header("Clean Parade State / Route Priority")]
+    [Tooltip("When OFF, ordinary fish keep spawning and swimming normally while a Parade is active.")]
+    [SerializeField] private bool pauseNormalSpawningDuringParade = false;
+
+    [Tooltip("When OFF, ordinary fish already on screen are never forced to fast-exit just because a Parade starts.")]
+    [SerializeField] private bool clearNormalFishBeforeParade = false;
+
+    [Tooltip("Keeps the opening Parade as the first visible event, then allows ordinary fish to mix in as soon as the Parade becomes visible.")]
+    [SerializeField] private bool allowAmbientAfterOpeningParadeVisible = true;
+
+    [Tooltip("Extra temporary capacity reserved so a Parade can still spawn when ordinary fish already fill the normal population target.")]
+    [SerializeField, Range(0, 16)] private int mixedParadeExtraFishCapacity = 8;
+
+    [SerializeField, Range(6, 28)] private int maximumParadeFishCount = 18;
+    [SerializeField, Min(4f)] private float paradeCompletionTimeout = 18f;
+    [SerializeField, Min(0.25f)] private float paradeAmbientClearTimeout = 1.8f;
+    [SerializeField, Min(1f)] private float paradeAmbientExitSpeedMultiplier = 1.8f;
+    [SerializeField, Min(0.25f)] private float paradeTimeoutCleanupGrace = 2.5f;
+    [SerializeField, Range(0f, 0.1f)] private float paradeVisibilityPadding = 0.01f;
+
+    [Header("Parade Size-Aware Spacing")]
+    [Tooltip("Visual footprint multiplier. 1.01 means about a 1% gap between Small fish before minimum padding.")]
+    [SerializeField, Range(1f, 1.30f)] private float smallParadeVisualGap = 1.01f;
+    [SerializeField, Range(1f, 1.35f)] private float mediumParadeVisualGap = 1.02f;
+    [SerializeField, Range(1f, 1.45f)] private float largeParadeVisualGap = 1.05f;
+    [SerializeField, Range(1f, 1.60f)] private float specialParadeVisualGap = 1.08f;
+    [SerializeField, Range(0f, 0.30f)] private float paradeMinimumGapPadding = 0.01f;
+
+    [Header("Stable Parade Leader / Followers")]
+    [SerializeField, Min(0.2f)] private float paradeWorldSpeed = 2.35f;
+    [SerializeField, Min(0f)] private float paradeWorldSpeedPerLevel = 0.04f;
+    [SerializeField, Min(0.5f)] private float paradeFollowerCorrection = 3.8f;
+    [SerializeField, Range(1f, 3f)] private float paradeFollowerCatchUpMultiplier = 1.65f;
+    [SerializeField, Range(0f, 0.15f)] private float paradeFollowerSlotWobble = 0.035f;
 
     [Header("Standalone Feature Parade - No Boss Required")]
     [Tooltip("Allows a showcase parade during Feature Build Up even when no boss is entering.")]
@@ -556,6 +617,21 @@ public class SwapFishScript : MonoBehaviour
 
     [SerializeField]
     private int bossBattleExtraFishCapacity = 14;
+
+    [Header("Boss Battle Companion Traffic")]
+    [Tooltip("Prevents a boss from being left alone. These are ordinary ambient fish, not Parade followers.")]
+    [SerializeField] private bool keepAmbientFishWithBoss = true;
+
+    [SerializeField, Range(1, 24)]
+    private int minimumAmbientFishDuringBossBattle = 8;
+
+    [SerializeField, Range(1, 5)]
+    private int bossAmbientRefillBurst = 2;
+
+    [SerializeField, Min(0.10f)]
+    private float bossAmbientRefillInterval = 0.35f;
+
+    private float nextBossAmbientRefillTime;
 
     [SerializeField, Range(1, 3)]
     private int bossArrivalRushFishMultiplier = 2;
@@ -779,23 +855,23 @@ public class SwapFishScript : MonoBehaviour
     private float bossArrivalExtraPerLevel = 0f;
 
     [Header("Gentle Difficulty Scaling")]
-    [SerializeField] private float normalHpPerLevel = 0.02f;
-    [SerializeField] private float normalRewardPerLevel = 0.018f;
-    [SerializeField] private float normalSpeedPerLevel = 0.005f;
+    [SerializeField] private float normalHpPerLevel = 0f;
+    [SerializeField] private float normalRewardPerLevel = 0f;
+    [SerializeField] private float normalSpeedPerLevel = 0f;
 
-    [SerializeField] private float miniBossBaseHpMultiplier = 1.05f;
-    [SerializeField] private float miniBossHpPerLevel = 0.05f;
-    [SerializeField] private float miniBossRewardPerLevel = 0.045f;
-    [SerializeField] private float miniBossSpeedPerLevel = 0.005f;
+    [SerializeField] private float miniBossBaseHpMultiplier = 1f;
+    [SerializeField] private float miniBossHpPerLevel = 0f;
+    [SerializeField] private float miniBossRewardPerLevel = 0f;
+    [SerializeField] private float miniBossSpeedPerLevel = 0f;
 
-    [SerializeField] private float bossBaseHpMultiplier = 1.08f;
-    [SerializeField] private float bossHpPerLevel = 0.07f;
-    [SerializeField] private float bossRewardPerLevel = 0.06f;
-    [SerializeField] private float bossSpeedPerLevel = 0.005f;
+    [SerializeField] private float bossBaseHpMultiplier = 1f;
+    [SerializeField] private float bossHpPerLevel = 0f;
+    [SerializeField] private float bossRewardPerLevel = 0f;
+    [SerializeField] private float bossSpeedPerLevel = 0f;
 
     [SerializeField] private float endlessHpPerLoop = 0.05f;
-    [SerializeField] private float endlessRewardPerLoop = 0.045f;
-    [SerializeField] private float endlessSpeedPerLoop = 0.005f;
+    [SerializeField] private float endlessRewardPerLoop = 0.05f;
+    [SerializeField] private float endlessSpeedPerLoop = 0.01f;
     [SerializeField] private int maxScalingLoops = 5;
 
 
@@ -857,6 +933,25 @@ public class SwapFishScript : MonoBehaviour
     public LevelPhase CurrentPhase
     {
         get { return currentPhase; }
+    }
+
+    public ParadeState CurrentParadeState
+    {
+        get { return paradeState; }
+    }
+
+    public bool IsParadeRunning
+    {
+        get { return paradeSessionRunning; }
+    }
+
+    public int ActiveParadeFishCount
+    {
+        get
+        {
+            PruneInactiveParadeFish();
+            return activeParadeFish.Count;
+        }
     }
 
     public bool IsTideChanging
@@ -1131,6 +1226,9 @@ public class SwapFishScript : MonoBehaviour
         );
         ambientSpawnTimer = 0.5f;
         paradeCooldownTimer = 0f;
+        paradeState = ParadeState.Completed;
+        paradeSessionRunning = false;
+        activeParadeFish.Clear();
         gameLoopCoroutine = StartCoroutine(GameLoopRoutine());
     }
 
@@ -1167,19 +1265,31 @@ public class SwapFishScript : MonoBehaviour
             return;
         }
 
+        UpdateParadeStateMachine();
+
         levelTimer += Time.deltaTime;
         ambientSpawnTimer -= Time.deltaTime;
         paradeCooldownTimer -= Time.deltaTime;
 
         // The warning itself is intentionally clean and short. The opening
         // parade also gets a clean presentation before ambient traffic starts.
+        bool holdForOpeningParade =
+            openingParadePresentationRunning &&
+            (!allowAmbientAfterOpeningParadeVisible || !paradeHasBeenVisible);
+
         if (currentPhase == LevelPhase.BossWarning ||
-            openingParadePresentationRunning)
+            holdForOpeningParade ||
+            (pauseNormalSpawningDuringParade && paradeSessionRunning))
         {
             return;
         }
 
         MaintainMinimumPopulation();
+
+        if (currentPhase == LevelPhase.BossBattle)
+        {
+            MaintainBossCompanionPopulation();
+        }
 
         if (ambientSpawnTimer <= 0f)
         {
@@ -1207,10 +1317,430 @@ public class SwapFishScript : MonoBehaviour
             }
             else
             {
-                TriggerLevelSpecificSpawn();
-                paradeCooldownTimer = GetNextParadeDelay();
+                if (periodicParadeCoroutine == null &&
+                    !paradeSessionRunning)
+                {
+                    periodicParadeCoroutine = StartCoroutine(
+                        RunPeriodicParadeRoutine()
+                    );
+                    paradeCooldownTimer = GetNextParadeDelay();
+                }
             }
         }
+    }
+
+    private bool BeginParadeSession(string reason)
+    {
+        if (paradeSessionRunning)
+        {
+            return false;
+        }
+
+        activeParadeFish.Clear();
+        paradeSessionRunning = true;
+        paradeSpawningComplete = false;
+        paradeHasBeenVisible = false;
+        paradeTimeoutExitRequested = false;
+        paradeSessionStartedAt = Time.time;
+        paradeTimeoutExitRequestedAt = -1f;
+        activeParadeReason = string.IsNullOrEmpty(reason)
+            ? "Parade"
+            : reason;
+        paradeState = ParadeState.Preparing;
+
+        if (clearNormalFishBeforeParade)
+        {
+            RequestNormalFishExitForParade(
+                paradeAmbientExitSpeedMultiplier
+            );
+        }
+
+        return true;
+    }
+
+    private void RegisterParadeFish(FishScript fish)
+    {
+        if (fish == null || !fish.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        bool implicitSession = false;
+        if (!paradeSessionRunning)
+        {
+            implicitSession = BeginParadeSession("Periodic Parade");
+        }
+
+        PruneInactiveParadeFish();
+
+        if (!activeParadeFish.Contains(fish) &&
+            activeParadeFish.Count >= Mathf.Max(1, maximumParadeFishCount))
+        {
+            fish.gameObject.SetActive(false);
+            return;
+        }
+
+        activeParadeFish.Add(fish);
+        paradeState = ParadeState.Spawning;
+
+        if (implicitSession)
+        {
+            // Periodic groups are spawned synchronously in one update pass.
+            // They can finish naturally as soon as their active fish exit.
+            paradeSpawningComplete = true;
+        }
+    }
+
+    private void MarkParadeSpawningComplete()
+    {
+        if (!paradeSessionRunning)
+        {
+            return;
+        }
+
+        paradeSpawningComplete = true;
+        if (activeParadeFish.Count > 0 &&
+            paradeState == ParadeState.Preparing)
+        {
+            paradeState = ParadeState.Entering;
+        }
+    }
+
+    private void UpdateParadeStateMachine()
+    {
+        if (!paradeSessionRunning)
+        {
+            return;
+        }
+
+        PruneInactiveParadeFish();
+
+        bool anyVisible = false;
+        Camera mainCamera = Camera.main;
+
+        foreach (FishScript fish in activeParadeFish)
+        {
+            if (fish == null || !fish.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            if (IsParadeFishInVisibleBand(fish, mainCamera))
+            {
+                anyVisible = true;
+                break;
+            }
+        }
+
+        if (activeParadeFish.Count == 0)
+        {
+            if (paradeSpawningComplete)
+            {
+                ForceCompleteParadeSession(false);
+            }
+            return;
+        }
+
+        if (anyVisible)
+        {
+            paradeHasBeenVisible = true;
+            paradeState = ParadeState.Active;
+        }
+        else if (!paradeHasBeenVisible)
+        {
+            paradeState = ParadeState.Entering;
+        }
+        else
+        {
+            paradeState = ParadeState.Exiting;
+        }
+
+        float elapsed = Time.time - paradeSessionStartedAt;
+        if (!paradeTimeoutExitRequested &&
+            elapsed >= Mathf.Max(4f, paradeCompletionTimeout))
+        {
+            paradeTimeoutExitRequested = true;
+            paradeTimeoutExitRequestedAt = Time.time;
+            paradeState = ParadeState.Exiting;
+
+            foreach (FishScript fish in activeParadeFish)
+            {
+                if (fish != null && fish.gameObject.activeInHierarchy &&
+                    !fish.IsDeadOrDying)
+                {
+                    fish.ForceLevelTransitionNaturalExit(2.25f);
+                }
+            }
+
+            Debug.LogWarning(
+                "[PARADE TIMEOUT] " + activeParadeReason +
+                " exceeded " + paradeCompletionTimeout.ToString("0.0") +
+                "s. Requesting natural fast exits.",
+                this
+            );
+        }
+
+        if (paradeTimeoutExitRequested &&
+            Time.time - paradeTimeoutExitRequestedAt >=
+                Mathf.Max(0.25f, paradeTimeoutCleanupGrace))
+        {
+            foreach (FishScript fish in activeParadeFish)
+            {
+                if (fish != null && fish.gameObject.activeInHierarchy)
+                {
+                    fish.gameObject.SetActive(false);
+                }
+            }
+
+            activeParadeFish.Clear();
+            ForceCompleteParadeSession(true);
+        }
+    }
+
+    private bool IsParadeFishInVisibleBand(
+        FishScript fish,
+        Camera targetCamera
+    )
+    {
+        if (fish == null || !fish.gameObject.activeInHierarchy)
+        {
+            return false;
+        }
+
+        if (targetCamera == null)
+        {
+            return true;
+        }
+
+        Vector3 viewport = targetCamera.WorldToViewportPoint(
+            fish.GetTargetCenterWorld()
+        );
+        float padding = Mathf.Clamp(paradeVisibilityPadding, 0f, 0.20f);
+        return viewport.z > 0f &&
+               viewport.x >= -padding &&
+               viewport.x <= 1f + padding &&
+               viewport.y >= -padding &&
+               viewport.y <= 1f + padding;
+    }
+
+    private void PruneInactiveParadeFish()
+    {
+        activeParadeFish.RemoveWhere(
+            fish => fish == null || !fish.gameObject.activeInHierarchy
+        );
+    }
+
+    private void ForceCompleteParadeSession(bool timedOut)
+    {
+        if (!paradeSessionRunning && activeParadeFish.Count == 0)
+        {
+            paradeState = ParadeState.Completed;
+            return;
+        }
+
+        activeParadeFish.Clear();
+        paradeSessionRunning = false;
+        paradeSpawningComplete = true;
+        paradeState = ParadeState.Completed;
+        paradeHasBeenVisible = false;
+        paradeTimeoutExitRequested = false;
+        activeParadeReason = string.Empty;
+
+        if (timedOut)
+        {
+            Debug.LogWarning(
+                "[PARADE] Timeout cleanup completed. Normal spawn flow restored.",
+                this
+            );
+        }
+    }
+
+    private IEnumerator WaitForParadeCompletionRoutine()
+    {
+        float maximumWait = Mathf.Max(4f, paradeCompletionTimeout) +
+            Mathf.Max(0.25f, paradeTimeoutCleanupGrace) + 1f;
+        float elapsed = 0f;
+
+        while (paradeSessionRunning && elapsed < maximumWait)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (paradeSessionRunning)
+        {
+            ForceCompleteParadeSession(true);
+        }
+    }
+
+    private IEnumerator PrepareParadeStageRoutine(bool openingParade)
+    {
+        if (!clearNormalFishBeforeParade)
+        {
+            yield break;
+        }
+
+        // At a level opening, a parade-controlled fish from the previous level
+        // is stale because the old parade session was already completed/reset.
+        // Treat it like ambient traffic so the new parade remains the first
+        // visible fish event. During an active parade, currently registered
+        // parade fish are never touched.
+        RequestNormalFishExitForParade(
+            paradeAmbientExitSpeedMultiplier,
+            openingParade
+        );
+
+        float elapsed = 0f;
+        float wait = Mathf.Max(0.25f, paradeAmbientClearTimeout);
+        while (CountVisibleNonParadeNormalFish(openingParade) > 0 &&
+               elapsed < wait)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (CountVisibleNonParadeNormalFish(openingParade) <= 0)
+        {
+            yield break;
+        }
+
+        RequestNormalFishExitForParade(
+            paradeAmbientExitSpeedMultiplier * 1.35f,
+            openingParade
+        );
+
+        float grace = 0f;
+        while (CountVisibleNonParadeNormalFish(openingParade) > 0 &&
+               grace < 0.55f)
+        {
+            grace += Time.deltaTime;
+            yield return null;
+        }
+
+        if (!openingParade ||
+            CountVisibleNonParadeNormalFish(true) <= 0)
+        {
+            yield break;
+        }
+
+        // Opening parade must be the first visible fish event of a new level.
+        // Any leftover ordinary/stale-parade fish that ignored both natural
+        // exit requests are returned to their existing pool as a final fallback.
+        GameManager gm = GameManager.Instance;
+        if (gm == null)
+        {
+            yield break;
+        }
+
+        Camera mainCamera = Camera.main;
+        for (int i = gm.fishInScreenList.Count - 1; i >= 0; i--)
+        {
+            FishScript fish = gm.fishInScreenList[i];
+            if (!ShouldClearForParade(fish, includeStaleParadeFish: true))
+            {
+                continue;
+            }
+
+            if (mainCamera == null || fish.IsTargetVisibleTo(mainCamera))
+            {
+                fish.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private int CountVisibleNonParadeNormalFish(
+        bool includeStaleParadeFish = false
+    )
+    {
+        GameManager gm = GameManager.Instance;
+        Camera mainCamera = Camera.main;
+        if (gm == null)
+        {
+            return 0;
+        }
+
+        int count = 0;
+        for (int i = 0; i < gm.fishInScreenList.Count; i++)
+        {
+            FishScript fish = gm.fishInScreenList[i];
+            if (!ShouldClearForParade(fish, includeStaleParadeFish))
+            {
+                continue;
+            }
+
+            if (mainCamera == null || fish.IsTargetVisibleTo(mainCamera))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private bool ShouldClearForParade(
+        FishScript fish,
+        bool includeStaleParadeFish
+    )
+    {
+        if (fish == null || !fish.gameObject.activeInHierarchy ||
+            fish.IsBoss() || fish.IsDeadOrDying)
+        {
+            return false;
+        }
+
+        if (!fish.IsParadeControlled)
+        {
+            return true;
+        }
+
+        if (!includeStaleParadeFish)
+        {
+            return false;
+        }
+
+        // A registered parade fish belongs to the currently running parade and
+        // must never be cleared by route-priority cleanup. Anything else is a
+        // leftover from a completed/previous-level parade.
+        return !activeParadeFish.Contains(fish);
+    }
+
+    private void RequestNormalFishExitForParade(
+        float speedMultiplier,
+        bool includeStaleParadeFish = false
+    )
+    {
+        GameManager gm = GameManager.Instance;
+        if (gm == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < gm.fishInScreenList.Count; i++)
+        {
+            FishScript fish = gm.fishInScreenList[i];
+            if (!ShouldClearForParade(fish, includeStaleParadeFish))
+            {
+                continue;
+            }
+
+            fish.ForceLevelTransitionNaturalExit(
+                Mathf.Max(1f, speedMultiplier)
+            );
+        }
+    }
+
+    private IEnumerator RunPeriodicParadeRoutine()
+    {
+        if (!BeginParadeSession("Periodic Level Parade"))
+        {
+            periodicParadeCoroutine = null;
+            yield break;
+        }
+
+        yield return StartCoroutine(PrepareParadeStageRoutine(false));
+        TriggerLevelSpecificSpawn();
+        MarkParadeSpawningComplete();
+        yield return StartCoroutine(WaitForParadeCompletionRoutine());
+        periodicParadeCoroutine = null;
     }
 
     private IEnumerator GameLoopRoutine()
@@ -1230,6 +1760,7 @@ public class SwapFishScript : MonoBehaviour
     {
         levelTimer = 0f;
         openingParadePresentationRunning = false;
+        ForceCompleteParadeSession(false);
         defeatedBossCount = 0;
         resolvedBossCount = 0;
         currentBatchRealDefeats = 0;
@@ -1404,6 +1935,8 @@ public class SwapFishScript : MonoBehaviour
 
             ambientSpawnTimer =
                 GetNextAmbientDelay();
+            nextBossAmbientRefillTime = 0f;
+            MaintainBossCompanionPopulation();
 
             Debug.Log(
                 "<color=#EF5350>[BOSS BATTLE]</color> " +
@@ -2345,6 +2878,16 @@ public class SwapFishScript : MonoBehaviour
     {
         openingParadePresentationRunning = true;
 
+        if (!BeginParadeSession("Opening Parade - " + level))
+        {
+            openingParadePresentationRunning = false;
+            yield break;
+        }
+
+        // Remove old-level ambient traffic first so the opening parade is the
+        // first visible fish event of the new level.
+        yield return StartCoroutine(PrepareParadeStageRoutine(true));
+
         yield return new WaitForSeconds(
             Mathf.Max(0f, levelOpeningParadeDelay)
         );
@@ -2373,9 +2916,12 @@ public class SwapFishScript : MonoBehaviour
             }
         }
 
+        MarkParadeSpawningComplete();
+        yield return StartCoroutine(WaitForParadeCompletionRoutine());
+
         openingParadePresentationRunning = false;
-        ambientSpawnTimer = Mathf.Max(ambientSpawnTimer, 0.25f);
-        paradeCooldownTimer = Mathf.Max(paradeCooldownTimer, 1.25f);
+        ambientSpawnTimer = Mathf.Max(ambientSpawnTimer, 0.35f);
+        paradeCooldownTimer = Mathf.Max(paradeCooldownTimer, 2.0f);
     }
 
     private void SpawnLevelOpeningParadeWave(
@@ -2385,7 +2931,7 @@ public class SwapFishScript : MonoBehaviour
     {
         int available = Mathf.Max(
             0,
-            GetMaxActiveFish() - CountActiveFish()
+            GetMixedParadeFishCapacityLimit() - CountActiveFish()
         );
 
         if (available <= 0)
@@ -2457,6 +3003,13 @@ public class SwapFishScript : MonoBehaviour
 
     private IEnumerator RunStandaloneFeatureParadeRoutine(GameLevel level)
     {
+        if (!BeginParadeSession("Standalone Feature Parade"))
+        {
+            yield break;
+        }
+
+        yield return StartCoroutine(PrepareParadeStageRoutine(false));
+
         yield return new WaitForSeconds(
             Mathf.Max(0f, standaloneFeatureParadeDelay)
         );
@@ -2483,6 +3036,9 @@ public class SwapFishScript : MonoBehaviour
                 );
             }
         }
+
+        MarkParadeSpawningComplete();
+        yield return StartCoroutine(WaitForParadeCompletionRoutine());
     }
 
     private void SpawnStandaloneFeatureParadeWave(
@@ -2492,7 +3048,7 @@ public class SwapFishScript : MonoBehaviour
     {
         int available = Mathf.Max(
             0,
-            GetMaxActiveFish() - CountActiveFish()
+            GetMixedParadeFishCapacityLimit() - CountActiveFish()
         );
 
         if (available <= 0)
@@ -2636,6 +3192,15 @@ public class SwapFishScript : MonoBehaviour
         int bossSequenceIndex
     )
     {
+        if (!BeginParadeSession(
+                "Pre-Boss Parade " + (bossSequenceIndex + 1)
+            ))
+        {
+            yield break;
+        }
+
+        yield return StartCoroutine(PrepareParadeStageRoutine(false));
+
         int waveCount = GetPreBossParadeWaveCount(
             level,
             bossSequenceIndex
@@ -2684,6 +3249,9 @@ public class SwapFishScript : MonoBehaviour
 
             yield return new WaitForSeconds(paradeGap);
         }
+
+        MarkParadeSpawningComplete();
+        yield return StartCoroutine(WaitForParadeCompletionRoutine());
 
         if (!(prioritizeMainBossPresence &&
               isFirstMainBossSequence &&
@@ -4514,6 +5082,27 @@ public class SwapFishScript : MonoBehaviour
         float additionalSpeedMultiplier = 1f
     )
     {
+        fishCount = Mathf.Clamp(
+            fishCount,
+            1,
+            Mathf.Max(1, maximumParadeFishCount)
+        );
+
+        if (pattern == OrganizedParadePattern.MixedFormation ||
+            pattern == OrganizedParadePattern.ProtectedCenter)
+        {
+            SpawnMixedOrganizedParadeGroup(
+                fishIndex,
+                entrySide,
+                laneOffset,
+                fishCount,
+                pattern == OrganizedParadePattern.ProtectedCenter,
+                slowPreBossScaling,
+                additionalSpeedMultiplier
+            );
+            return;
+        }
+
         if (!TryGetDirectionalParadeRoute(
                 entrySide,
                 laneOffset,
@@ -4610,6 +5199,163 @@ public class SwapFishScript : MonoBehaviour
                 ApplyPreBossParadeScaling(followerScript);
             else
                 ApplyParadeScaling(followerScript);
+
+            if (!Mathf.Approximately(additionalSpeedMultiplier, 1f))
+            {
+                followerScript.MultiplyCurrentRuntimeStats(
+                    1f,
+                    1f,
+                    Mathf.Max(0.05f, additionalSpeedMultiplier)
+                );
+            }
+
+            followerScript.SetMovementStyle(
+                FishScript.SwimStyle.SchoolFollow,
+                leader.transform,
+                localOffset
+            );
+        }
+    }
+
+    private void SpawnMixedOrganizedParadeGroup(
+        int fallbackFishIndex,
+        ParadeEntrySide entrySide,
+        float laneOffset,
+        int fishCount,
+        bool protectedCenter,
+        bool slowPreBossScaling,
+        float additionalSpeedMultiplier
+    )
+    {
+        if (!TryGetDirectionalParadeRoute(
+                entrySide,
+                laneOffset,
+                out Vector3 leaderPosition,
+                out Vector3 targetPosition,
+                out Vector3 trailingDirection,
+                out Vector3 perpendicularDirection
+            ))
+        {
+            return;
+        }
+
+        int leaderFishIndex = fallbackFishIndex;
+        if (protectedCenter)
+        {
+            int special = GetSpecialFishIndex(true);
+            if (special >= 0)
+            {
+                leaderFishIndex = special;
+            }
+        }
+
+        GameObject leader = GetFishFromPool(
+            leaderFishIndex,
+            leaderPosition,
+            targetPosition
+        );
+        if (!TryGetFishScript(leader, out FishScript leaderScript))
+        {
+            if (leader != null) leader.SetActive(false);
+            return;
+        }
+
+        if (!protectedCenter && !leaderScript.CanJoinParade())
+        {
+            leader.SetActive(false);
+            return;
+        }
+
+        if (slowPreBossScaling) ApplyPreBossParadeScaling(leaderScript);
+        else ApplyParadeScaling(leaderScript);
+
+        if (!Mathf.Approximately(additionalSpeedMultiplier, 1f))
+        {
+            leaderScript.MultiplyCurrentRuntimeStats(
+                1f,
+                1f,
+                Mathf.Max(0.05f, additionalSpeedMultiplier)
+            );
+        }
+
+        leaderScript.SetParadeRoute(
+            targetPosition,
+            FishScript.SwimStyle.LaneGlide,
+            protectedCenter ? paradeRouteSweepAmplitude * 0.10f :
+                paradeRouteSweepAmplitude * 0.18f,
+            paradeRouteSweepFrequency
+        );
+
+        float horizontalSpacing = GetFishHorizontalSpacing(leaderFishIndex);
+        float verticalSpacing = GetFishVerticalSpacing(leaderFishIndex);
+
+        for (int index = 1; index < fishCount; index++)
+        {
+            int followerFishIndex;
+            if (protectedCenter)
+            {
+                followerFishIndex = (index & 1) == 0
+                    ? GetSmallFishIndex()
+                    : GetMediumFishIndex();
+            }
+            else
+            {
+                int mode = index % 3;
+                followerFishIndex = mode == 0
+                    ? fallbackFishIndex
+                    : mode == 1
+                        ? GetSmallFishIndex()
+                        : GetMediumFishIndex();
+            }
+
+            if (followerFishIndex < 0)
+            {
+                followerFishIndex = fallbackFishIndex;
+            }
+
+            float followerHorizontal = GetFishHorizontalSpacing(
+                followerFishIndex
+            );
+            float followerVertical = GetFishVerticalSpacing(
+                followerFishIndex
+            );
+            float slotHorizontal = Mathf.Max(
+                horizontalSpacing,
+                followerHorizontal
+            );
+            float slotVertical = Mathf.Max(
+                verticalSpacing,
+                followerVertical
+            );
+
+            Vector3 localOffset = GetOrganizedParadeOffset(
+                protectedCenter
+                    ? OrganizedParadePattern.ProtectedCenter
+                    : OrganizedParadePattern.LeaderAndFollowers,
+                index,
+                fishCount,
+                slotHorizontal,
+                slotVertical
+            );
+
+            Vector3 worldOffset =
+                leader.transform.TransformDirection(localOffset);
+            GameObject follower = GetFishFromPool(
+                followerFishIndex,
+                leader.transform.position + worldOffset,
+                targetPosition,
+                true
+            );
+
+            if (!TryGetFishScript(follower, out FishScript followerScript) ||
+                !followerScript.CanJoinParade())
+            {
+                if (follower != null) follower.SetActive(false);
+                continue;
+            }
+
+            if (slowPreBossScaling) ApplyPreBossParadeScaling(followerScript);
+            else ApplyParadeScaling(followerScript);
 
             if (!Mathf.Approximately(additionalSpeedMultiplier, 1f))
             {
@@ -4744,6 +5490,67 @@ public class SwapFishScript : MonoBehaviour
                 return new Vector3(
                     -horizontalSpacing * row,
                     side * verticalSpacing * 0.72f,
+                    0f
+                );
+            }
+
+            case OrganizedParadePattern.VerticalLine:
+            {
+                int rank = (index + 1) / 2;
+                float side = (index & 1) == 0 ? -1f : 1f;
+                return new Vector3(
+                    -horizontalSpacing * 0.18f * rank,
+                    side * verticalSpacing * rank,
+                    0f
+                );
+            }
+
+            case OrganizedParadePattern.VFormation:
+            {
+                int rank = (index + 1) / 2;
+                float side = (index & 1) == 0 ? -1f : 1f;
+                return new Vector3(
+                    -horizontalSpacing * rank,
+                    side * verticalSpacing * 0.82f * rank,
+                    0f
+                );
+            }
+
+            case OrganizedParadePattern.Spiral:
+            {
+                float angle = index * 1.12f;
+                float radius = Mathf.Max(
+                    horizontalSpacing,
+                    verticalSpacing
+                ) * (0.55f + index * 0.18f);
+                return new Vector3(
+                    Mathf.Cos(angle) * radius - horizontalSpacing * 0.55f,
+                    Mathf.Sin(angle) * radius,
+                    0f
+                );
+            }
+
+            case OrganizedParadePattern.MixedFormation:
+                return GetOrganizedParadeOffset(
+                    OrganizedParadePattern.LeaderAndFollowers,
+                    index,
+                    totalCount,
+                    horizontalSpacing,
+                    verticalSpacing
+                );
+
+            case OrganizedParadePattern.ProtectedCenter:
+            {
+                int ringCount = Mathf.Max(1, totalCount - 1);
+                float angle = (index - 1) / (float)ringCount *
+                    Mathf.PI * 2f;
+                float radius = Mathf.Max(
+                    horizontalSpacing,
+                    verticalSpacing
+                ) * Mathf.Max(1.25f, ringCount / (Mathf.PI * 2f));
+                return new Vector3(
+                    Mathf.Cos(angle) * radius,
+                    Mathf.Sin(angle) * radius,
                     0f
                 );
             }
@@ -5062,44 +5869,23 @@ public class SwapFishScript : MonoBehaviour
         FishScript script
     )
     {
-        int levelIndex =
-            (int)currentLevelState;
+        if (script == null)
+        {
+            return;
+        }
 
-        int effectiveLoop = Mathf.Clamp(
-            loopMultiplier,
-            0,
-            maxScalingLoops
+        // Parade is a temporary movement role only. Combat stats keep the
+        // exact same scaling the fish would receive as an ordinary spawn.
+        ApplyNormalScaling(script);
+        float targetSpeed = GetStableParadeWorldSpeed(true);
+
+        script.PrepareForParadeControl(
+            targetSpeed,
+            paradeFollowerCorrection,
+            paradeFollowerCatchUpMultiplier,
+            paradeFollowerSlotWobble
         );
-
-        float hpMultiplier =
-            1f +
-            levelIndex * normalHpPerLevel +
-            effectiveLoop * endlessHpPerLoop;
-
-        float rewardMultiplier =
-            1f +
-            levelIndex * normalRewardPerLevel +
-            effectiveLoop * endlessRewardPerLoop;
-
-        float slowParadeFactor = Mathf.Clamp(
-            preBossParadeSpeedBase +
-            levelIndex * preBossParadeSpeedPerLevel,
-            0.35f,
-            1f
-        );
-
-        float speedMultiplier =
-            (
-                1f +
-                levelIndex * normalSpeedPerLevel +
-                effectiveLoop * endlessSpeedPerLoop
-            ) * slowParadeFactor;
-
-        script.ApplyRuntimeScaling(
-            hpMultiplier,
-            rewardMultiplier,
-            speedMultiplier
-        );
+        RegisterParadeFish(script);
     }
 
     private int GetConcurrentParadeGroupCount(
@@ -5134,16 +5920,12 @@ public class SwapFishScript : MonoBehaviour
 
     private float GetFishHorizontalSpacing(int fishIndex)
     {
-        if (Fish != null &&
-            fishIndex >= 0 &&
-            fishIndex < Fish.Length &&
-            Fish[fishIndex] != null &&
-            Fish[fishIndex].TryGetComponent<FishScript>(
-                out FishScript script
-            ))
+        if (TryGetPrefabFishScript(fishIndex, out FishScript script))
         {
-            return script.GetFormationHorizontalSpacing(
-                paradeFishHorizontalGap
+            float gap = GetParadeVisualGap(script);
+            return script.GetParadeSafeHorizontalSpacing(
+                gap,
+                paradeMinimumGapPadding
             );
         }
 
@@ -5152,20 +5934,65 @@ public class SwapFishScript : MonoBehaviour
 
     private float GetFishVerticalSpacing(int fishIndex)
     {
-        if (Fish != null &&
-            fishIndex >= 0 &&
-            fishIndex < Fish.Length &&
-            Fish[fishIndex] != null &&
-            Fish[fishIndex].TryGetComponent<FishScript>(
-                out FishScript script
-            ))
+        if (TryGetPrefabFishScript(fishIndex, out FishScript script))
         {
-            return script.GetFormationVerticalSpacing(
-                paradeLaneSpacing
+            float gap = GetParadeVisualGap(script);
+            return script.GetParadeSafeVerticalSpacing(
+                gap,
+                paradeMinimumGapPadding
             );
         }
 
-        return paradeLaneSpacing;
+        return Mathf.Max(0.35f, paradeLaneSpacing * 0.45f);
+    }
+
+    private bool TryGetPrefabFishScript(
+        int fishIndex,
+        out FishScript script
+    )
+    {
+        script = null;
+        return Fish != null &&
+               fishIndex >= 0 &&
+               fishIndex < Fish.Length &&
+               Fish[fishIndex] != null &&
+               Fish[fishIndex].TryGetComponent(out script);
+    }
+
+    private float GetParadeVisualGap(FishScript script)
+    {
+        if (script == null)
+        {
+            return mediumParadeVisualGap;
+        }
+
+        FishGameplayProfile profile = script.GetGameplayProfile();
+        if (script.GetFishTier() == FishTier.Special)
+        {
+            return specialParadeVisualGap;
+        }
+
+        if (profile != null)
+        {
+            switch (profile.sizeClass)
+            {
+                case FishSizeClass.Tiny:
+                case FishSizeClass.Small:
+                    return smallParadeVisualGap;
+
+                case FishSizeClass.Medium:
+                    return mediumParadeVisualGap;
+
+                case FishSizeClass.Large:
+                case FishSizeClass.Huge:
+                case FishSizeClass.Boss:
+                    return largeParadeVisualGap;
+            }
+        }
+
+        return script.GetFishTier() == FishTier.Small
+            ? smallParadeVisualGap
+            : mediumParadeVisualGap;
     }
 
     private float GetParadeGroupLaneY(
@@ -5507,44 +6334,42 @@ public class SwapFishScript : MonoBehaviour
         FishScript script
     )
     {
-        int levelIndex =
-            (int)currentLevelState;
+        if (script == null)
+        {
+            return;
+        }
 
-        int effectiveLoop = Mathf.Clamp(
-            loopMultiplier,
-            0,
-            maxScalingLoops
+        // Parade is a temporary movement role only. Do not rewrite the fish's
+        // personality/profile or give it a special HP/reward identity.
+        ApplyNormalScaling(script);
+        float targetSpeed = GetStableParadeWorldSpeed(false);
+
+        script.PrepareForParadeControl(
+            targetSpeed,
+            paradeFollowerCorrection,
+            paradeFollowerCatchUpMultiplier,
+            paradeFollowerSlotWobble
         );
-
-        float hpMultiplier =
-            1f +
-            levelIndex * normalHpPerLevel +
-            effectiveLoop * endlessHpPerLoop;
-
-        float rewardMultiplier =
-            1f +
-            levelIndex * normalRewardPerLevel +
-            effectiveLoop * endlessRewardPerLoop;
-
-        float paradeSpeedBonus =
-            paradeSpeedMultiplierBase +
-            levelIndex *
-            paradeSpeedMultiplierPerLevel;
-
-        float speedMultiplier =
-            (
-                1f +
-                levelIndex * normalSpeedPerLevel +
-                effectiveLoop * endlessSpeedPerLoop
-            ) * paradeSpeedBonus;
-
-        script.ApplyRuntimeScaling(
-            hpMultiplier,
-            rewardMultiplier,
-            speedMultiplier
-        );
+        RegisterParadeFish(script);
     }
 
+    private float GetStableParadeWorldSpeed(bool preBoss)
+    {
+        float levelBonus = (int)currentLevelState * paradeWorldSpeedPerLevel;
+        float speed = Mathf.Max(0.2f, paradeWorldSpeed + levelBonus);
+
+        if (preBoss)
+        {
+            speed *= Mathf.Clamp(
+                preBossParadeSpeedBase +
+                (int)currentLevelState * preBossParadeSpeedPerLevel,
+                0.65f,
+                1.15f
+            );
+        }
+
+        return speed;
+    }
 
     private void MaintainMinimumPopulation()
     {
@@ -5578,10 +6403,94 @@ public class SwapFishScript : MonoBehaviour
             Time.time + minimumPopulationRefillInterval;
     }
 
+    private void MaintainBossCompanionPopulation()
+    {
+        if (!keepAmbientFishWithBoss ||
+            currentPhase != LevelPhase.BossBattle ||
+            ActiveTargetBossCount <= 0 ||
+            Time.time < nextBossAmbientRefillTime)
+        {
+            return;
+        }
+
+        int currentCompanions = CountActiveAmbientCompanionFish();
+        int desiredCompanions = Mathf.Max(
+            1,
+            minimumAmbientFishDuringBossBattle
+        );
+
+        if (currentCompanions >= desiredCompanions)
+        {
+            nextBossAmbientRefillTime =
+                Time.time + Mathf.Max(0.10f, bossAmbientRefillInterval);
+            return;
+        }
+
+        int capacity = Mathf.Max(
+            0,
+            GetBossFishLimit() - CountActiveFish()
+        );
+        int refillCount = Mathf.Min(
+            Mathf.Max(1, bossAmbientRefillBurst),
+            desiredCompanions - currentCompanions,
+            capacity
+        );
+
+        for (int i = 0; i < refillCount; i++)
+        {
+            SpawnAmbientNormalFish();
+        }
+
+        nextBossAmbientRefillTime =
+            Time.time + Mathf.Max(0.10f, bossAmbientRefillInterval);
+    }
+
+    private int CountActiveAmbientCompanionFish()
+    {
+        GameManager gm = GameManager.Instance;
+        if (gm == null || gm.fishInScreenList == null)
+        {
+            return 0;
+        }
+
+        int count = 0;
+        for (int i = 0; i < gm.fishInScreenList.Count; i++)
+        {
+            FishScript fish = gm.fishInScreenList[i];
+            if (fish == null ||
+                !fish.gameObject.activeInHierarchy ||
+                fish.IsDeadOrDying ||
+                fish.IsBoss() ||
+                fish.IsParadeControlled)
+            {
+                continue;
+            }
+
+            count++;
+        }
+
+        return count;
+    }
+
+    private int GetMixedParadeFishCapacityLimit()
+    {
+        return Mathf.Min(
+            GetMaxActiveFish() + Mathf.Max(0, mixedParadeExtraFishCapacity),
+            Mathf.Max(1, absoluteMaximumActiveFish)
+        );
+    }
+
+    private int GetAmbientFishCapacityLimit()
+    {
+        return currentPhase == LevelPhase.BossBattle
+            ? GetBossFishLimit()
+            : GetMaxActiveFish();
+    }
+
     private void SpawnAmbientNormalFish()
     {
         if (!ReferencesAreReady() ||
-            CountActiveFish() >= GetMaxActiveFish())
+            CountActiveFish() >= GetAmbientFishCapacityLimit())
         {
             return;
         }
@@ -5657,7 +6566,10 @@ public class SwapFishScript : MonoBehaviour
             };
         }
 
-        int availableCapacity = Mathf.Max(0, GetMaxActiveFish() - CountActiveFish());
+        int availableCapacity = Mathf.Max(
+            0,
+            GetAmbientFishCapacityLimit() - CountActiveFish()
+        );
         int groupSize = Mathf.Clamp(
             prefabScript.GetNaturalAmbientGroupSize(),
             1,
@@ -5911,145 +6823,6 @@ public class SwapFishScript : MonoBehaviour
             new Vector3(viewportX, 0.5f, depth)
         );
         return worldPoint.x;
-    }
-
-    private void SpawnStraightLineParade(
-        int fishIndex,
-        FishScript.SwimStyle style
-    )
-    {
-        if (!ReferencesAreReady())
-        {
-            return;
-        }
-
-        Vector3 startPosition = LeftPos.position + new Vector3(
-            0f,
-            Random.Range(-4f, 4f),
-            0f
-        );
-
-        Vector3 targetPosition = RightPos.position + new Vector3(
-            0f,
-            startPosition.y - LeftPos.position.y,
-            0f
-        );
-
-        int count = Mathf.Clamp(5 + GetFormationGrowth(), 5, 12);
-        float horizontalSpacing = GetFishHorizontalSpacing(fishIndex);
-
-        for (int i = 0; i < count; i++)
-        {
-            Vector3 spawnPosition =
-                startPosition - new Vector3(
-                    i * horizontalSpacing,
-                    0f,
-                    0f
-                );
-
-            SpawnScaledNormalFish(
-                fishIndex,
-                spawnPosition,
-                targetPosition,
-                style
-            );
-        }
-    }
-
-    private void SpawnVFormationParade(int fishIndex)
-    {
-        if (!ReferencesAreReady())
-        {
-            return;
-        }
-
-        Vector3 leaderPosition = LeftPos.position + new Vector3(
-            0f,
-            Random.Range(-2f, 2f),
-            0f
-        );
-
-        Vector3 targetPosition = RightPos.position + new Vector3(
-            0f,
-            leaderPosition.y - LeftPos.position.y,
-            0f
-        );
-
-        GameObject leader = GetFishFromPool(
-            fishIndex,
-            leaderPosition,
-            targetPosition
-        );
-
-        if (!TryGetFishScript(leader, out FishScript leaderScript))
-        {
-            return;
-        }
-
-        ApplyNormalScaling(leaderScript);
-        leaderScript.SetParadeRoute(
-            targetPosition,
-            FishScript.SwimStyle.LaneGlide,
-            paradeRouteSweepAmplitude * 0.30f,
-            paradeRouteSweepFrequency * 0.75f
-        );
-
-        int pairs = Mathf.Clamp(
-            2 + GetFormationGrowth() / 2,
-            2,
-            5
-        );
-        float horizontalSpacing = GetFishHorizontalSpacing(fishIndex);
-        float verticalSpacing = GetFishVerticalSpacing(fishIndex);
-
-        for (int pair = 1; pair <= pairs; pair++)
-        {
-            Vector3 topOffset = new Vector3(
-                -horizontalSpacing * pair,
-                verticalSpacing * 0.55f * pair,
-                0f
-            );
-
-            Vector3 bottomOffset = new Vector3(
-                -horizontalSpacing * pair,
-                -verticalSpacing * 0.55f * pair,
-                0f
-            );
-
-            GameObject topFish = GetFishFromPool(
-                fishIndex,
-                leaderPosition + topOffset,
-                targetPosition,
-                true
-            );
-
-            if (TryGetFishScript(topFish, out FishScript topScript))
-            {
-                ApplyNormalScaling(topScript);
-                topScript.SetMovementStyle(
-                    FishScript.SwimStyle.SchoolFollow,
-                    leader.transform,
-                    topOffset
-                );
-            }
-
-            GameObject bottomFish = GetFishFromPool(
-                fishIndex,
-                leaderPosition + bottomOffset,
-                targetPosition,
-                true
-            );
-
-            if (TryGetFishScript(bottomFish, out FishScript bottomScript))
-            {
-                ApplyNormalScaling(bottomScript);
-                bottomScript.SetMovementStyle(
-                    FishScript.SwimStyle.SchoolFollow,
-                    leader.transform,
-                    bottomOffset
-                );
-            }
-        }
     }
 
     private void SpawnCrossAttackParade()
@@ -7113,35 +7886,18 @@ public class SwapFishScript : MonoBehaviour
 
     private void ApplyNormalScaling(FishScript script)
     {
-        int levelIndex = (int)currentLevelState;
         int effectiveLoop = Mathf.Clamp(
             loopMultiplier,
             0,
             maxScalingLoops
         );
 
-        float hpMultiplier =
-            1f +
-            levelIndex * normalHpPerLevel +
-            effectiveLoop * endlessHpPerLoop;
-
-        float rewardMultiplier =
-            1f +
-            levelIndex * normalRewardPerLevel +
-            effectiveLoop * endlessRewardPerLoop;
-
-        float speedMultiplier =
-            1f +
-            levelIndex * normalSpeedPerLevel +
-            effectiveLoop * endlessSpeedPerLoop;
-
-        FishLevelPopulationProfile population = GetCurrentLevelPopulationProfile();
-        if (population != null)
-        {
-            hpMultiplier *= population.fishHealthMultiplier;
-            rewardMultiplier *= population.rewardMultiplier;
-            speedMultiplier *= population.fishSpeedMultiplier;
-        }
+        // Clean v20 balance is absolute. Normal levels change fish mix rather
+        // than multiplying the same fish HP/reward again. Endless loops may
+        // still add the small explicit progression configured below.
+        float hpMultiplier = 1f + effectiveLoop * endlessHpPerLoop;
+        float rewardMultiplier = 1f + effectiveLoop * endlessRewardPerLoop;
+        float speedMultiplier = 1f + effectiveLoop * endlessSpeedPerLoop;
 
         script.ApplyRuntimeScaling(
             hpMultiplier,
@@ -7152,32 +7908,16 @@ public class SwapFishScript : MonoBehaviour
 
     private void ApplyMiniBossScaling(FishScript script)
     {
-        int levelIndex = (int)currentLevelState;
         int effectiveLoop = Mathf.Clamp(
             loopMultiplier,
             0,
             maxScalingLoops
         );
 
-        float hpMultiplier =
-            miniBossBaseHpMultiplier +
-            levelIndex * miniBossHpPerLevel +
-            effectiveLoop * endlessHpPerLoop;
-
-        float rewardMultiplier =
-            1.10f +
-            levelIndex * miniBossRewardPerLevel +
-            effectiveLoop * endlessRewardPerLoop;
-
-        float speedMultiplier =
-            0.95f +
-            levelIndex * miniBossSpeedPerLevel +
-            effectiveLoop * endlessSpeedPerLoop;
-
         script.ApplyRuntimeScaling(
-            hpMultiplier,
-            rewardMultiplier,
-            speedMultiplier
+            1f + effectiveLoop * endlessHpPerLoop,
+            1f + effectiveLoop * endlessRewardPerLoop,
+            1f + effectiveLoop * endlessSpeedPerLoop
         );
     }
 
@@ -7186,61 +7926,26 @@ public class SwapFishScript : MonoBehaviour
         int simultaneousBossCount = 1
     )
     {
-        int levelIndex =
-            (int)currentLevelState;
-
         int effectiveLoop = Mathf.Clamp(
             loopMultiplier,
             0,
             maxScalingLoops
         );
 
-        float hpMultiplier =
-            bossBaseHpMultiplier +
-            levelIndex *
-            bossHpPerLevel +
-            effectiveLoop *
-            endlessHpPerLoop;
-
-        int extraBossCount = Mathf.Max(
-            0,
-            simultaneousBossCount - 1
-        );
-
-        float simultaneousHpFactor =
-            1f -
-            extraBossCount *
-            simultaneousBossHpReductionPerExtraBoss;
-
-        simultaneousHpFactor = Mathf.Clamp(
-            simultaneousHpFactor,
-            0.68f,
+        int extraBossCount = Mathf.Max(0, simultaneousBossCount - 1);
+        float simultaneousHpFactor = Mathf.Clamp(
+            1f - extraBossCount * simultaneousBossHpReductionPerExtraBoss,
+            0.72f,
             1f
         );
 
-        hpMultiplier *=
-            simultaneousHpFactor;
-
-        float rewardMultiplier =
-            1.20f +
-            levelIndex *
-            bossRewardPerLevel +
-            effectiveLoop *
-            endlessRewardPerLoop;
-
-        float speedMultiplier =
-            0.90f +
-            levelIndex *
-            bossSpeedPerLevel +
-            effectiveLoop *
-            endlessSpeedPerLoop;
-
         script.ApplyRuntimeScaling(
-            hpMultiplier,
-            rewardMultiplier,
-            speedMultiplier
+            (1f + effectiveLoop * endlessHpPerLoop) * simultaneousHpFactor,
+            1f + effectiveLoop * endlessRewardPerLoop,
+            1f + effectiveLoop * endlessSpeedPerLoop
         );
     }
+
     private GameObject GetFishFromPool(
         int fishIndex,
         Vector3 spawnPosition,
@@ -8616,6 +9321,154 @@ public class SwapFishScript : MonoBehaviour
         );
     }
 
+    [ContextMenu("Apply v21 Mixed Parade + Boss Companion Preset")]
+    public void ApplyV21MixedParadePreset()
+    {
+        pauseNormalSpawningDuringParade = false;
+        clearNormalFishBeforeParade = false;
+        allowAmbientAfterOpeningParadeVisible = true;
+        mixedParadeExtraFishCapacity = 8;
+
+        smallParadeVisualGap = 1.01f;
+        mediumParadeVisualGap = 1.02f;
+        largeParadeVisualGap = 1.05f;
+        specialParadeVisualGap = 1.08f;
+        paradeMinimumGapPadding = 0.01f;
+        organizedParadeSpacingMultiplier = 1f;
+        organizedParadeSlotBreathing = 0.015f;
+        naturalSchoolLongitudinalSpacingMultiplier = 1.03f;
+        naturalSchoolLateralSpacingMultiplier = 1.04f;
+        naturalSchoolRowStagger = 0.16f;
+
+        keepAmbientFishWithBoss = true;
+        minimumAmbientFishDuringBossBattle = 8;
+        bossAmbientRefillBurst = 2;
+        bossAmbientRefillInterval = 0.35f;
+
+        ValidateAndRepairConfiguration();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+    }
+
+    [ContextMenu("Apply Clean Parade Preset")]
+    public void ApplyCleanParadePreset()
+    {
+        playStandardParadeAtEveryLevelStart = true;
+        levelOpeningParadeDelay = 0.25f;
+        levelOpeningParadeWaveCount = 1;
+        levelOpeningParadeWaveGap = 0.65f;
+        levelOpeningParadeFishCountBase = 10;
+        levelOpeningParadeFishPerLevel = 1;
+        levelOpeningParadeSpeedMultiplier = 1f;
+        levelOpeningParadePatterns = new OrganizedParadePattern[]
+        {
+            OrganizedParadePattern.StraightLine,
+            OrganizedParadePattern.VFormation,
+            OrganizedParadePattern.Arrow,
+            OrganizedParadePattern.Wave,
+            OrganizedParadePattern.Grid
+        };
+
+        pauseNormalSpawningDuringParade = false;
+        clearNormalFishBeforeParade = false;
+        allowAmbientAfterOpeningParadeVisible = true;
+        mixedParadeExtraFishCapacity = 8;
+        maximumParadeFishCount = 18;
+        paradeCompletionTimeout = 18f;
+        paradeAmbientClearTimeout = 1.8f;
+        paradeAmbientExitSpeedMultiplier = 1.8f;
+        paradeTimeoutCleanupGrace = 2.5f;
+        paradeVisibilityPadding = 0.01f;
+
+        smallParadeVisualGap = 1.01f;
+        mediumParadeVisualGap = 1.02f;
+        largeParadeVisualGap = 1.05f;
+        specialParadeVisualGap = 1.08f;
+        paradeMinimumGapPadding = 0.01f;
+        organizedParadeSpacingMultiplier = 1f;
+        organizedParadeSlotBreathing = 0.02f;
+        naturalSchoolLongitudinalSpacingMultiplier = 1.03f;
+        naturalSchoolLateralSpacingMultiplier = 1.04f;
+        naturalSchoolRowStagger = 0.16f;
+
+        keepAmbientFishWithBoss = true;
+        minimumAmbientFishDuringBossBattle = 8;
+        bossAmbientRefillBurst = 2;
+        bossAmbientRefillInterval = 0.35f;
+
+        paradeWorldSpeed = 2.35f;
+        paradeWorldSpeedPerLevel = 0.04f;
+        paradeFollowerCorrection = 3.8f;
+        paradeFollowerCatchUpMultiplier = 1.65f;
+        paradeFollowerSlotWobble = 0.035f;
+        preBossParadeSpeedBase = 0.92f;
+        preBossParadeSpeedPerLevel = 0.01f;
+        paradeRouteSweepAmplitude = 0.22f;
+        paradeRouteSweepFrequency = 0.82f;
+
+        paradeDelayMin = 12f;
+        paradeDelayMax = 18f;
+        standaloneFeatureParadeChance = 0.35f;
+        standaloneFeatureParadeDelay = 0.35f;
+        standaloneFeatureParadeWaveCount = 1;
+        standaloneFeatureParadeWaveGap = 0.75f;
+        standaloneFeatureParadeFishCountBase = 11;
+        standaloneFeatureParadeFishPerLevel = 1;
+        standaloneFeatureParadePatterns = new OrganizedParadePattern[]
+        {
+            OrganizedParadePattern.Diamond,
+            OrganizedParadePattern.Spiral,
+            OrganizedParadePattern.MixedFormation,
+            OrganizedParadePattern.ProtectedCenter,
+            OrganizedParadePattern.Wave
+        };
+
+        beginnerParadePatterns = new OrganizedParadePattern[]
+        {
+            OrganizedParadePattern.StraightLine,
+            OrganizedParadePattern.Diagonal,
+            OrganizedParadePattern.VFormation,
+            OrganizedParadePattern.LeaderAndFollowers
+        };
+        largeParadePatterns = new OrganizedParadePattern[]
+        {
+            OrganizedParadePattern.Arrow,
+            OrganizedParadePattern.Grid,
+            OrganizedParadePattern.Wave,
+            OrganizedParadePattern.Circle,
+            OrganizedParadePattern.Spiral,
+            OrganizedParadePattern.LeaderAndFollowers
+        };
+
+        // Clean balance is absolute. Avoid stacking level HP/reward inflation
+        // on top of the generated fish profiles.
+        normalHpPerLevel = 0f;
+        normalRewardPerLevel = 0f;
+        normalSpeedPerLevel = 0f;
+        miniBossBaseHpMultiplier = 1f;
+        miniBossHpPerLevel = 0f;
+        miniBossRewardPerLevel = 0f;
+        miniBossSpeedPerLevel = 0f;
+        bossBaseHpMultiplier = 1f;
+        bossHpPerLevel = 0f;
+        bossRewardPerLevel = 0f;
+        bossSpeedPerLevel = 0f;
+
+        // Endless loops remain the one explicit optional scaling layer.
+        endlessHpPerLoop = 0.05f;
+        endlessRewardPerLoop = 0.05f;
+        endlessSpeedPerLoop = 0.01f;
+        maxScalingLoops = 5;
+
+        ValidateAndRepairConfiguration();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+    }
+
     [ContextMenu("Apply Recommended 46-Fish Director Preset")]
     public void ApplyRecommended46FishDirectorPreset()
     {
@@ -8784,6 +9637,7 @@ public class SwapFishScript : MonoBehaviour
         endlessSpeedPerLoop = 0.005f;
         maxScalingLoops = 5;
 
+        ApplyCleanParadePreset();
         ValidateAndRepairConfiguration();
 
         Debug.Log(
@@ -8843,6 +9697,40 @@ public class SwapFishScript : MonoBehaviour
         levelOpeningParadeFishCountBase = Mathf.Clamp(levelOpeningParadeFishCountBase, 5, 24);
         levelOpeningParadeFishPerLevel = Mathf.Clamp(levelOpeningParadeFishPerLevel, 0, 4);
         levelOpeningParadeSpeedMultiplier = Mathf.Clamp(levelOpeningParadeSpeedMultiplier, 0.45f, 1.4f);
+
+        mixedParadeExtraFishCapacity = Mathf.Clamp(mixedParadeExtraFishCapacity, 0, 16);
+        maximumParadeFishCount = Mathf.Clamp(maximumParadeFishCount, 6, 28);
+        paradeCompletionTimeout = Mathf.Max(4f, paradeCompletionTimeout);
+        paradeAmbientClearTimeout = Mathf.Max(0.25f, paradeAmbientClearTimeout);
+        paradeAmbientExitSpeedMultiplier = Mathf.Max(1f, paradeAmbientExitSpeedMultiplier);
+        paradeTimeoutCleanupGrace = Mathf.Max(0.25f, paradeTimeoutCleanupGrace);
+        paradeVisibilityPadding = Mathf.Clamp(paradeVisibilityPadding, 0f, 0.20f);
+        smallParadeVisualGap = Mathf.Clamp(smallParadeVisualGap, 1f, 1.30f);
+        mediumParadeVisualGap = Mathf.Clamp(mediumParadeVisualGap, 1f, 1.40f);
+        largeParadeVisualGap = Mathf.Clamp(largeParadeVisualGap, 1f, 1.60f);
+        specialParadeVisualGap = Mathf.Clamp(specialParadeVisualGap, 1f, 1.80f);
+        paradeMinimumGapPadding = Mathf.Clamp(paradeMinimumGapPadding, 0f, 0.50f);
+        paradeWorldSpeed = Mathf.Max(0.20f, paradeWorldSpeed);
+        paradeWorldSpeedPerLevel = Mathf.Max(0f, paradeWorldSpeedPerLevel);
+        paradeFollowerCorrection = Mathf.Max(0.50f, paradeFollowerCorrection);
+        paradeFollowerCatchUpMultiplier = Mathf.Clamp(
+            paradeFollowerCatchUpMultiplier,
+            1f,
+            3f
+        );
+        paradeFollowerSlotWobble = Mathf.Clamp(
+            paradeFollowerSlotWobble,
+            0f,
+            0.20f
+        );
+        minimumAmbientFishDuringBossBattle = Mathf.Clamp(
+            minimumAmbientFishDuringBossBattle,
+            1,
+            24
+        );
+        bossAmbientRefillBurst = Mathf.Clamp(bossAmbientRefillBurst, 1, 5);
+        bossAmbientRefillInterval = Mathf.Max(0.10f, bossAmbientRefillInterval);
+
         standaloneFeatureParadeChance = Mathf.Clamp01(standaloneFeatureParadeChance);
         standaloneFeatureParadeDelay = Mathf.Max(0f, standaloneFeatureParadeDelay);
         standaloneFeatureParadeWaveCount = Mathf.Clamp(standaloneFeatureParadeWaveCount, 1, 3);

@@ -92,6 +92,10 @@ public class DisplayTextManagerScript : MonoBehaviour
         );
     }
 
+
+
+
+
     private IEnumerator DisplayRoutine(
         string textValue,
         Vector3 worldPosition,

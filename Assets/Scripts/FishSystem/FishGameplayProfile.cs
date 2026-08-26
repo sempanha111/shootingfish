@@ -237,6 +237,24 @@ public sealed class FishGameplayProfile : ScriptableObject
         );
     }
 
+    /// <summary>
+    /// Clean-generation hook. Unlike the old multiplicative migrations, this
+    /// writes absolute combat values and replaces the old balance version.
+    /// Re-running the generator therefore cannot stack HP or reward multipliers.
+    /// </summary>
+    public void SetCombatBalanceAbsolute(
+        int version,
+        float healthValue,
+        float resistanceValue,
+        float rewardValueAmount
+    )
+    {
+        health = Mathf.Max(1f, healthValue);
+        damageResistance = Mathf.Clamp(resistanceValue, 0f, 0.95f);
+        rewardValue = Mathf.Max(0f, rewardValueAmount);
+        combatBalanceVersion = Mathf.Max(0, version);
+    }
+
     [Header("Movement Characteristics")]
     [Min(0.05f)] public float minimumSpeed = 1.6f;
     [Min(0.05f)] public float maximumSpeed = 2.4f;

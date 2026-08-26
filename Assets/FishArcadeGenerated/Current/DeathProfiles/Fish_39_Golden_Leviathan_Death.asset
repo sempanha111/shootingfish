@@ -1,0 +1,219 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d2a33646558ba43a3f6b66fa200ceb, type: 3}
+  m_Name: Fish_39_Golden_Leviathan_Death
+  m_EditorClassIdentifier: 
+  rewardCalculationMode: 1
+  rewardMultiplier: 1
+  maximumSmallShotBonusPercent: 0
+  minimumReward: 50600
+  maximumReward: 0
+  rewardTextStyle: 0
+  customRewardTextPrefab: {fileID: 0}
+  playStandardCoinAnimation: 0
+  coinAnimationPlayCount: 1
+  coinAnimationInterval: 0
+  coinAnimationSpreadRadius: 0
+  playMainBossSkillInFrontGun: 1
+  mainBossFrontGunSkillIndex: 0
+  mainBossFrontGunSkillTiming: 2
+  mainBossFrontGunSkillDelay: 0
+  mainBossFrontGunCoinStartDelayOverride: -1
+  playMainBossFrontGunSkillSound: 1
+  mainBossFrontGunSkillSoundIndex: -1
+  showMainBossFrontGunRewardText: 1
+  mainBossFrontGunRewardTextPrefix: 
+  mainBossFrontGunRewardTextDelay: 0.03
+  playBossCoinBurst: 0
+  bossCoinBurstEffectIndex: 4
+  playNetBoom: 0
+  netBoomEffectIndex: 0
+  playNetBoomImmediatelyAtDeathStart: 0
+  netBoomPositionOffset: {x: 100, y: 100}
+  netBoomScatterRadius: 0.63
+  netBoomScaleMultiplier: 1.35
+  customDeathEffect: {fileID: 4591828527829975111, guid: 43f76d6454288c149bc2bffb543fd26e, type: 3}
+  customDeathEffectStartDelay: 1.2
+  customDeathEffectPositionOffset: {x: 0, y: 0}
+  customDeathEffectScatterRadius: 0.18
+  customDeathEffectScale: {x: 1, y: 1}
+  customDeathEffectRotationDegrees: 2.73
+  customDeathEffectVisibleDuration: 1.75
+  customDeathEffectUseFishSorting: 0
+  customDeathEffectSortingOrderOffset: 200
+  customEffectHideDelay: 0
+  enableCinematicDeathMotion: 0
+  cinematicStartDelay: 0
+  deathAnimatorTrigger: 
+  overrideDeathAnimatorSpeed: 1
+  deathAnimatorSpeed: 0.05
+  useSeparateConvulsionAnimatorSpeed: 0
+  deathConvulsionAnimatorSpeed: 0.05
+  deathDuration: 0.31
+  rewardBeatNormalized: 0
+  enableImpactScalePulse: 1
+  impactScaleMultiplier: 1.06
+  enableDeathZoom: 0
+  deathZoomStartMode: 2
+  deathZoomStartNormalized: 1
+  deathZoomAdditionalDelay: 0.36
+  deathZoomDuration: 0.48
+  deathZoomEndScaleMultiplier: 1
+  deathDriftDistance: 0
+  enableDeathTumbleRotation: 0
+  deathTumbleDegrees: 178.9
+  fadeStartNormalized: 1
+  deathOpacityStartMode: 1
+  deathOpacityAdditionalDelay: 0
+  deathOpacityFadeDuration: 0.4
+  extendDeathDurationForLatePhases: 1
+  latePhaseWaitIncludesPrefabHideDelay: 0
+  deathOpacityStart: 1
+  deathOpacityEnd: 0
+  deathOpacityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadeSpriteRenderers: 1
+  disableCollidersDuringDeath: 1
+  enableDeathConvulsion: 1
+  deathConvulsionDuration: 0.86
+  deathConvulsionPositionStrength: 0.13
+  deathConvulsionRotationDegrees: 1.8
+  enableDeathConvulsionScalePulse: 1
+  deathConvulsionScaleStrength: 0.014
+  deathConvulsionFrequency: 8.4
+  playPrefabWithDeathConvulsion: 1
+  deathConvulsionEffectPrefab: {fileID: 6546262891853406860, guid: 474bb93b00dfba345b8a65b9294e6998, type: 3}
+  deathConvulsionPresentationDelay: 0
+  deathConvulsionEffectPositionOffset: {x: 0, y: 0}
+  deathConvulsionEffectScatterRadius: 0
+  deathConvulsionEffectScale: {x: 1, y: 1}
+  deathConvulsionEffectRotationDegrees: 0
+  deathConvulsionEffectVisibleDuration: 0
+  deathConvulsionEffectHideDelay: 0
+  deathConvulsionEffectUseFishSorting: 0
+  deathConvulsionEffectSortingOrderOffset: -200
+  playAdditionalDeathPrefabs: 1
+  deathAdditionalEffects:
+  - prefab: {fileID: 6546262891853406860, guid: 2bdc891d3868f0e4994c066bf9bcc5d9, type: 3}
+    startMode: 0
+    delay: 0.1
+    offsetSpace: 2
+    positionOffset: {x: -0.5, y: 0}
+    followFishCenter: 1
+    scatterRadius: 0
+    scale: {x: 0.24, y: 0.21}
+    rotationDegrees: 0
+    visibleDuration: 0
+    hideDelay: 0
+    useFishSorting: 0
+    sortingOrderOffset: 0
+  - prefab: {fileID: 6546262891853406860, guid: 2bdc891d3868f0e4994c066bf9bcc5d9, type: 3}
+    startMode: 0
+    delay: 0.13
+    offsetSpace: 2
+    positionOffset: {x: 0, y: 0}
+    followFishCenter: 1
+    scatterRadius: 0
+    scale: {x: 0.24, y: 0.21}
+    rotationDegrees: 0
+    visibleDuration: 0
+    hideDelay: 0
+    useFishSorting: 0
+    sortingOrderOffset: 0
+  - prefab: {fileID: 6546262891853406860, guid: 2bdc891d3868f0e4994c066bf9bcc5d9, type: 3}
+    startMode: 0
+    delay: 0.13
+    offsetSpace: 2
+    positionOffset: {x: 0.5, y: 0}
+    followFishCenter: 1
+    scatterRadius: 0
+    scale: {x: 0, y: 0}
+    rotationDegrees: 0
+    visibleDuration: 0
+    hideDelay: 0
+    useFishSorting: 0
+    sortingOrderOffset: 0
+  - prefab: {fileID: 6546262891853406860, guid: 84fbff0e79e517247b46829d30ab65bd, type: 3}
+    startMode: 0
+    delay: 0.25
+    offsetSpace: 2
+    positionOffset: {x: -0.3, y: 0.04}
+    followFishCenter: 1
+    scatterRadius: 0
+    scale: {x: 0, y: 0}
+    rotationDegrees: 0
+    visibleDuration: 0
+    hideDelay: 0
+    useFishSorting: 0
+    sortingOrderOffset: 0
+  - prefab: {fileID: 6546262891853406860, guid: 84fbff0e79e517247b46829d30ab65bd, type: 3}
+    startMode: 0
+    delay: 0.48
+    offsetSpace: 2
+    positionOffset: {x: 0.7, y: 0.04}
+    followFishCenter: 0
+    scatterRadius: 0
+    scale: {x: 0, y: 0}
+    rotationDegrees: 0
+    visibleDuration: 0
+    hideDelay: 0
+    useFishSorting: 0
+    sortingOrderOffset: 0
+  playEarthquakeWithDeathConvulsion: 1
+  deathConvulsionEarthquakeStrength: 0.38
+  deathConvulsionEarthquakeDuration: 0.32
+  deathCameraShakeStrength: 0
+  deathCameraShakeDuration: 0
+  enableCustomEffectPulses: 0
+  customEffectPulseCount: 3
+  customEffectPulseInterval: 1.57
+  playCenterScreenDeathPrefab: 0
+  centerScreenDeathPrefabs: []
+  centerScreenDeathPrefabSelection: 0
+  centerScreenDeathPrefabIndex: 0
+  centerScreenDeathPrefabChance: 1
+  minimumCenterScreenDeathPrefabReward: 0
+  centerScreenDeathPrefabSpace: 0
+  centerScreenDeathPrefabOverlap: 0
+  centerScreenDeathViewportPosition: {x: 0.5, y: 0.5}
+  centerScreenDeathCanvasOffset: {x: 0, y: 0}
+  centerScreenDeathWorldOffset: {x: 0, y: 0}
+  centerScreenDeathScaleMultiplier: 1
+  centerScreenDeathVisibleDuration: 0
+  centerScreenDeathHideDelay: 0.15
+  centerScreenDeathUseUnscaledTime: 1
+  playBigWinSound: 0
+  bigWinSoundIndex: -1
+  certificateChance: 1
+  minimumCertificateWin: 140000

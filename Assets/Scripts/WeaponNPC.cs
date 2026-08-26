@@ -21,6 +21,16 @@ public class WeaponNPC : MonoBehaviour
     [SerializeField] private float AnimaShootWait = 0.15f;
     private GameObject activeGun;
 
+    public int ShooterId
+    {
+        get { return id; }
+    }
+
+    public Transform ActiveGunTransform
+    {
+        get { return activeGun != null ? activeGun.transform : transform; }
+    }
+
     // --- SMART & CHALLENGING AI SETTINGS ---
     [Header("Smart AI Settings")]
     [Range(0.05f, 0.3f)]
@@ -70,9 +80,16 @@ public class WeaponNPC : MonoBehaviour
     private int shotsUntilBreath;
     private Camera mainCam;
 
+    [Header("NPC Gun Level Limit")]
+    [Tooltip("Hard maximum gun level NPC cannons may use. The player can still use all 17 gun levels.")]
+    [SerializeField, Range(1, 17)] private int maximumNpcGunLevel = 8;
+
+    [Tooltip("Lowest gun level NPCs normally use against bosses. This is clamped by Maximum NPC Gun Level.")]
+    [SerializeField, Range(1, 17)] private int minimumBossNpcGunLevel = 7;
+
     [Header("Random Weapon Settings")]
-    [Tooltip("How many gun levels higher or lower the NPC can randomly choose.")]
-    [SerializeField] private int randomVariance = 2; 
+    [Tooltip("Small +/- variation around the recommended NPC gun level. Keep this low so NPCs do not jump to oversized guns.")]
+    [SerializeField, Range(0, 3)] private int randomVariance = 1;
 
     private float timeToShoot = 0;
     private float fireRate = 2.8f; 
@@ -102,6 +119,27 @@ public class WeaponNPC : MonoBehaviour
     private void OnValidate()
     {
         ApplyV13NpcRhythmIfNeeded();
+        maximumNpcGunLevel = Mathf.Clamp(maximumNpcGunLevel, 1, 17);
+        minimumBossNpcGunLevel = Mathf.Clamp(
+            minimumBossNpcGunLevel,
+            1,
+            maximumNpcGunLevel
+        );
+        randomVariance = Mathf.Clamp(randomVariance, 0, 3);
+    }
+
+    [ContextMenu("Apply Recommended NPC Gun Preset - Max Level 8")]
+    public void ApplyRecommendedNpcGunPreset()
+    {
+        maximumNpcGunLevel = 8;
+        minimumBossNpcGunLevel = 7;
+        randomVariance = 1;
+        activeGunLevel = Mathf.Clamp(activeGunLevel, 1, maximumNpcGunLevel);
+
+        if (Gunlevel != null && Gunlevel.Length > 0)
+        {
+            ActivateGun(activeGunLevel);
+        }
     }
 
     private void ApplyV13NpcRhythmIfNeeded()
@@ -151,8 +189,21 @@ public class WeaponNPC : MonoBehaviour
 
     public void ActivateGun(int gunLevelSet)
     {
-        // Clamp to valid gun level array bounds
-        gunLevelSet = Mathf.Clamp(gunLevelSet, 1, Gunlevel.Length);
+        if (Gunlevel == null || Gunlevel.Length == 0 ||
+            Gun == null || Gun.Length == 0)
+        {
+            return;
+        }
+
+        // NPCs intentionally use only the lower eight gun levels by default.
+        // Player gun progression remains independent and can still reach 17.
+        int availableGunCount = Mathf.Min(Gunlevel.Length, Gun.Length);
+        int npcMaximum = Mathf.Clamp(
+            maximumNpcGunLevel,
+            1,
+            availableGunCount
+        );
+        gunLevelSet = Mathf.Clamp(gunLevelSet, 1, npcMaximum);
 
         for (int i = 0; i < Gunlevel.Length; i++)
         {
@@ -166,7 +217,14 @@ public class WeaponNPC : MonoBehaviour
 
     void GetEachBetGun(int activeGunLevel)
     {
-        Totalbet = Bet[activeGunLevel - 1];
+        if (Bet == null || Bet.Length == 0)
+        {
+            Totalbet = 0f;
+            return;
+        }
+
+        int index = Mathf.Clamp(activeGunLevel - 1, 0, Bet.Length - 1);
+        Totalbet = Bet[index];
     }
 
     void Update()
@@ -369,31 +427,71 @@ public class WeaponNPC : MonoBehaviour
         return bestTarget;
     }
 
-    // RANDOMIZED GUN SELECTION FOR CHALLENGING / UNPREDICTABLE GAMEPLAY
+    // NPC gun choice follows the clean balance curve but never exceeds the
+    // configured NPC cap. This keeps NPC cannons useful without letting them
+    // constantly jump to player end-game guns 9-17.
     void ChangeGun(FishScript fishscript)
     {
-        if (fishscript == null || Gunlevel == null || Gunlevel.Length == 0) return;
+        if (fishscript == null || Gunlevel == null || Gunlevel.Length == 0)
+        {
+            return;
+        }
 
-        int totalGuns = Gunlevel.Length;
-        int selectedGunLevel = 1;
+        int totalGuns = Mathf.Clamp(
+            maximumNpcGunLevel,
+            1,
+            Gunlevel.Length
+        );
+        int selectedGunLevel;
 
         if (fishscript.IsBoss())
         {
-            // For Bosses, randomly select among the top 4 highest gun levels
-            int minBossGun = Mathf.Max(1, totalGuns - 3);
-            selectedGunLevel = Random.Range(minBossGun, totalGuns + 1);
+            int minimumBossLevel = Mathf.Clamp(
+                minimumBossNpcGunLevel,
+                1,
+                totalGuns
+            );
+            selectedGunLevel = Random.Range(
+                minimumBossLevel,
+                totalGuns + 1
+            );
         }
         else
         {
-            // Calculate base ideal gun level according to fish HP
-            int baseLevel = Mathf.CeilToInt(fishscript.Hp / 100f);
-
-            // Add random variance (+/- randomVariance) to make choices unpredictable
-            int offset = Random.Range(-randomVariance, randomVariance + 1);
-            selectedGunLevel = Mathf.Clamp(baseLevel + offset, 1, totalGuns);
+            int baseLevel = GetRecommendedNpcGunLevel(fishscript);
+            int offset = randomVariance > 0
+                ? Random.Range(-randomVariance, randomVariance + 1)
+                : 0;
+            selectedGunLevel = Mathf.Clamp(
+                baseLevel + offset,
+                1,
+                totalGuns
+            );
         }
 
         ActivateGun(selectedGunLevel);
+    }
+
+    private int GetRecommendedNpcGunLevel(FishScript fishscript)
+    {
+        if (fishscript == null)
+        {
+            return 1;
+        }
+
+        // HP breakpoints are intentionally broad. They align the clean fish
+        // balance with NPC guns 1-8 without making every target use the
+        // strongest allowed cannon.
+        float hp = Mathf.Max(1f, fishscript.Hp);
+
+        if (hp <= 80f) return 1;
+        if (hp <= 220f) return 2;
+        if (hp <= 550f) return 3;
+        if (hp <= 1000f) return 4;
+        if (hp <= 1800f) return 5;
+        if (hp <= 3500f) return 6;
+        if (hp <= 7500f) return 7;
+        return 8;
     }
 
     public void ShootingAIClick()

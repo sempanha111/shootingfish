@@ -54,6 +54,34 @@ public class SpriteShadow : MonoBehaviour
     private int lastSortingLayerId;
     private int lastSortingOrder;
 
+    /// <summary>
+    /// Exact renderer used as the visible fish body/source by this component.
+    /// Exposed read-only so visual-only cinematic systems can distinguish the
+    /// authored body from its shadow without copying gameplay behaviour.
+    /// </summary>
+    public SpriteRenderer SourceSpriteRenderer
+    {
+        get
+        {
+            AutoAssignRenderers();
+            return sourceSpriteRenderer;
+        }
+    }
+
+    /// <summary>
+    /// Exact renderer used as the fish shadow. This is intentionally exposed
+    /// read-only because many existing fish prefabs use an unnamed duplicate
+    /// SpriteRenderer as the shadow, so name matching alone is not reliable.
+    /// </summary>
+    public SpriteRenderer ShadowSpriteRenderer
+    {
+        get
+        {
+            AutoAssignRenderers();
+            return shadowSpriteRenderer;
+        }
+    }
+
 
     public void ApplyGameplayProfile(FishGameplayProfile profile)
     {

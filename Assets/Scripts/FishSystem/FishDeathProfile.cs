@@ -173,6 +173,23 @@ public class FishDeathProfile : ScriptableObject
     [Range(-1f, 3f)]
     public float mainBossFrontGunCoinStartDelayOverride = -1f;
 
+    [Header("Main Boss Front-Gun Skill Audio and Reward Text")]
+    [Tooltip("Plays a dedicated sound when the front-gun skill prefab actually appears at the shooter gun.")]
+    public bool playMainBossFrontGunSkillSound = true;
+
+    [Tooltip("-1 randomly selects a valid Main Boss Front-Gun Skill sound. 0+ selects an exact SoundManager array index.")]
+    public int mainBossFrontGunSkillSoundIndex = -1;
+
+    [Tooltip("Shows the real calculated boss reward using the embedded RewardText inside the spawned PF_BossReward front-gun skill prefab.")]
+    public bool showMainBossFrontGunRewardText = true;
+
+    [Tooltip("Text placed before the reward amount. Example: + gives +25000.")]
+    public string mainBossFrontGunRewardTextPrefix = "+";
+
+    [Tooltip("Optional delay after the skill appears before the embedded reward TextMeshPro begins counting.")]
+    [Min(0f)]
+    public float mainBossFrontGunRewardTextDelay;
+
     [Header("Death Effects")]
     [FormerlySerializedAs("playNormalParticle")]
     [Tooltip("Boss-only coin burst particle at the fish death position.")]

@@ -237,6 +237,19 @@ public class WeaponsScripts : MonoBehaviour
         }
     }
 
+    public void ApplyCleanBalancePreset(float shotsPerSecond)
+    {
+        fireRate = Mathf.Max(0.1f, shotsPerSecond);
+        AnimaShootWait = Mathf.Min(
+            Mathf.Max(0.04f, 0.38f / fireRate),
+            0.14f
+        );
+
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+    }
+
     private void Start()
     {
         GM = GameManager.Instance;

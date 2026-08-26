@@ -300,13 +300,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishTier: 0
   useArrayIndexTierFallback: 0
-  deathProfile: {fileID: 11400000, guid: 66ffd6a285b48154e8903474aeb3a738, type: 2}
+  deathProfile: {fileID: 11400000, guid: d0bd1ff34a9d7c64da7aba4da856ffac, type: 2}
   movementProfile: {fileID: 11400000, guid: 36a27c0ce5b876f44a850f1c2cd9c6ee, type: 2}
-  gameplayProfile: {fileID: 11400000, guid: 583848f4bb2527343aced4ef2ad9390f, type: 2}
+  gameplayProfile: {fileID: 11400000, guid: ed908b4c9c9a31f4fa836b15db238df4, type: 2}
   useProfessionalMotionAgent: 1
   professionalMotionAgent: {fileID: 814325789737001596}
   professionalProfileSpeedScale: 0.55
   cinematicDeathController: {fileID: 0}
+  postDeathCloneCinematicController: {fileID: 0}
   healthEvaluationInterval: 0.35
   paradeParticipation: 2
   paradeSelectionWeight: 0
@@ -348,8 +349,8 @@ MonoBehaviour:
   forcedLevelExitSpeedMultiplier: 2.4
   forcedLevelExitTurnDegreesPerSecond: 220
   forcedLevelExitExtraDistance: 1
-  Hp: 260
-  CoinFish: 400
+  Hp: 54
+  CoinFish: 38
   MoveSpeed: 1.3
   id: 7
   gimmickType: 0

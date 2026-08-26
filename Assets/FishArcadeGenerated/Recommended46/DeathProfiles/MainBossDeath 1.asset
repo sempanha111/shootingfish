@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainBossDeath 1
   m_EditorClassIdentifier: 
   rewardCalculationMode: 1
-  rewardMultiplier: 3
+  rewardMultiplier: 1
   maximumSmallShotBonusPercent: 0
   minimumReward: 0
   maximumReward: 0
@@ -24,10 +24,15 @@ MonoBehaviour:
   coinAnimationInterval: 0
   coinAnimationSpreadRadius: 0
   playMainBossSkillInFrontGun: 1
-  mainBossFrontGunSkillIndex: 1
+  mainBossFrontGunSkillIndex: 0
   mainBossFrontGunSkillTiming: 2
   mainBossFrontGunSkillDelay: 0
-  mainBossFrontGunCoinStartDelayOverride: -1
+  mainBossFrontGunCoinStartDelayOverride: 0.12
+  playMainBossFrontGunSkillSound: 1
+  mainBossFrontGunSkillSoundIndex: -1
+  showMainBossFrontGunRewardText: 1
+  mainBossFrontGunRewardTextPrefix: +
+  mainBossFrontGunRewardTextDelay: 0.05
   playBossCoinBurst: 0
   bossCoinBurstEffectIndex: 4
   playNetBoom: 0
@@ -123,6 +128,7 @@ MonoBehaviour:
   - prefab: {fileID: 6546262891853406860, guid: 2bdc891d3868f0e4994c066bf9bcc5d9, type: 3}
     startMode: 0
     delay: 0.1
+    offsetSpace: 0
     positionOffset: {x: 2.25, y: 0.04}
     followFishCenter: 0
     scatterRadius: 0
@@ -135,6 +141,7 @@ MonoBehaviour:
   - prefab: {fileID: 6546262891853406860, guid: 2bdc891d3868f0e4994c066bf9bcc5d9, type: 3}
     startMode: 0
     delay: 0.13
+    offsetSpace: 0
     positionOffset: {x: 1.07, y: -0.68}
     followFishCenter: 0
     scatterRadius: 0
@@ -147,6 +154,7 @@ MonoBehaviour:
   - prefab: {fileID: 6546262891853406860, guid: 2bdc891d3868f0e4994c066bf9bcc5d9, type: 3}
     startMode: 0
     delay: 0.13
+    offsetSpace: 0
     positionOffset: {x: 1.07, y: -0.68}
     followFishCenter: 0
     scatterRadius: 0
@@ -159,6 +167,7 @@ MonoBehaviour:
   - prefab: {fileID: 6546262891853406860, guid: 84fbff0e79e517247b46829d30ab65bd, type: 3}
     startMode: 0
     delay: 0.08
+    offsetSpace: 0
     positionOffset: {x: 0.83, y: 0.04}
     followFishCenter: 0
     scatterRadius: 0
@@ -169,8 +178,8 @@ MonoBehaviour:
     useFishSorting: 0
     sortingOrderOffset: 0
   playEarthquakeWithDeathConvulsion: 1
-  deathConvulsionEarthquakeStrength: 0.38
-  deathConvulsionEarthquakeDuration: 0.32
+  deathConvulsionEarthquakeStrength: 0.48
+  deathConvulsionEarthquakeDuration: 0.41
   deathCameraShakeStrength: 0
   deathCameraShakeDuration: 0
   enableCustomEffectPulses: 0

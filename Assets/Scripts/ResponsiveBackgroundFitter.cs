@@ -13,7 +13,7 @@ public sealed class ResponsiveBackgroundFitter : MonoBehaviour
     [Header("References")]
     [SerializeField] private Camera targetCamera;
     [SerializeField] private SpriteRenderer targetRenderer;
-     
+
     [Header("Fit Settings")]
     [Tooltip("1.10 means 110% of the minimum cover size, leaving extra room for camera shake.")]
     [Min(1f)]

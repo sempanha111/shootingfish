@@ -192,23 +192,11 @@ public class GameManager : MonoBehaviour
         activeEarthquakeTarget = null;
     }
 
-    [ContextMenu("Apply v14 Durable Fish Economy")]
-    public void ApplyV14DurableFishEconomy()
+    [ContextMenu("Apply Clean Balanced 17-Gun Economy")]
+    public void ApplyCleanBalancedEconomy()
     {
-        // Fictional arcade-point costs are intentionally lower than bullet
-        // damage in v14. Fish now live longer, so this keeps sustained fire
-        // from draining every cannon balance too quickly.
-        float[] shotCosts =
-        {
-            7f, 14f, 21f, 35f, 56f, 84f, 126f, 175f, 245f,
-            350f, 490f, 700f, 980f, 1330f, 1820f, 2450f, 3500f
-        };
-
-        float[] damageValues =
-        {
-            10f, 20f, 30f, 50f, 80f, 120f, 180f, 250f, 350f,
-            500f, 700f, 1000f, 1400f, 1900f, 2600f, 3500f, 5000f
-        };
+        float[] shotCosts = FishArcadeBalanceModel.CopyGunCostValues();
+        float[] damageValues = FishArcadeBalanceModel.CopyGunDamageValues();
 
         Amount = Mathf.Max(Amount, 100000f);
         PlayerCoinWallet.ConfigureDefault(100000f);
@@ -225,6 +213,9 @@ public class GameManager : MonoBehaviour
         if (weaponsScripts != null)
         {
             weaponsScripts.Bet = (float[])shotCosts.Clone();
+            weaponsScripts.ApplyCleanBalancePreset(
+                FishArcadeBalanceModel.PlayerFireRate
+            );
         }
 
         ApplyNpcEconomy(gun1, shotCosts);
@@ -258,77 +249,6 @@ public class GameManager : MonoBehaviour
 
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
-        if (weaponsScripts != null)
-        {
-            UnityEditor.EditorUtility.SetDirty(weaponsScripts);
-        }
-        if (gun1 != null) UnityEditor.EditorUtility.SetDirty(gun1);
-        if (gun2 != null) UnityEditor.EditorUtility.SetDirty(gun2);
-        if (gun3 != null) UnityEditor.EditorUtility.SetDirty(gun3);
-#endif
-
-        Debug.Log(
-            "Applied v14 durable-fish economy: normal cannon costs are " +
-            "about 30% lower while bullet damage keeps the previous arcade " +
-            "damage curve.",
-            this
-        );
-    }
-
-    [ContextMenu("Apply 17-Level Arcade Point Economy")]
-    private void Apply17LevelArcadePointEconomy()
-    {
-        float[] values =
-        {
-            10f, 20f, 30f, 50f, 80f, 120f, 180f, 250f, 350f,
-            500f, 700f, 1000f, 1400f, 1900f, 2600f, 3500f, 5000f
-        };
-
-        Amount = 100000f;
-        PlayerCoinWallet.ConfigureDefault(Amount);
-
-        if (weaponsScripts == null)
-        {
-            weaponsScripts = GetComponent<WeaponsScripts>();
-        }
-
-        if (gun1 == null) gun1 = GetComponent<Gun1>();
-        if (gun2 == null) gun2 = GetComponent<Gun2>();
-        if (gun3 == null) gun3 = GetComponent<Gun3>();
-
-        if (weaponsScripts != null)
-        {
-            weaponsScripts.Bet = (float[])values.Clone();
-        }
-
-        ApplyNpcEconomy(gun1, values);
-        ApplyNpcEconomy(gun2, values);
-        ApplyNpcEconomy(gun3, values);
-
-        if (prefab_Bullet != null)
-        {
-            int bulletCount = Mathf.Min(prefab_Bullet.Length, values.Length);
-
-            for (int i = 0; i < bulletCount; i++)
-            {
-                if (prefab_Bullet[i] == null ||
-                    !prefab_Bullet[i].TryGetComponent<BulletScript>(
-                        out BulletScript bullet
-                    ))
-                {
-                    continue;
-                }
-
-                bullet.ApplyArcadePreset(values[i]);
-
-#if UNITY_EDITOR
-                UnityEditor.EditorUtility.SetDirty(bullet);
-#endif
-            }
-        }
-
-#if UNITY_EDITOR
-        UnityEditor.EditorUtility.SetDirty(this);
         if (weaponsScripts != null) UnityEditor.EditorUtility.SetDirty(weaponsScripts);
         if (gun1 != null) UnityEditor.EditorUtility.SetDirty(gun1);
         if (gun2 != null) UnityEditor.EditorUtility.SetDirty(gun2);
@@ -336,10 +256,25 @@ public class GameManager : MonoBehaviour
 #endif
 
         Debug.Log(
-            "Applied 17 gun costs, matching bullet damage, and 100000 " +
-            "starting arcade points.",
+            "Applied clean v20 arcade economy: 17 gun levels, shared " +
+            "damage/cost model and 3.5 shots/sec player fire rate.",
             this
         );
+    }
+
+    // Backward-compatible button. Old scenes or editor utilities that still
+    // call the v14 method now receive the clean absolute economy instead of
+    // reapplying a legacy curve.
+    [ContextMenu("Apply v14 Durable Fish Economy (Compatibility)")]
+    public void ApplyV14DurableFishEconomy()
+    {
+        ApplyCleanBalancedEconomy();
+    }
+
+    [ContextMenu("Apply 17-Level Arcade Point Economy (Clean v20)")]
+    private void Apply17LevelArcadePointEconomy()
+    {
+        ApplyCleanBalancedEconomy();
     }
 
     private static void ApplyNpcEconomy(Gun1 gun, float[] values)

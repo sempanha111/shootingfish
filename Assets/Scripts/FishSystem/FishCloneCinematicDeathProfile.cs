@@ -30,6 +30,20 @@ public enum FishCloneTargetMode
     WorldPosition
 }
 
+public enum FishCloneBackgroundPlayTiming
+{
+    WholeCinematic,
+    FinalBoomOnly
+}
+
+public enum FishCloneBackgroundAnchorMode
+{
+    FormationCenter,
+    FinalCenter,
+    NormalizedViewport,
+    WorldPosition
+}
+
 [Serializable]
 public class FishCloneCinematicSlot
 {
@@ -110,6 +124,67 @@ public class FishCloneCinematicDeathProfile : ScriptableObject
 
     [Tooltip("Hide the already-dead real fish while the visual clones are active.")]
     public bool hideOriginalFishDuringCinematic = true;
+
+    [Header("Cinematic Background Effect (Runs With Clone Effect)")]
+    [Tooltip("Enable the optional background VFX layer. The same assigned prefab from older profiles is preserved.")]
+    public bool enableBackgroundEffect = true;
+
+    [Tooltip("Whole Cinematic starts the background when the visual clones begin and keeps it alive through formation, spin, dashes, separation, merge, and final Boom. Final Boom Only keeps the old behavior.")]
+    public FishCloneBackgroundPlayTiming backgroundPlayTiming =
+        FishCloneBackgroundPlayTiming.WholeCinematic;
+
+    public GameObject finalBackgroundEffectPrefab;
+
+    [Tooltip("Where the long-running background effect is anchored while the clone cinematic is active.")]
+    public FishCloneBackgroundAnchorMode backgroundAnchorMode =
+        FishCloneBackgroundAnchorMode.FormationCenter;
+
+    [Tooltip("Used only when Background Anchor Mode is Normalized Viewport.")]
+    public Vector2 backgroundViewportPosition = new Vector2(0.5f, 0.5f);
+
+    [Tooltip("Used only when Background Anchor Mode is World Position.")]
+    public Vector3 backgroundWorldPosition;
+
+    [Tooltip("Keep the background attached to its selected anchor every frame. Useful when the formation/final center is a moving Transform override.")]
+    public bool backgroundFollowAnchor = true;
+
+    public Vector2 finalBackgroundEffectOffset;
+    public Vector2 finalBackgroundEffectScale = Vector2.one;
+
+    [Tooltip("Initial Z rotation applied when the background starts.")]
+    public float finalBackgroundEffectRotationDegrees;
+
+    [Header("Background Unlimited Rotation")]
+    public bool backgroundRotationEnabled = true;
+
+    [Min(0f)]
+    public float backgroundRotationSpeed = 45f;
+
+    public bool backgroundRotationClockwise;
+
+    [Tooltip("Recommended ON. Rotation has no turn limit and continues for the complete clone cinematic until cleanup begins.")]
+    public bool continueBackgroundRotationUntilCinematicEnds = true;
+
+    [Tooltip("Used only when Continue Until Cinematic Ends is OFF. 0 means no timed rotation.")]
+    [Min(0f)]
+    public float backgroundRotationDuration;
+
+    [Tooltip("Leave OFF for unlimited turns. Enable only if you intentionally want a maximum number of rotations.")]
+    public bool limitBackgroundRotationByTurns;
+
+    [Min(0f)]
+    public float maximumBackgroundTurns = 1f;
+
+    [Tooltip("For Final Boom Only mode, 0 detects Animator/ParticleSystem lifetime. Whole Cinematic mode ignores this because the controller explicitly keeps the pooled object alive until cleanup.")]
+    [Min(0f)]
+    public float finalBackgroundEffectVisibleDuration;
+
+    [Tooltip("Used by Final Boom Only mode. Whole Cinematic mode stops the persistent background during normal cinematic cleanup.")]
+    [Min(0f)]
+    public float finalBackgroundEffectHideDelay = 0.15f;
+
+    [Range(-500, 500)]
+    public int finalBackgroundSortingOrderOffset = 80;
 
     [Header("Visual Clone Safety / Appearance")]
     [Tooltip("The runtime clones only Transform, SpriteRenderer, SortingGroup, and Animator components. Gameplay scripts/colliders/HP are never cloned.")]
@@ -385,21 +460,6 @@ public class FishCloneCinematicDeathProfile : ScriptableObject
 
     [Header("Additional Final Prefabs")]
     public FishCloneCinematicFinalEffect[] additionalFinalEffects;
-
-    [Header("Optional Background Effect")]
-    public GameObject finalBackgroundEffectPrefab;
-    public Vector2 finalBackgroundEffectOffset;
-    public Vector2 finalBackgroundEffectScale = Vector2.one;
-    public float finalBackgroundEffectRotationDegrees;
-
-    [Min(0f)]
-    public float finalBackgroundEffectVisibleDuration;
-
-    [Min(0f)]
-    public float finalBackgroundEffectHideDelay = 0.15f;
-
-    [Range(-500, 500)]
-    public int finalBackgroundSortingOrderOffset = 80;
 
     [Header("Final Sound / Camera")]
     public bool playFinalNetBoomSound;

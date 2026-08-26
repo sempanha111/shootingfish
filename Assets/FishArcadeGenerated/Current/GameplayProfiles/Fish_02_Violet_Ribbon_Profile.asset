@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d025593ac0af65e4693ea4198546ba09, type: 3}
+  m_Name: Fish_02_Violet_Ribbon_Profile
+  m_EditorClassIdentifier: 
+  fishId: 2
+  displayName: Violet Ribbon
+  fishCategory: Small Fish
+  fishTier: 0
+  rarity: 0
+  sizeClass: 0
+  rewardValue: 19
+  health: 28
+  damageResistance: 0.01
+  spawnWeight: 1.2
+  minimumLevel: 1
+  maximumSimultaneousCount: 8
+  combatBalanceVersion: 23
+  movementBalanceVersion: 15
+  minimumSpeed: 3.03
+  maximumSpeed: 4.4100003
+  acceleration: 7
+  deceleration: 8
+  turnSpeed: 165
+  turnFrequency: 0.9
+  routeLengthRange: {x: 0.8, y: 1.8}
+  preferredSwimmingDepth: 0.5
+  horizontalMovementPreference: 0.8
+  verticalMovementPreference: 0.2
+  centerCrossingChance: 0.56
+  edgeRouteChance: 0.1
+  curveStrength: 0.28
+  wobbleAmount: 0.12
+  wobbleFrequency: 1.25
+  pauseChance: 0.025
+  pauseDurationRange: {x: 0.12, y: 0.6}
+  burstSpeedChance: 0.14
+  burstSpeedMultiplier: 1.42
+  offScreenWaitingTimeRange: {x: 1.5, y: 4.5}
+  returnChance: 0.12
+  preferredEntryDirection: 0
+  preferredExitDirection: 7
+  swimmingPattern: 9
+  routeWeights:
+  - route: 0
+    weight: 1.1
+  - route: 1
+    weight: 0.85
+  - route: 2
+    weight: 1.35
+  - route: 3
+    weight: 0.8
+  - route: 4
+    weight: 0.15
+  - route: 5
+    weight: 0.7
+  - route: 8
+    weight: 0.1
+  behavior: 5137
+  lowHealthEscapeThreshold: 0.2
+  evasionStrength: 0.25
+  playerApproachStrength: 0.2
+  canJoinSchool: 1
+  minimumGroupSize: 2
+  maximumGroupSize: 7
+  leaderChance: 0.2
+  formationType: 6
+  followDistance: 0.62
+  separationDistance: 0.42
+  alignmentStrength: 0.65
+  cohesionStrength: 0.55
+  groupSpeedVariation: 0.08
+  groupEntryDelayRange: {x: 0.06, y: 0.22}
+  groupExitsTogether: 1
+  minimumSpawnDistance: 0.58
+  minimumSwimmingDistance: 0.46
+  overlapCheckInterval: 0.28
+  routeAdjustmentStrength: 0.48
+  maximumRouteCorrectionAttempts: 6
+  fishSizeSpacingMultiplier: 0.9
+  schoolingSpacingMultiplier: 0.58
+  animatorSpeedMultiplier: 1.28
+  tailMovementSpeed: 1.3
+  bodySwayAmount: 0.09
+  flipDirection: 1
+  shadowOffset: {x: 0.15, y: -0.22}
+  shadowScale: 1
+  shadowOpacity: 0.42
+  shadowSortingOrder: -1
+  turnAnimation: Turn
+  hitAnimation: HitFlinch
+  deathAnimation: Death
+  entryEffect: {fileID: 0}
+  exitEffect: {fileID: 0}
+  bossEffect: {fileID: 0}
+  rareFishEffect: {fileID: 0}
+  useBossMovement: 0
+  bossMinimumSpeed: 0.75
+  bossMaximumSpeed: 1.45
+  bossAcceleration: 1.45
+  bossDeceleration: 1.8
+  bossTurnSpeed: 55
+  bossEnterNearPlayerChance: 0.28
+  bossCrossCenterChance: 0.62
+  bossWideRouteChance: 0.58
+  bossRouteDistanceRange: {x: 1.15, y: 2.6}
+  bossPauseDurationRange: {x: 0.15, y: 1.1}
+  screenEdgePadding: 0.1
+  bossReturnDelayRange: {x: 1.4, y: 4.2}
+  bossEnterAndRetreatChance: 0.18
+  bossLoopRouteChance: 0.18
+  bossUseLongBodySteering: 0
+  bossSteeringDegreesPerSecond: 28
+  bossRetreatOutsideOnly: 0
+  bossSpeedChangeIntervalRange: {x: 1.4, y: 3.6}
+  bossPauseChance: 0.22
+  bossNormalWorldSpeedCap: 0
+  ignoreReactiveHitMotion: 0

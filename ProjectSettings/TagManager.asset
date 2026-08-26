@@ -63,6 +63,9 @@ TagManager:
   - name: FreezeFX
     uniqueID: 3833159125
     locked: 0
+  - name: SkillFrontGun
+    uniqueID: 912659823
+    locked: 0
   - name: UI
     uniqueID: 2682815031
     locked: 0

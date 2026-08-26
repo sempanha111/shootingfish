@@ -25,24 +25,112 @@ MonoBehaviour:
   coinAnimationSpreadRadius: 0
   playMainBossSkillInFrontGun: 1
   mainBossFrontGunSkillIndex: -1
+  mainBossFrontGunSkillTiming: 2
+  mainBossFrontGunSkillDelay: 0
+  mainBossFrontGunCoinStartDelayOverride: 0.12
+  playMainBossFrontGunSkillSound: 1
+  mainBossFrontGunSkillSoundIndex: -1
+  showMainBossFrontGunRewardText: 1
+  mainBossFrontGunRewardTextPrefix: +
+  mainBossFrontGunRewardTextDelay: 0.05
   playBossCoinBurst: 1
   bossCoinBurstEffectIndex: -1
   playNetBoom: 1
   netBoomEffectIndex: 3
+  playNetBoomImmediatelyAtDeathStart: 0
+  netBoomPositionOffset: {x: 0, y: 0}
+  netBoomScatterRadius: 1.2
+  netBoomScaleMultiplier: 1
   customDeathEffect: {fileID: 0}
+  customDeathEffectStartDelay: 0
+  customDeathEffectPositionOffset: {x: 0, y: 0}
+  customDeathEffectScatterRadius: 0.18
+  customDeathEffectScale: {x: 1, y: 1}
+  customDeathEffectRotationDegrees: 0
+  customDeathEffectVisibleDuration: 0
+  customDeathEffectUseFishSorting: 0
+  customDeathEffectSortingOrderOffset: -20
   customEffectHideDelay: 0.35
   enableCinematicDeathMotion: 1
+  cinematicStartDelay: 0
   deathAnimatorTrigger: Death
+  overrideDeathAnimatorSpeed: 0
+  deathAnimatorSpeed: 1
+  useSeparateConvulsionAnimatorSpeed: 0
+  deathConvulsionAnimatorSpeed: 1.25
   deathDuration: 1.5
   rewardBeatNormalized: 0.38
+  enableImpactScalePulse: 1
   impactScaleMultiplier: 1.2
+  enableDeathZoom: 1
+  deathZoomStartMode: 0
+  deathZoomStartNormalized: 0
+  deathZoomAdditionalDelay: 0
+  deathZoomDuration: 0
+  deathZoomEndScaleMultiplier: 0.68
   deathDriftDistance: 0.68
+  enableDeathTumbleRotation: 1
   deathTumbleDegrees: 48
   fadeStartNormalized: 0.68
+  deathOpacityStartMode: 0
+  deathOpacityAdditionalDelay: 0
+  deathOpacityFadeDuration: 0
+  extendDeathDurationForLatePhases: 1
+  latePhaseWaitIncludesPrefabHideDelay: 0
+  deathOpacityStart: 1
+  deathOpacityEnd: 0
+  deathOpacityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   fadeSpriteRenderers: 1
   disableCollidersDuringDeath: 1
+  enableDeathConvulsion: 0
+  deathConvulsionDuration: 0.45
+  deathConvulsionPositionStrength: 0.08
+  deathConvulsionRotationDegrees: 10
+  enableDeathConvulsionScalePulse: 1
+  deathConvulsionScaleStrength: 0.08
+  deathConvulsionFrequency: 18
+  playPrefabWithDeathConvulsion: 0
+  deathConvulsionEffectPrefab: {fileID: 0}
+  deathConvulsionPresentationDelay: 0
+  deathConvulsionEffectPositionOffset: {x: 0, y: 0}
+  deathConvulsionEffectScatterRadius: 0
+  deathConvulsionEffectScale: {x: 1, y: 1}
+  deathConvulsionEffectRotationDegrees: 0
+  deathConvulsionEffectVisibleDuration: 0
+  deathConvulsionEffectHideDelay: 0.15
+  deathConvulsionEffectUseFishSorting: 0
+  deathConvulsionEffectSortingOrderOffset: -10
+  playAdditionalDeathPrefabs: 0
+  deathAdditionalEffects: []
+  playEarthquakeWithDeathConvulsion: 0
+  deathConvulsionEarthquakeStrength: 0.08
+  deathConvulsionEarthquakeDuration: 0.35
   deathCameraShakeStrength: 0.09
   deathCameraShakeDuration: 0.5
+  enableCustomEffectPulses: 1
   customEffectPulseCount: 3
   customEffectPulseInterval: 0.22
   playCenterScreenDeathPrefab: 0

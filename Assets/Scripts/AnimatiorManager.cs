@@ -45,14 +45,21 @@ public class AnimatiorManager : MonoBehaviour
     [Min(0f)] public float mainBossCoinStartDelay = 0.8f;
     [Min(0.01f)] public float mainBossCoinMoveSpeed = 50f;
     [Min(0f)] public float mainBossCoinArrivalDistance = 1f;
+    [Min(0.1f)] public float mainBossCoinTravelTimeout = 1.5f;
 
     [Header("NetBoom Pool")]
     public GameObject[] netBoomPrefabs;
     [Min(0f)] public float netBoomHideDelay = 0.15f;
 
-    [Header("Compatibility - migrate old assignments")]
-    public GameObject[] NetBoom;
-    public GameObject[] CerificateText;
+    // Hidden migration-only fields. They preserve old serialized data without
+    // exposing obsolete Inspector lists.
+    [FormerlySerializedAs("NetBoom")]
+    [SerializeField, HideInInspector]
+    private GameObject[] legacyNetBoomAssignments;
+
+    [FormerlySerializedAs("CerificateText")]
+    [SerializeField, HideInInspector]
+    private GameObject[] legacyCertificateTextAssignments;
 
     [Header("Certificate Popup")]
     public CertificateTextManager certificateTextManager;
@@ -101,9 +108,10 @@ public class AnimatiorManager : MonoBehaviour
         MigrateLegacyBossCoinBurst();
 
         if ((netBoomPrefabs == null || netBoomPrefabs.Length == 0) &&
-            NetBoom != null && NetBoom.Length > 0)
+            legacyNetBoomAssignments != null &&
+            legacyNetBoomAssignments.Length > 0)
         {
-            netBoomPrefabs = NetBoom;
+            netBoomPrefabs = legacyNetBoomAssignments;
         }
 
         EnsureBossCoinBurstPools();
@@ -366,25 +374,34 @@ public class AnimatiorManager : MonoBehaviour
 
     /// <summary>
     /// Sends a reward coin to the correct gun and plays the configured
-    /// main-boss death skill in front of that gun.
+    /// main-boss death skill in front of that gun. Missing reward-coin or
+    /// GunPos references no longer silently cancel the skill: the method
+    /// resolves a safe gun/death-position fallback and still plays the VFX.
     /// skillIndex -1 selects a random valid prefab.
     /// </summary>
     public void PlayMainBossDeathSkillInFrontGun(
         Vector3 deathPosition,
         int shooterId,
         int skillIndex = -1,
-        float coinStartDelayOverride = -1f
+        float coinStartDelayOverride = -1f,
+        float rewardAmount = 0f,
+        bool playSkillSound = false,
+        int skillSoundIndex = -1,
+        bool showRewardText = false,
+        string rewardTextPrefix = "+",
+        float rewardTextDelay = 0f
     )
     {
+        Vector3 fallbackSkillPosition = ResolveMainBossFrontGunTargetPosition(
+            shooterId,
+            deathPosition
+        );
+
+
         GameObject coin = GetInactive(coinPool);
 
-        if (coin == null)
+        if (coin == null && mainBossRewardCoinPrefab != null)
         {
-            if (mainBossRewardCoinPrefab == null)
-            {
-                return;
-            }
-
             coin = Instantiate(
                 mainBossRewardCoinPrefab,
                 animatorParent
@@ -400,6 +417,24 @@ public class AnimatiorManager : MonoBehaviour
 
             createdToken.CaptureDefaultTransform(coin.transform);
             coinPool.Add(coin);
+        }
+
+        // The skill must never depend on the optional reward-coin prefab.
+        if (coin == null)
+        {
+            StartCoroutine(
+                PlayMainBossDeathSkill(
+                    fallbackSkillPosition,
+                    skillIndex,
+                    rewardAmount,
+                    playSkillSound,
+                    skillSoundIndex,
+                    showRewardText,
+                    rewardTextPrefix,
+                    rewardTextDelay
+                )
+            );
+            return;
         }
 
         PooledEffectToken token = coin.GetComponent<PooledEffectToken>();
@@ -423,7 +458,13 @@ public class AnimatiorManager : MonoBehaviour
                 version,
                 shooterId,
                 skillIndex,
-                coinStartDelayOverride
+                coinStartDelayOverride,
+                rewardAmount,
+                playSkillSound,
+                skillSoundIndex,
+                showRewardText,
+                rewardTextPrefix,
+                rewardTextDelay
             )
         );
     }
@@ -664,7 +705,13 @@ public class AnimatiorManager : MonoBehaviour
         int coinVersion,
         int shooterId,
         int skillIndex,
-        float coinStartDelayOverride
+        float coinStartDelayOverride,
+        float rewardAmount,
+        bool playSkillSound,
+        int skillSoundIndex,
+        bool showRewardText,
+        string rewardTextPrefix,
+        float rewardTextDelay
     )
     {
         float startDelay = coinStartDelayOverride >= 0f
@@ -676,34 +723,30 @@ public class AnimatiorManager : MonoBehaviour
             yield return new WaitForSeconds(startDelay);
         }
 
-        if (coin == null ||
-            !IsCurrentPlay(coin, coinVersion) ||
-            GunPos == null ||
-            shooterId < 0 ||
-            shooterId >= GunPos.Length ||
-            GunPos[shooterId] == null)
+        if (coin == null || !IsCurrentPlay(coin, coinVersion))
         {
-            DisableIfCurrent(coin, coinVersion);
             yield break;
         }
 
-        Vector3 gunOffset =
-            shooterId == 0 || shooterId == 1
-                ? new Vector3(0f, 2f, 0f)
-                : new Vector3(0f, -2f, 0f);
+        Vector3 targetPosition = ResolveMainBossFrontGunTargetPosition(
+            shooterId,
+            coin.transform.position
+        );
 
-        Vector3 targetPosition = GunPos[shooterId].position + gunOffset;
         float initialDistance = Mathf.Max(
             0.01f,
             Vector2.Distance(coin.transform.position, targetPosition)
         );
 
         float distance = initialDistance;
+        float travelElapsed = 0f;
 
         while (coin.activeSelf &&
                IsCurrentPlay(coin, coinVersion) &&
-               distance > mainBossCoinArrivalDistance)
+               distance > mainBossCoinArrivalDistance &&
+               travelElapsed < Mathf.Max(0.1f, mainBossCoinTravelTimeout))
         {
+            travelElapsed += Time.deltaTime;
             float distanceFactor = distance / initialDistance;
 
             coin.transform.position = Vector2.MoveTowards(
@@ -727,12 +770,18 @@ public class AnimatiorManager : MonoBehaviour
             yield break;
         }
 
-        Vector3 skillPosition = coin.transform.position;
+        Vector3 skillPosition = targetPosition;
         coin.SetActive(false);
         StartCoroutine(
             PlayMainBossDeathSkill(
                 skillPosition,
-                skillIndex
+                skillIndex,
+                rewardAmount,
+                playSkillSound,
+                skillSoundIndex,
+                showRewardText,
+                rewardTextPrefix,
+                rewardTextDelay
             )
         );
     }
@@ -743,13 +792,24 @@ public class AnimatiorManager : MonoBehaviour
     /// </summary>
     public IEnumerator PlayMainBossDeathSkill(
         Vector3 position,
-        int skillIndex = -1
+        int skillIndex = -1,
+        float rewardAmount = 0f,
+        bool playSkillSound = false,
+        int skillSoundIndex = -1,
+        bool showRewardText = false,
+        string rewardTextPrefix = "+",
+        float rewardTextDelay = 0f
     )
     {
         int resolvedIndex = ResolveMainBossSkillIndex(skillIndex);
 
         if (resolvedIndex < 0)
         {
+            Debug.LogWarning(
+                "[Main Boss Front Gun] No valid skill prefab is assigned in " +
+                "AnimatiorManager.mainBossFrontGunSkillPrefabs.",
+                this
+            );
             yield break;
         }
 
@@ -805,7 +865,28 @@ public class AnimatiorManager : MonoBehaviour
         ResetVisuals(clone);
         clone.SetActive(true);
 
+
         float clipDuration = RestartAnimators(clone);
+
+        GameManager manager = GameManager.Instance;
+
+        if (playSkillSound && manager != null && manager.SoundManager != null)
+        {
+            manager.SoundManager.PlayMainBossFrontGunSkillSound(
+                skillSoundIndex
+            );
+        }
+
+        if (showRewardText && rewardAmount > 0f)
+        {
+            TryPlayEmbeddedFrontGunRewardText(
+                clone,
+                rewardAmount,
+                rewardTextPrefix,
+                rewardTextDelay
+            );
+        }
+
         float configuredDuration = GetMainBossSkillVisibleDuration(resolvedIndex);
         float visibleDuration = configuredDuration > 0f
             ? configuredDuration
@@ -820,6 +901,155 @@ public class AnimatiorManager : MonoBehaviour
         {
             clone.SetActive(false);
         }
+    }
+
+
+
+
+    private bool TryPlayEmbeddedFrontGunRewardText(
+        GameObject skillClone,
+        float rewardAmount,
+        string prefix,
+        float delay
+    )
+    {
+        if (skillClone == null || rewardAmount <= 0f)
+        {
+            return false;
+        }
+
+        FrontGunRewardPresentation presentation =
+            skillClone.GetComponent<FrontGunRewardPresentation>();
+
+        if (presentation == null)
+        {
+            presentation =
+                skillClone.GetComponentInChildren<FrontGunRewardPresentation>(true);
+        }
+
+        if (presentation != null &&
+            presentation.PlayReward(
+                rewardAmount,
+                prefix ?? string.Empty,
+                Mathf.Max(0f, delay)
+            ))
+        {
+            return true;
+        }
+
+        // Compatibility: if the prefab already contains the counter component
+        // but not the presentation wrapper, use it directly.
+        FrontGunRewardCounterText counter =
+            skillClone.GetComponentInChildren<FrontGunRewardCounterText>(true);
+
+        if (counter != null)
+        {
+            counter.SetVisible(true);
+            counter.Play(
+                rewardAmount,
+                prefix ?? string.Empty,
+                Mathf.Max(0f, delay)
+            );
+
+            return true;
+        }
+
+        Debug.LogWarning(
+            "[Main Boss Front Gun] No embedded RewardText found in " +
+            skillClone.name + ". Add FrontGunRewardPresentation or " +
+            "FrontGunRewardCounterText inside the SkillFrontGun prefab.",
+            skillClone
+        );
+
+        return false;
+    }
+
+
+    private Vector3 ResolveMainBossFrontGunTargetPosition(
+        int shooterId,
+        Vector3 fallbackPosition
+    )
+    {
+        Transform target = null;
+
+        if (GunPos != null &&
+            shooterId >= 0 &&
+            shooterId < GunPos.Length)
+        {
+            target = GunPos[shooterId];
+        }
+
+        GameManager manager = GameManager.Instance;
+
+        if (target == null && manager != null)
+        {
+            if (shooterId == 0 &&
+                manager.weaponsScripts != null &&
+                manager.weaponsScripts.activeGun != null)
+            {
+                target = manager.weaponsScripts.activeGun.transform;
+            }
+            else if (shooterId > 0)
+            {
+                WeaponNPC[] npcWeapons = FindObjectsOfType<WeaponNPC>();
+
+                for (int i = 0; i < npcWeapons.Length; i++)
+                {
+                    WeaponNPC npc = npcWeapons[i];
+
+                    if (npc != null && npc.ShooterId == shooterId)
+                    {
+                        target = npc.ActiveGunTransform;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (target == null)
+        {
+            Debug.LogWarning(
+                "[Main Boss Front Gun] GunPos for shooter " + shooterId +
+                " is not assigned. Playing the skill at the safe fallback " +
+                "position instead of cancelling it.",
+                this
+            );
+            return fallbackPosition;
+        }
+
+        Vector3 gunOffset =
+            shooterId == 0 || shooterId == 1
+                ? new Vector3(0f, 2f, 0f)
+                : new Vector3(0f, -2f, 0f);
+
+        return target.position + gunOffset;
+    }
+
+
+    [ContextMenu("Validate Main Boss Front-Gun Skill Setup")]
+    private void ValidateMainBossFrontGunSkillSetup()
+    {
+        int validSkills = 0;
+
+        if (mainBossFrontGunSkillPrefabs != null)
+        {
+            for (int i = 0; i < mainBossFrontGunSkillPrefabs.Length; i++)
+            {
+                if (mainBossFrontGunSkillPrefabs[i] != null)
+                {
+                    validSkills++;
+                }
+            }
+        }
+
+        Debug.Log(
+            "[Main Boss Front Gun] Valid skill prefabs=" + validSkills +
+            ", reward coin=" +
+            (mainBossRewardCoinPrefab != null ? "assigned" : "missing (direct-play fallback enabled)") +
+            ", GunPos slots=" + (GunPos != null ? GunPos.Length : 0) +
+            ".",
+            this
+        );
     }
 
     private int ResolveMainBossSkillIndex(int requestedIndex)
@@ -1300,6 +1530,100 @@ public class AnimatiorManager : MonoBehaviour
         );
 
         return instance;
+    }
+
+    /// <summary>
+    /// Starts a pooled effect without scheduling an automatic return.
+    /// The caller owns its lifetime and must call StopPersistentPooledEffect.
+    /// This is used by long-running cinematic background layers that need to
+    /// remain active while several fish-animation stages are playing.
+    /// </summary>
+    public GameObject PlayPersistentPooledEffectAdvanced(
+        GameObject prefab,
+        Vector3 position,
+        float zRotation,
+        Vector3 scaleMultiplier,
+        int sortingOrder = int.MinValue,
+        int sortingLayerId = int.MinValue
+    )
+    {
+        if (prefab == null)
+        {
+            return null;
+        }
+
+        Transform effectParent = animatorParent != null
+            ? animatorParent
+            : transform;
+        GameObject instance = GetGenericPooledEffect(
+            prefab,
+            effectParent
+        );
+
+        if (instance == null)
+        {
+            return null;
+        }
+
+        PooledEffectToken token =
+            instance.GetComponent<PooledEffectToken>();
+
+        if (token == null)
+        {
+            token = instance.AddComponent<PooledEffectToken>();
+        }
+
+        token.CaptureDefaultTransform(instance.transform);
+        token.CaptureDefaultSorting(instance);
+
+        // Incrementing the version invalidates any stale return coroutine from
+        // an older use of this pooled instance.
+        ++token.playVersion;
+
+        instance.transform.SetParent(
+            effectParent,
+            false
+        );
+        token.RestoreDefaultTransform(instance.transform);
+        token.RestoreDefaultSorting(instance);
+        instance.transform.position = position;
+        instance.transform.rotation =
+            instance.transform.rotation *
+            Quaternion.Euler(0f, 0f, zRotation);
+        instance.transform.localScale = Vector3.Scale(
+            instance.transform.localScale,
+            scaleMultiplier
+        );
+
+        ApplyTemporarySorting(instance, sortingLayerId, sortingOrder);
+        ResetVisuals(instance);
+        instance.SetActive(true);
+        RestartAnimators(instance);
+        RestartParticleSystems(instance);
+        return instance;
+    }
+
+    /// <summary>
+    /// Returns an explicitly persistent pooled effect to the normal inactive
+    /// state. Incrementing the play token prevents any stale coroutine from a
+    /// previous play from affecting the next reuse.
+    /// </summary>
+    public void StopPersistentPooledEffect(GameObject instance)
+    {
+        if (instance == null)
+        {
+            return;
+        }
+
+        PooledEffectToken token =
+            instance.GetComponent<PooledEffectToken>();
+
+        if (token != null)
+        {
+            ++token.playVersion;
+        }
+
+        instance.SetActive(false);
     }
 
     private static void ApplyTemporarySorting(

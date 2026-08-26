@@ -31,10 +31,18 @@ public class SoundManager : MonoBehaviour
     [Tooltip("Optional Net Boom variations. A valid source is selected randomly; the fallback is used when this array is empty.")]
     public AudioSource[] netBoomSounds;
 
+    [Header("Main Boss Front-Gun Skill Sounds")]
+    [Tooltip("Fallback sound played when the Main Boss reward skill appears in front of the shooter gun.")]
+    public AudioSource mainBossFrontGunSkillFallback;
+
+    [Tooltip("Optional variations for the Main Boss front-gun reward skill. -1 selects a random valid source without immediate repeats.")]
+    public AudioSource[] mainBossFrontGunSkillSounds;
+
     private int lastBigWinIndex = -1;
     private int lastBossArrivalIndex = -1;
     private int lastBossDefeatIndex = -1;
     private int lastNetBoomIndex = -1;
+    private int lastMainBossFrontGunSkillIndex = -1;
 
     private void Start()
     {
@@ -114,6 +122,27 @@ public class SoundManager : MonoBehaviour
         if (selected == null)
         {
             selected = netBoomFallback;
+        }
+
+        PlaySafe(selected);
+    }
+
+    public void PlayMainBossFrontGunSkillSound(int requestedIndex = -1)
+    {
+        AudioSource selected = GetRequestedOrRandom(
+            mainBossFrontGunSkillSounds,
+            requestedIndex,
+            ref lastMainBossFrontGunSkillIndex
+        );
+
+        if (selected == null)
+        {
+            selected = mainBossFrontGunSkillFallback;
+        }
+
+        if (selected == null)
+        {
+            selected = bigWinFallback;
         }
 
         PlaySafe(selected);

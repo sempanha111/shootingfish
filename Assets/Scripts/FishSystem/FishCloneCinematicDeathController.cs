@@ -84,6 +84,19 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
     private readonly HashSet<FishScript> finalDamagedFish =
         new HashSet<FishScript>();
 
+    // Many legacy fish prefabs use an unnamed duplicate renderer as their
+    // SpriteShadow target. Name-only checks therefore miss the real shadow and
+    // clone it at body opacity. Cache the exact authored shadow renderers too.
+    private readonly HashSet<SpriteRenderer> sourceShadowRenderers =
+        new HashSet<SpriteRenderer>();
+
+    // Optional long-running pooled background layer. Unlike the final Boom,
+    // this can begin with the first clone frame and remain active/rotating
+    // through every cinematic stage until normal cleanup.
+    private GameObject backgroundEffectInstance;
+    private float backgroundRotationElapsed;
+    private float backgroundAccumulatedAbsoluteRotation;
+
     public FishCloneCinematicDeathProfile Profile
     {
         get { return profile; }
@@ -151,6 +164,11 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        UpdateCinematicBackground();
+    }
+
     private void OnDisable()
     {
         ResetForPool();
@@ -158,6 +176,8 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
 
     private void OnDestroy()
     {
+        StopCinematicBackground();
+
         if (runtimeRoot != null)
         {
             Destroy(runtimeRoot.gameObject);
@@ -230,8 +250,15 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
 
         profile.EnsureCloneSettingsCount();
         CacheReferences();
-        activeBulletId = bulletId;
-        activeGunLevel = gunLevel;
+        // Prefer FishScript's immutable lethal-hit snapshot. This prevents
+        // chained final area-damage kills from being credited to an NPC when
+        // the Crystal Whale was actually killed by the local player.
+        activeBulletId = owner != null && owner.HasDeathCredit
+            ? owner.DeathCreditBulletId
+            : bulletId;
+        activeGunLevel = owner != null && owner.HasDeathCredit
+            ? owner.DeathCreditGunLevel
+            : Mathf.Max(1, gunLevel);
         ownerRotationAtDeathStart = originalOwnerWorldRotation;
 
         sourceVisualRoot = visualRootOverride != null
@@ -244,6 +271,7 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
         }
 
         CacheOwnerRendererState();
+        CacheSourceShadowRenderers();
         CacheSourceVisualTransform();
         EnsureRuntimeRoots();
         EnsureCloneCount(profile.cloneCount);
@@ -266,6 +294,7 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
         activeBulletId = 0;
         activeGunLevel = 0;
         ownerRotationAtDeathStart = 0f;
+        StopCinematicBackground();
         HideAllClones();
         RestoreOwnerRendererState();
 
@@ -369,6 +398,36 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
             SafeSignedScale(sourceVisualBaseScale.y),
             SafeSignedScale(sourceVisualBaseScale.z)
         );
+    }
+
+    private void CacheSourceShadowRenderers()
+    {
+        sourceShadowRenderers.Clear();
+
+        if (owner == null)
+        {
+            return;
+        }
+
+        SpriteShadow[] shadowComponents =
+            owner.GetComponentsInChildren<SpriteShadow>(true);
+
+        for (int i = 0; i < shadowComponents.Length; i++)
+        {
+            SpriteShadow shadow = shadowComponents[i];
+
+            if (shadow == null)
+            {
+                continue;
+            }
+
+            SpriteRenderer shadowRenderer = shadow.ShadowSpriteRenderer;
+
+            if (shadowRenderer != null)
+            {
+                sourceShadowRenderers.Add(shadowRenderer);
+            }
+        }
     }
 
     private void CacheOwnerRendererState()
@@ -517,12 +576,18 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
             copyTransform.localScale = source.localScale;
         }
 
-        bool shadowObject = IsShadowObject(source);
-        bool allowRenderer = profile == null ||
-                             profile.includeShadowVisuals ||
-                             !shadowObject;
-
         SpriteRenderer sourceRenderer = source.GetComponent<SpriteRenderer>();
+        bool shadowObject = IsShadowObject(source, sourceRenderer);
+
+        // Alpha 0 must mean truly invisible. Some custom sprite materials do
+        // not respect vertex alpha exactly as Sprites/Default does, so when a
+        // clone shadow is disabled/zero-opacity we do not create its renderer
+        // at all. This also prevents four overlapping shadows from becoming a
+        // dark duplicate silhouette.
+        bool shadowShouldRender = profile == null ||
+                                  (profile.includeShadowVisuals &&
+                                   profile.cloneShadowOpacity > 0.001f);
+        bool allowRenderer = !shadowObject || shadowShouldRender;
 
         if (sourceRenderer != null && allowRenderer)
         {
@@ -575,9 +640,22 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
         return copy;
     }
 
-    private bool IsShadowObject(Transform source)
+    private bool IsShadowObject(
+        Transform source,
+        SpriteRenderer sourceRenderer
+    )
     {
-        string lowerName = source.name.ToLowerInvariant();
+        if (sourceRenderer != null &&
+            sourceShadowRenderers.Contains(sourceRenderer))
+        {
+            return true;
+        }
+
+        // Keep the old convention as a fallback for prefabs that do use a
+        // clearly named Shadow child but have no SpriteShadow component.
+        string lowerName = source != null
+            ? source.name.ToLowerInvariant()
+            : string.Empty;
         return lowerName.Contains("shadow");
     }
 
@@ -625,6 +703,14 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
         }
 
         target.color = color;
+
+        // Guaranteed hide for zero-opacity shadows, including custom materials
+        // whose shader ignores SpriteRenderer color alpha.
+        if (isShadow && profile != null &&
+            profile.cloneShadowOpacity <= 0.001f)
+        {
+            target.enabled = false;
+        }
     }
 
     private int ResolveCloneSortingOrder(int sourceOrder, int cloneIndex)
@@ -927,6 +1013,8 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
 
     private IEnumerator RunSequence()
     {
+        StartCinematicBackground();
+
         if (profile.hideOriginalFishDuringCinematic)
         {
             SetOwnerRenderersVisible(false);
@@ -954,6 +1042,7 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
             yield return Wait(profile.cleanupDelay);
         }
 
+        StopCinematicBackground();
         sequenceRoutine = null;
         sequenceRunning = false;
     }
@@ -2121,6 +2210,182 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
         return result;
     }
 
+    private Vector3 ResolveBackgroundAnchorWorld()
+    {
+        if (profile == null)
+        {
+            return owner != null ? owner.transform.position : Vector3.zero;
+        }
+
+        switch (profile.backgroundAnchorMode)
+        {
+            case FishCloneBackgroundAnchorMode.FinalCenter:
+                return ResolveFinalCenterWorld();
+
+            case FishCloneBackgroundAnchorMode.NormalizedViewport:
+                return ViewportToWorld(
+                    profile.backgroundViewportPosition,
+                    owner != null
+                        ? owner.transform.position
+                        : Vector3.zero
+                );
+
+            case FishCloneBackgroundAnchorMode.WorldPosition:
+            {
+                Vector3 world = profile.backgroundWorldPosition;
+                if (owner != null)
+                {
+                    world.z = owner.transform.position.z;
+                }
+                return world;
+            }
+
+            case FishCloneBackgroundAnchorMode.FormationCenter:
+            default:
+                return ResolveFormationCenterWorld();
+        }
+    }
+
+    private void StartCinematicBackground()
+    {
+        StopCinematicBackground();
+
+        if (profile == null ||
+            !profile.enableBackgroundEffect ||
+            profile.backgroundPlayTiming !=
+                FishCloneBackgroundPlayTiming.WholeCinematic ||
+            profile.finalBackgroundEffectPrefab == null)
+        {
+            return;
+        }
+
+        CacheReferences();
+        AnimatiorManager manager = gameManager != null
+            ? gameManager.animatiorManager
+            : null;
+
+        if (manager == null)
+        {
+            return;
+        }
+
+        int sortingLayerId;
+        int sortingOrder;
+        GetOwnerSorting(out sortingLayerId, out sortingOrder);
+
+        Vector3 position = ResolveBackgroundAnchorWorld() +
+                           (Vector3)profile.finalBackgroundEffectOffset;
+
+        backgroundEffectInstance =
+            manager.PlayPersistentPooledEffectAdvanced(
+                profile.finalBackgroundEffectPrefab,
+                position,
+                profile.finalBackgroundEffectRotationDegrees,
+                ToScale(profile.finalBackgroundEffectScale),
+                AddSortingOffset(
+                    sortingOrder,
+                    profile.finalBackgroundSortingOrderOffset
+                ),
+                sortingLayerId
+            );
+
+        backgroundRotationElapsed = 0f;
+        backgroundAccumulatedAbsoluteRotation = 0f;
+    }
+
+    private void UpdateCinematicBackground()
+    {
+        if (!sequenceRunning ||
+            profile == null ||
+            backgroundEffectInstance == null ||
+            !backgroundEffectInstance.activeInHierarchy)
+        {
+            return;
+        }
+
+        if (profile.backgroundFollowAnchor)
+        {
+            backgroundEffectInstance.transform.position =
+                ResolveBackgroundAnchorWorld() +
+                (Vector3)profile.finalBackgroundEffectOffset;
+        }
+
+        if (!profile.backgroundRotationEnabled)
+        {
+            return;
+        }
+
+        float dt = DeltaTime;
+        backgroundRotationElapsed += dt;
+
+        bool rotationActive =
+            profile.continueBackgroundRotationUntilCinematicEnds ||
+            (profile.backgroundRotationDuration > 0f &&
+             backgroundRotationElapsed <=
+                profile.backgroundRotationDuration);
+
+        if (!rotationActive)
+        {
+            return;
+        }
+
+        float delta = Mathf.Max(0f, profile.backgroundRotationSpeed) * dt;
+
+        if (profile.limitBackgroundRotationByTurns)
+        {
+            float maximumDegrees =
+                Mathf.Max(0f, profile.maximumBackgroundTurns) * 360f;
+            delta = Mathf.Min(
+                delta,
+                Mathf.Max(
+                    0f,
+                    maximumDegrees -
+                    backgroundAccumulatedAbsoluteRotation
+                )
+            );
+        }
+
+        if (delta <= 0f)
+        {
+            return;
+        }
+
+        backgroundAccumulatedAbsoluteRotation += Mathf.Abs(delta);
+        float direction = profile.backgroundRotationClockwise ? -1f : 1f;
+        backgroundEffectInstance.transform.Rotate(
+            0f,
+            0f,
+            delta * direction,
+            Space.Self
+        );
+    }
+
+    private void StopCinematicBackground()
+    {
+        if (backgroundEffectInstance != null)
+        {
+            CacheReferences();
+            AnimatiorManager manager = gameManager != null
+                ? gameManager.animatiorManager
+                : null;
+
+            if (manager != null)
+            {
+                manager.StopPersistentPooledEffect(
+                    backgroundEffectInstance
+                );
+            }
+            else
+            {
+                backgroundEffectInstance.SetActive(false);
+            }
+        }
+
+        backgroundEffectInstance = null;
+        backgroundRotationElapsed = 0f;
+        backgroundAccumulatedAbsoluteRotation = 0f;
+    }
+
     private void PlayFinalEffects(Vector3 center)
     {
         CacheReferences();
@@ -2132,7 +2397,11 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
         int sortingOrder;
         GetOwnerSorting(out sortingLayerId, out sortingOrder);
 
-        if (profile.finalBackgroundEffectPrefab != null && manager != null)
+        if (profile.enableBackgroundEffect &&
+            profile.backgroundPlayTiming ==
+                FishCloneBackgroundPlayTiming.FinalBoomOnly &&
+            profile.finalBackgroundEffectPrefab != null &&
+            manager != null)
         {
             manager.PlayPooledEffectAdvanced(
                 profile.finalBackgroundEffectPrefab,
@@ -2251,6 +2520,13 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
 
         finalDamagedFish.Clear();
 
+        int damageBulletId = owner != null && owner.HasDeathCredit
+            ? owner.DeathCreditBulletId
+            : activeBulletId;
+        int damageGunLevel = owner != null && owner.HasDeathCredit
+            ? owner.DeathCreditGunLevel
+            : Mathf.Max(1, activeGunLevel);
+
         int hitCount = Physics2D.OverlapCircleNonAlloc(
             center,
             Mathf.Max(0.1f, settings.radius),
@@ -2347,8 +2623,8 @@ public sealed class FishCloneCinematicDeathController : MonoBehaviour
             victim.TakeDamage(
                 targetRenderer,
                 damage,
-                activeBulletId,
-                activeGunLevel
+                damageBulletId,
+                damageGunLevel
             );
 
             if (settings.requestReaction &&
